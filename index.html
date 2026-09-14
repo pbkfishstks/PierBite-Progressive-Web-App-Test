@@ -2,89 +2,428 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>PierBite PWA Test</title>
+  <title>PierBite</title>
 
   <meta name="theme-color" content="#061522">
+
   <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
   <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+  <link rel="icon" href="PierBite-App-Icon-192x192.png">
 
   <style>
+    :root {
+      --background: #061522;
+      --panel: #0b1c2b;
+      --card: #112a3f;
+      --line: #1f405b;
+      --white: #f4f7fb;
+      --text: #a3c2e8;
+      --muted: #7f9bb2;
+      --lime: #8fd43c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
+      background: var(--background);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page {
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #061522;
-      color: #eef5fb;
-      font-family: Arial, sans-serif;
+      padding: 34px 20px 50px;
+    }
+
+    .hero {
+      max-width: 1320px;
+      margin: 0 auto;
+      background: var(--panel);
+      padding: 58px 36px 52px;
       text-align: center;
     }
 
-    .test-panel {
-      max-width: 600px;
-      padding: 40px 24px;
+    .brand-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
     }
 
-    h1 {
-      margin-bottom: 12px;
-      font-size: 2.5rem;
+    .brand-icon {
+      width: 116px;
+      height: 116px;
+      border-radius: 18px;
+      display: block;
     }
 
-    .pier {
-      color: #ffffff;
+    .brand {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      flex-wrap: wrap;
+      line-height: 0.9;
+      font-weight: 800;
+      letter-spacing: -5px;
     }
 
-    .bite {
-      color: #39ff14;
+    .brand-pier {
+      color: var(--white);
+      font-size: clamp(4rem, 8vw, 7.8rem);
     }
 
-    p {
-      color: #a3bcd1;
-      line-height: 1.6;
+    .brand-bite {
+      color: var(--lime);
+      font-size: clamp(4rem, 8vw, 7.8rem);
     }
 
-    .safe {
-      margin-top: 24px;
-      padding: 12px 16px;
-      border: 1px solid #1f405b;
+    .brand-dotcom {
+      color: #89a6c2;
+      font-size: clamp(2.7rem, 5.8vw, 5.2rem);
+      letter-spacing: -3px;
+      margin-left: 10px;
+    }
+
+    .tagline-row {
+      margin: 28px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      max-width: 760px;
+    }
+
+    .tagline-line {
+      height: 1px;
+      background: rgba(143, 212, 60, 0.55);
+      flex: 1;
+      max-width: 170px;
+    }
+
+    .tagline {
+      color: var(--lime);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.38em;
+      white-space: nowrap;
+    }
+
+    .intro {
+      max-width: 780px;
+      margin: 54px auto 30px;
+      color: var(--text);
+      font-size: 1.2rem;
+      line-height: 1.62;
+    }
+
+    .nav-grid {
+      max-width: 860px;
+      margin: 28px auto 0;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .nav-card {
+      min-height: 154px;
+      background: var(--card);
+      border: 1px solid var(--line);
       border-radius: 10px;
-      background: #112a3f;
-      font-size: 0.9rem;
+      padding: 16px 11px 14px;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--lime);
+    }
+
+    .nav-icon {
+      width: 27px;
+      height: 27px;
+      color: var(--lime);
+      margin-bottom: 8px;
+    }
+
+    .nav-title {
+      color: var(--white);
+      font-size: 0.98rem;
+      line-height: 1.08;
+      font-weight: 700;
+    }
+
+    .nav-subtitle {
+      color: var(--muted);
+      font-size: 0.75rem;
+      line-height: 1.35;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 1000px) {
+      .nav-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 620px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .page {
+        padding: 0;
+      }
+
+      .hero {
+        min-height: 100vh;
+        padding: 34px 16px 38px;
+      }
+
+      .brand-row {
+        gap: 14px;
+      }
+
+      .brand-icon {
+        width: 76px;
+        height: 76px;
+      }
+
+      .brand {
+        letter-spacing: -2px;
+      }
+
+      .brand-pier,
+      .brand-bite {
+        font-size: clamp(3rem, 15vw, 4.6rem);
+      }
+
+      .brand-dotcom {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+        font-size: 2.15rem;
+        letter-spacing: -1px;
+      }
+
+      .tagline-row {
+        margin-top: 24px;
+        gap: 12px;
+      }
+
+      .tagline {
+        font-size: 0.7rem;
+        letter-spacing: 0.26em;
+      }
+
+      .tagline-line {
+        max-width: 60px;
+      }
+
+      .intro {
+        margin-top: 38px;
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .nav-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+      }
+
+      .nav-card {
+        min-height: 138px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="test-panel">
+  <main class="page">
 
-    <h1>
-      <span class="pier">PIER</span><span class="bite">BITE</span>
-    </h1>
+    <section class="hero">
 
-    <p>Progressive Web App Development Test</p>
+      <div class="brand-row">
 
-    <div class="safe">
-      This is the separate PierBite test environment.<br>
-      The live PierBite.com website is not being modified.
-    </div>
+        <img
+          src="PierBite-App-Icon-192x192.png"
+          alt="PierBite icon"
+          class="brand-icon"
+        >
+
+        <div class="brand">
+          <span class="brand-pier">Pier</span>
+          <span class="brand-bite">Bite</span>
+          <span class="brand-dotcom">.com</span>
+        </div>
+
+      </div>
+
+      <div class="tagline-row">
+
+        <span class="tagline-line"></span>
+
+        <div class="tagline">
+          KNOW BEFORE YOU GO
+        </div>
+
+        <span class="tagline-line"></span>
+
+      </div>
+
+      <div class="intro">
+        Live wind, water and wave conditions for six Lake Michigan fishing
+        piers on Wisconsin's west shore — updated every hour, with every
+        number labeled so you know exactly where it came from.
+      </div>
+
+      <nav class="nav-grid">
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="18" cy="5" r="2"></circle>
+            <path d="M3 12h15M6 12v6M11 12v6M16 12v6"></path>
+          </svg>
+
+          <div class="nav-title">
+            Pick your<br>pier
+          </div>
+
+          <div class="nav-subtitle">
+            All six, scored
+          </div>
+
+        </a>
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M12 3v8"></path>
+            <circle cx="12" cy="5" r="1.5"></circle>
+            <path d="M8 13l-3 5h14l-3-5z"></path>
+          </svg>
+
+          <div class="nav-title">
+            Conditions<br>map
+          </div>
+
+          <div class="nav-subtitle">
+            Every buoy we read
+          </div>
+
+        </a>
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M8 4c2.2 3 4 5.2 4 8a4 4 0 0 1-8 0c0-2.8 1.8-5 4-8z"></path>
+            <path d="M15 7h6M16 11h5M15 15h6"></path>
+          </svg>
+
+          <div class="nav-title">
+            Water Temp<br>/ Wind
+          </div>
+
+          <div class="nav-subtitle">
+            72-hour temps<br>and trends
+          </div>
+
+        </a>
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M3 8h11c3 0 3-4 0-4"></path>
+            <path d="M3 12h15c3 0 3 4 0 4"></path>
+            <path d="M3 16h9"></path>
+          </svg>
+
+          <div class="nav-title">
+            Wind Facts
+          </div>
+
+          <div class="nav-subtitle">
+            South winds<br>drive the bite
+          </div>
+
+        </a>
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="12" width="3" height="7"></rect>
+            <rect x="8" y="8" width="3" height="11"></rect>
+            <rect x="13" y="4" width="3" height="15"></rect>
+            <rect x="18" y="10" width="3" height="9"></rect>
+          </svg>
+
+          <div class="nav-title">
+            About<br>PierBite.com
+          </div>
+
+          <div class="nav-subtitle">
+            Side by side
+          </div>
+
+        </a>
+
+        <a class="nav-card" href="#">
+
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="3" y="5" width="18" height="14" rx="1"></rect>
+            <path d="M4 7l8 6 8-6"></path>
+          </svg>
+
+          <div class="nav-title">
+            Get in<br>touch
+          </div>
+
+          <div class="nav-subtitle">
+            Photos and tips
+          </div>
+
+        </a>
+
+      </nav>
+
+    </section>
 
   </main>
 
   <script>
     if ("serviceWorker" in navigator) {
+
       window.addEventListener("load", function () {
-        navigator.serviceWorker.register("./PierBite-PWA-Service-Worker.js")
+
+        navigator.serviceWorker
+          .register("./PierBite-PWA-Service-Worker.js")
+
           .then(function () {
             console.log("PierBite PWA service worker registered successfully.");
           })
+
           .catch(function (error) {
             console.error("PierBite PWA service worker registration failed:", error);
           });
+
       });
+
     }
   </script>
 
