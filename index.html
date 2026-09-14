@@ -74,5 +74,19 @@
 
   </main>
 
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("./PierBite-PWA-Service-Worker.js")
+          .then(function () {
+            console.log("PierBite PWA service worker registered successfully.");
+          })
+          .catch(function (error) {
+            console.error("PierBite PWA service worker registration failed:", error);
+          });
+      });
+    }
+  </script>
+
 </body>
 </html>
