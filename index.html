@@ -178,6 +178,11 @@
       margin-top: 8px;
     }
 
+    .content-section {
+      max-width: 860px;
+      margin: 28px auto 0;
+    }
+
     @media (max-width: 1000px) {
       .nav-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -187,7 +192,7 @@
 
     @media (max-width: 650px) {
       .page {
-        padding: 0;
+        padding: 0 0 30px;
       }
 
       .hero {
@@ -253,6 +258,10 @@
       .nav-card {
         min-height: 138px;
       }
+
+      .content-section {
+        margin: 14px 12px 0;
+      }
     }
   </style>
 </head>
@@ -292,14 +301,14 @@
       </div>
 
       <div class="intro">
-        Live wind, water and wave conditions for six Lake Michigan fishing
+        Live wind, water and wave conditions for seven Lake Michigan fishing
         piers on Wisconsin's west shore — updated every hour, with every
         number labeled so you know exactly where it came from.
       </div>
 
       <nav class="nav-grid">
 
-        <a class="nav-card" href="#">
+        <a class="nav-card" href="#pick-your-pier">
 
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <circle cx="18" cy="5" r="2"></circle>
@@ -311,7 +320,7 @@
           </div>
 
           <div class="nav-subtitle">
-            All six, scored
+            All seven, scored
           </div>
 
         </a>
@@ -409,7 +418,526 @@
 
     </section>
 
+
+    <section id="pick-your-pier" class="content-section">
+
+      <div id="pbpick">
+        <div class="pbpick-inner">Loading live conditions&hellip;</div>
+      </div>
+
+      <style>
+        #pbpick{
+        --nd:#0b1c2b; --np:#112a3f; --npd:#0e2436; --nl:#1f405b;
+        --ink:#eef5fb; --im:#a3bcd1; --if:#8aa2b6;
+        --lake:#8fd43c; --good:#34c878; --gold:#f5b53f;
+        --warn:#ff8a3d; --bad:#ec5547;
+        --fc:#378add; --sat:#7f77dd; --mdl:#3fbfa8;
+        font-family:"Inter",-apple-system,sans-serif; color:var(--ink);
+        width:100%; margin:0 auto;
+        }
+
+        #pbpick *{box-sizing:border-box;margin:0;padding:0}
+        #pbpick a{color:inherit;text-decoration:none}
+
+        #pbpick .pbpick-inner{
+        background:linear-gradient(180deg,#12293d,#0e2032);
+        border:1px solid var(--nl); border-radius:16px; padding:18px 16px 16px;
+        font-size:.8rem; color:var(--im);
+        }
+
+        #pbpick .pph{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:4px}
+
+        #pbpick .pph h2{
+        font-family:"Barlow Semi Condensed","Inter",sans-serif;
+        font-size:1.15rem;font-weight:700;color:var(--ink)
+        }
+
+        #pbpick .ht{
+        font-size:.56rem;color:var(--if);letter-spacing:.12em;white-space:nowrap
+        }
+
+        #pbpick .tn{
+        font-size:.68rem;color:var(--im);line-height:1.5;margin-bottom:12px
+        }
+
+        #pbpick .bslbl{
+        font-size:.56rem;color:var(--ink);letter-spacing:.12em;
+        text-transform:uppercase;text-align:right;margin-bottom:6px
+        }
+
+        #pbpick .pws{display:flex;flex-direction:column;gap:5px}
+
+        #pbpick .pw{
+        display:block;padding:9px 11px;border-radius:9px;
+        background:var(--npd);border:1px solid transparent;
+        transition:border-color .18s ease,background .18s ease
+        }
+
+        #pbpick .pw:hover,
+        #pbpick .pw:focus-visible{
+        border-color:var(--nl);background:#16344b
+        }
+
+        #pbpick .pw:focus-visible{
+        outline:2px solid var(--lake);outline-offset:2px
+        }
+
+        #pbpick .pw.hot{
+        background:#0f2118;
+        border-color:rgba(245,181,63,.4);
+        padding:10px 11px
+        }
+
+        #pbpick .pw.hot:hover{background:#142b1e}
+
+        #pbpick .prow{display:flex;align-items:center;gap:8px}
+
+        #pbpick .ldt{
+        width:7px;height:7px;border-radius:50%;flex-shrink:0
+        }
+
+        #pbpick .pmid{flex:1;min-width:0}
+
+        #pbpick .pnl{
+        display:flex;align-items:center;gap:7px;flex-wrap:wrap
+        }
+
+        #pbpick .pnm{font-size:.85rem;color:var(--ink)}
+
+        #pbpick .pw.hot .pnm{font-weight:600}
+
+        #pbpick .hb{
+        background:var(--gold);color:#412402;font-size:.5rem;
+        font-weight:600;letter-spacing:.06em;padding:2px 7px;
+        border-radius:10px;white-space:nowrap
+        }
+
+        #pbpick .pstats{
+        display:flex;align-items:center;gap:12px;flex-shrink:0
+        }
+
+        #pbpick .stat{text-align:center;min-width:38px}
+
+        #pbpick .sv{
+        font-size:.72rem;font-weight:600;color:var(--im);white-space:nowrap
+        }
+
+        #pbpick .sl{
+        font-size:.5rem;color:var(--if);letter-spacing:.06em;
+        text-transform:uppercase;margin-top:1px
+        }
+
+        #pbpick .sdiv{
+        width:1px;height:20px;background:var(--nl);flex-shrink:0
+        }
+
+        #pbpick .pend{
+        display:flex;flex-direction:column;align-items:flex-end;
+        justify-content:center;flex-shrink:0;line-height:1.15
+        }
+
+        #pbpick .psc{
+        font-size:1.15rem;font-weight:700;white-space:nowrap
+        }
+
+        #pbpick .pbd{
+        font-size:.62rem;white-space:nowrap
+        }
+
+        #pbpick .sbar{
+        height:3px;background:#132433;border-radius:2px;
+        margin-top:6px;overflow:hidden
+        }
+
+        #pbpick .sfill{height:100%;border-radius:2px}
+
+        #pbpick .lvb{
+        display:inline-flex;align-items:center;gap:7px;
+        font-size:.58rem;letter-spacing:.12em;color:var(--lake);
+        border:1px solid rgba(143,212,60,.25);
+        background:rgba(143,212,60,.06);
+        padding:4px 10px;border-radius:20px;margin-bottom:12px
+        }
+
+        #pbpick .lvd{
+        width:6px;height:6px;border-radius:50%;background:var(--good)
+        }
+
+        #pbpick .stale{
+        margin-top:9px;font-size:.66rem;color:var(--warn)
+        }
+
+        #pbpick .lg{
+        margin-top:14px;border-top:1px solid var(--nl);padding-top:12px
+        }
+
+        #pbpick .lgh{
+        display:flex;align-items:baseline;justify-content:space-between;
+        flex-wrap:wrap;gap:6px;margin-bottom:9px
+        }
+
+        #pbpick .lgk{
+        font-size:.6rem;font-weight:600;letter-spacing:.08em;
+        text-transform:uppercase;color:var(--gold)
+        }
+
+        #pbpick .lgq{
+        font-size:.64rem;color:var(--im);font-style:italic
+        }
+
+        #pbpick .lgg{
+        display:flex;flex-direction:column;gap:6px
+        }
+
+        #pbpick .lgr{
+        display:flex;align-items:center;gap:7px;
+        font-size:.67rem;color:#c3d4e3
+        }
+
+        #pbpick .lgd{
+        width:7px;height:7px;border-radius:50%;flex-shrink:0
+        }
+
+        @media(max-width:420px){
+          #pbpick .pstats{gap:8px}
+          #pbpick .stat{min-width:32px}
+          #pbpick .sv{font-size:.66rem}
+        }
+      </style>
+
+      <script>
+      (function(){
+
+      var LIVE_DATA_URL="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json";
+
+      var PIER_ORDER=[
+      {key:"port_washington",name:"Port Washington",slug:"port-washington"},
+      {key:"sheboygan",name:"Sheboygan",slug:"sheboygan"},
+      {key:"manitowoc",name:"Manitowoc",slug:"manitowoc"},
+      {key:"two_rivers",name:"Two Rivers",slug:"two-rivers"},
+      {key:"kewaunee",name:"Kewaunee",slug:"kewaunee"},
+      {key:"algoma",name:"Algoma",slug:"algoma"},
+      {key:"sturgeon_bay",name:"Sturgeon Bay",slug:"sturgeon-bay"}
+      ];
+
+      var TONE={
+      good:"var(--good)",
+      gold:"var(--gold)",
+      warn:"var(--warn)",
+      bad:"var(--bad)",
+      muted:"var(--if)"
+      };
+
+      var SRC_DOT={
+      LIVE:"var(--good)",
+      MODELED:"var(--mdl)",
+      FORECAST:"var(--fc)",
+      SATELLITE:"var(--sat)",
+      ESTIMATED:"var(--gold)"
+      };
+
+      function color(t){
+        return TONE[t]||TONE.muted;
+      }
+
+      function esc(s){
+        return String(s).replace(/[&<>]/g,function(c){
+          return{
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;"
+          }[c];
+        });
+      }
+
+      function agoText(iso){
+        var m=Math.round((Date.now()-new Date(iso).getTime())/60000);
+
+        if(!isFinite(m)||m<0)return null;
+
+        if(m<1)return"JUST NOW";
+
+        if(m<60)return"UPDATED "+m+" MIN AGO";
+
+        var h=Math.round(m/60);
+
+        return"UPDATED "+h+(h===1?" HOUR":" HOURS")+" AGO";
+      }
+
+      function tempStat(wt){
+        if(wt&&wt.water_temp_f!=null)
+          return wt.water_temp_f.toFixed(1)+"&#176;F";
+
+        return"&mdash;";
+      }
+
+      function trendStat(wt){
+        if(wt&&wt.water_change_72h_f!=null){
+          var c=wt.water_change_72h_f;
+
+          return(c>0?"+":"")+c.toFixed(1)+"&#176;";
+        }
+
+        return"&mdash;";
+      }
+
+      function trendColor(wt){
+        if(
+          wt &&
+          wt.water_change_72h_f!=null &&
+          wt.water_change_72h_f<=-5
+        ){
+          return"var(--fc)";
+        }
+
+        return"var(--im)";
+      }
+
+      function render(data){
+
+        var piers=data.piers||{};
+
+        var mwt=
+          (data.model_water_temp&&data.model_water_temp.points)||{};
+
+        var hot=data.hot_piers_today||[];
+
+        var ago=
+          data.generated_at_utc ?
+          agoText(data.generated_at_utc) :
+          null;
+
+        var badge=
+          ago ?
+          '<div class="lvb"><span class="lvd"></span>LIVE &middot; '+ago+'</div>' :
+          '';
+
+        var stale=false;
+
+        if(data.generated_at_utc&&data.stale_after_hours){
+
+          var ageH=
+            (Date.now()-new Date(data.generated_at_utc).getTime())/
+            3600000;
+
+          if(ageH>data.stale_after_hours)
+            stale=true;
+        }
+
+        var rows=PIER_ORDER.map(function(p){
+
+          var d=piers[p.key];
+
+          if(!d){
+
+            return'<a class="pw" href="#'+p.slug+'">'+
+            '<div class="prow">'+
+            '<span class="ldt" style="background:var(--if)"></span>'+
+            '<div class="pmid">'+
+            '<span class="pnm">'+esc(p.name)+'</span>'+
+            '</div>'+
+            '<div class="pend">'+
+            '<div class="psc" style="color:var(--if)">&mdash;</div>'+
+            '</div>'+
+            '</div>'+
+            '</a>';
+
+          }
+
+          var isHot=hot.indexOf(p.key)!==-1;
+
+          var c=color(d.band&&d.band.tone);
+
+          var h=d.headline||{};
+
+          var wt=mwt[p.key]||{};
+
+          var dot=
+            SRC_DOT[h.water_temp_source]||
+            "var(--if)";
+
+          var scoreNum=
+            (d.score==null)?0:d.score;
+
+          var scoreTxt=
+            (d.score==null)?"&mdash;":d.score;
+
+          var bandTxt=
+            esc((d.band&&d.band.label)||"");
+
+          var hotPill=
+            isHot ?
+            '<span class="hb">HOT PIER'+
+            (hot.length>1?' &middot; TIED':' TODAY')+
+            '</span>' :
+            '';
+
+          var scoreColor=
+            isHot ?
+            "var(--lake)" :
+            "var(--ink)";
+
+          var barColor=
+            isHot ?
+            "var(--lake)" :
+            c;
+
+          var tempTxt=tempStat(wt);
+
+          var trendTxt=trendStat(wt);
+
+          var trendCol=trendColor(wt);
+
+          return'<a class="pw'+
+          (isHot?' hot':'')+
+          '" href="#'+
+          p.slug+
+          '">'+
+
+          '<div class="prow">'+
+
+          '<span class="ldt" style="background:'+
+          dot+
+          '"></span>'+
+
+          '<div class="pmid">'+
+          '<div class="pnl">'+
+          '<span class="pnm">'+
+          esc(p.name)+
+          '</span>'+
+          hotPill+
+          '</div>'+
+          '</div>'+
+
+          '<div class="pstats">'+
+
+          '<div class="stat">'+
+          '<div class="sv">'+
+          tempTxt+
+          '</div>'+
+          '<div class="sl">water</div>'+
+          '</div>'+
+
+          '<div class="sdiv"></div>'+
+
+          '<div class="stat">'+
+          '<div class="sv" style="color:'+
+          trendCol+
+          '">'+
+          trendTxt+
+          '</div>'+
+          '<div class="sl">72h</div>'+
+          '</div>'+
+
+          '<div class="sdiv"></div>'+
+
+          '<div class="pend">'+
+          '<div class="psc" style="color:'+
+          scoreColor+
+          '">'+
+          scoreTxt+
+          '</div>'+
+          '<div class="pbd" style="color:'+
+          c+
+          '">'+
+          bandTxt+
+          '</div>'+
+          '</div>'+
+
+          '</div>'+
+          '</div>'+
+
+          '<div class="sbar">'+
+          '<div class="sfill" style="width:'+
+          scoreNum+
+          '%;background:'+
+          barColor+
+          '"></div>'+
+          '</div>'+
+
+          '</a>';
+
+        }).join('');
+
+        var staleNote=
+          stale ?
+          '<div class="stale">Data may be delayed</div>' :
+          '';
+
+        document.querySelector("#pbpick .pbpick-inner").innerHTML=
+
+        badge+
+
+        '<div class="pph">'+
+        '<h2>Pick Your Pier</h2>'+
+        '<span class="ht">SOUTH TO NORTH</span>'+
+        '</div>'+
+
+        '<div class="tn">'+
+        'Scores are labeled live, modeled, forecast, or estimated.'+
+        '</div>'+
+
+        '<div class="bslbl">Bite Index</div>'+
+
+        '<div class="pws">'+
+        rows+
+        '</div>'+
+
+        staleNote+
+
+        '<div class="lg">'+
+
+        '<div class="lgh">'+
+        '<span class="lgk">Where the numbers come from</span>'+
+        '<span class="lgq">If we have to guess, we\'ll say so.</span>'+
+        '</div>'+
+
+        '<div class="lgg">'+
+
+        '<div class="lgr">'+
+        '<span class="lgd" style="background:var(--good)"></span>'+
+        '<span>Live &mdash; real station reporting now</span>'+
+        '</div>'+
+
+        '<div class="lgr">'+
+        '<span class="lgd" style="background:var(--mdl)"></span>'+
+        '<span>Modeled &mdash; NOAA nearshore</span>'+
+        '</div>'+
+
+        '<div class="lgr">'+
+        '<span class="lgd" style="background:var(--gold)"></span>'+
+        '<span>Estimated &mdash; nearest live reading</span>'+
+        '</div>'+
+
+        '</div>'+
+        '</div>';
+
+      }
+
+      fetch(LIVE_DATA_URL,{cache:"no-store"})
+      .then(function(r){
+        return r.json();
+      })
+      .then(render)
+      .catch(function(){
+
+        document.querySelector(
+          "#pbpick .pbpick-inner"
+        ).innerHTML=
+        '<div style="padding:20px 0;color:var(--im)">'+
+        'Live conditions are temporarily unavailable. '+
+        'Please check back shortly.'+
+        '</div>';
+
+      });
+
+      })();
+      </script>
+
+    </section>
+
   </main>
+
 
   <script>
     if ("serviceWorker" in navigator) {
@@ -420,11 +948,16 @@
           .register("./PierBite-PWA-Service-Worker.js")
 
           .then(function () {
-            console.log("PierBite PWA service worker registered successfully.");
+            console.log(
+              "PierBite PWA service worker registered successfully."
+            );
           })
 
           .catch(function (error) {
-            console.error("PierBite PWA service worker registration failed:", error);
+            console.error(
+              "PierBite PWA service worker registration failed:",
+              error
+            );
           });
 
       });
