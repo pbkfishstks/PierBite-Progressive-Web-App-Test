@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manitowoc | PierBite</title>
+  <meta name="theme-color" content="#061522">
+  <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
+  <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+  <link rel="icon" href="PierBite-App-Icon-192x192.png">
+  <style>
+    html { scroll-behavior: smooth; background: #061522; }
+    body { margin: 0; background: #061522; color: #eef5fb; }
+    .pierbite-pier-page { max-width: 1000px; margin: 0 auto; padding: 24px 20px 48px; }
+    #pbmta,
+#pbmtb,
+#pbmtbsky,
+#pb-mtw-clean,
+#pbphmn,
+#pbsap-manitowoc,
+#pbwebcam-manitowoc { margin-bottom: 12px !important; }
+    @media(max-width:650px) { .pierbite-pier-page { padding: 12px 10px 30px; } }
+  </style>
+</head>
+<body>
+<main class="pierbite-pier-page" id="manitowoc">
+
+<!-- PIERBITE pbmta | 2026-09-11 12:55 UTC | v10 | CONSOLIDATION PASS — box structure brought in line with the Sheboygan template. Colors and radius were already at the master palette (no change needed). Only change: the DNR fishing-license banner line removed from the rendered output, matching Sheboygan's pbsha v9 (which dropped this same banner). No score logic, no station keys, no other behavior touched. -->
+<div id="pbmta"></div>
+<style>#pbmta{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--good:#34c878;--warn:#ff8a3d;--bad:#ec5547;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
+#pbmta *{box-sizing:border-box;margin:0;padding:0}
+#pbmta a{color:inherit;text-decoration:none}
+#pbmta .bb{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--p2);padding-bottom:10px;margin-bottom:16px}
+#pbmta .bn{font-weight:600;font-size:.9rem}
+#pbmta .bn i{color:var(--lake);font-style:normal}
+#pbmta .bn u{color:var(--if);text-decoration:none}
+#pbmta .bl{font-family:var(--fm);font-size:.66rem;letter-spacing:.1em;color:var(--lake);border:1px solid rgba(143,212,60,.3);padding:5px 11px;border-radius:7px}
+#pbmta .ey{font-family:var(--fm);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--lb)}
+#pbmta h1{font-family:var(--fd);font-weight:700;text-transform:uppercase;font-size:2.1rem;line-height:1.05;margin:4px 0 2px}
+#pbmta .up{font-family:var(--fm);font-size:.66rem;color:var(--if);margin-bottom:14px}
+#pbmta .al{padding:11px 15px;border-radius:10px;margin-bottom:14px;font-size:.8rem;line-height:1.45}
+#pbmta .al.hz{border:1px solid rgba(236,85,71,.45);background:rgba(236,85,71,.12);color:#ffb3ab}
+#pbmta .dis{padding:11px 15px;border-radius:10px;margin-bottom:16px;font-size:.75rem;line-height:1.5;background:rgba(245,181,63,.07);border:1px solid rgba(245,181,63,.3);color:var(--im)}
+#pbmta .dis b{color:var(--ink);font-weight:600}
+#pbmta .top{display:grid;grid-template-columns:212px minmax(0,1fr);gap:16px;align-items:stretch;margin-bottom:16px}
+#pbmta .gcd{background:var(--p1);border:1px solid var(--p2);border-radius:16px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+#pbmta .sc{font-family:var(--fm);font-size:2.9rem;font-weight:700;line-height:1}
+#pbmta .bd{font-family:var(--fd);letter-spacing:.09em;text-transform:uppercase;font-size:1rem;margin-top:2px}
+#pbmta .cf{font-family:var(--fm);font-size:.6rem;color:var(--if);margin-top:7px;line-height:1.5}
+#pbmta .tr{border-top:1px solid var(--p2);margin-top:10px;padding-top:9px}
+#pbmta .trv{font-family:var(--fm);font-size:.66rem}
+#pbmta .trt{font-family:var(--fb);font-size:.6rem;color:var(--if);line-height:1.45;margin-top:5px}
+#pbmta .fw{background:var(--p1);border:1px solid var(--p2);border-radius:16px;padding:16px 18px;display:grid;gap:11px;align-content:center}
+#pbmta .fr{display:grid;grid-template-columns:1fr auto;gap:5px;font-size:.74rem;color:var(--im)}
+#pbmta .fr b{color:var(--ink);font-weight:500}
+#pbmta .fv{font-family:var(--fm);font-size:.72rem;color:var(--ink)}
+#pbmta .bar{grid-column:1/-1;height:5px;border-radius:4px;background:#0d2133;overflow:hidden}
+#pbmta .bar i{display:block;height:100%;border-radius:4px}
+#pbmta .expl{grid-column:1/-1;font-size:.68rem;color:var(--im);line-height:1.55;margin-top:1px}
+#pbmta .cap{font-size:.74rem;line-height:1.5;color:#ffd9a8;background:rgba(255,138,61,.09);border:1px solid rgba(255,138,61,.32);border-radius:10px;padding:10px 14px;margin-bottom:16px}
+#pbmta .gt{font-family:var(--fm);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--if);margin-bottom:8px}
+#pbmta .gr{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+#pbmta .cel{background:var(--p1);border:1px solid var(--p2);border-radius:12px;padding:12px 13px}
+#pbmta .cl{font-size:.66rem;color:var(--im);margin-bottom:3px}
+#pbmta .cv{font-family:var(--fm);font-size:1.24rem;font-weight:600;line-height:1.15}
+#pbmta .cs{font-size:.6rem;color:var(--if);line-height:1.45;margin-top:5px;display:flex;gap:5px;align-items:flex-start}
+#pbmta .d{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+#pbmta .ld{padding:44px 20px;text-align:center;color:var(--im);font-family:var(--fm);font-size:.82rem}
+@media(max-width:760px){#pbmta .top{grid-template-columns:1fr}#pbmta .gr{grid-template-columns:1fr 1fr}#pbmta h1{font-size:1.7rem}}
+</style>
+<script>(function(){
+var U="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json";
+var KEY="manitowoc";
+var STALE_HOURS=3;
+var BUOY_KEY="mt1";
+var WIND_SHARED="";
+var TONE={good:"var(--good)",gold:"var(--gold)",warn:"var(--warn)",bad:"var(--bad)"};
+var SRC={LIVE:"var(--good)",MODELED:"var(--lb)",FORECAST:"var(--lb)",SATELLITE:"var(--lb)",ESTIMATED:"var(--gold)"};
+function E(s){return String(s==null?"":s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function tone(t){return TONE[t]||"var(--if)";}
+function dot(s){return SRC[s]||"var(--if)";}
+function ago(iso){var m=Math.round((Date.now()-new Date(iso).getTime())/60000);if(!isFinite(m)||m<0)return null;if(m<1)return"just now";if(m<60)return m+" min ago";var h=Math.round(m/60);return h+(h===1?" hour ago":" hours ago");}
+function cell(label,val,srcTier,srcText){
+return '<div class="cel"><div class="cl">'+E(label)+'</div><div class="cv">'+val+'</div>'+
+'<div class="cs"><span class="d" style="background:'+dot(srcTier)+'"></span><span>'+srcText+'</span></div></div>';}
+function dist(mi){return (typeof mi==="number")?(mi.toFixed(1)+" mi from the pier"):null;}
+function waterSub(h){
+var ws=h.water_temp_source;
+var label=h.water_temp_station_label;
+var mi=h.water_temp_distance_mi;
+var d=dist(mi);var distText=d?(" \u00b7 "+d):"";
+var trend="";
+if(h.water_change_24h_f!=null){var t=h.water_change_24h_f;trend=" \u00b7 "+(t>0?"+":"")+t.toFixed(1)+"\u00b0 in 24h";}
+if(ws==="LIVE"){
+return (label||"Live station")+distText+trend;
+}
+if(ws==="MODELED"){
+return "Modeled \u2014 NOAA LMHOFS"+(label?(" \u00b7 "+label):"")+distText+trend;
+}
+if(ws==="ESTIMATED"){
+if(h.water_temp_from){
+return "Estimated from "+E(h.water_temp_from)+", the closest buoy still reporting today \u2014 other piers may show the same number until more come back online"+trend;
+}
+return "Estimated \u2014 no nearby buoy identified right now"+trend;
+}
+return "Unknown \u2014 no reliable reading right now";
+}
+function windAge(w){
+var lag=w.age_hours;
+if(lag==null||!isFinite(lag))return "";
+if(lag<0)lag=0;
+if(lag<STALE_HOURS)return "";
+var n=Math.round(lag);
+return '<br><span style="color:var(--gold)">\u26a0 Reading '+n+(n===1?' hour':' hours')+' old</span>';
+}
+function windSub(h,data){
+var w=h.wind||{};
+var parts=[];
+if(h.wind_station_label)parts.push(h.wind_station_label);
+var d=dist(h.wind_distance_mi);
+if(d)parts.push(d);
+var base=(parts.length?parts.join(" \u00b7 "):"Station not identified");
+if(w.source==="ESTIMATED"&&w.source_name){
+base=base+" \u00b7 estimated, borrowed from "+E(w.source_name);
+}else{
+base=base+WIND_SHARED;
+}
+return base+windAge(w);
+}
+function waveSub(data,h){
+if(h.wave_source==="LIVE"){
+var s=(data.stations||{})[BUOY_KEY]||{};
+var lbl=s.label||"Open-lake buoy";
+return (/open lake/i.test(lbl))?lbl:(lbl+" \u00b7 open lake");
+}
+if(h.wave_source==="FORECAST")return "NWS marine zone forecast";
+return "Not reported right now";
+}
+function trendBlock(h){
+var c=h.water_change_72h_f;
+if(c==null)return "";
+var arrow,color,text;
+if(c<-0.05){
+arrow="&#9660;";
+color="var(--good)";
+text="Cooling fast right now &mdash; that trend is doing more for this score than the current number alone.";
+}else if(c>0.05){
+arrow="&#9650;";
+color="var(--warn)";
+text="Warming steadily &mdash; a colder but stable pier can still score under a faster-cooling one.";
+}else{
+arrow="&#8213;";
+color="var(--if)";
+text="Holding steady over the past 3 days.";
+}
+var val=Math.abs(c).toFixed(1)+"\u00b0 in 3 days";
+return '<div class="tr"><div class="trv" style="color:'+color+'">'+arrow+' '+val+'</div><div class="trt">'+text+'</div></div>';
+}
+window.__PB=window.__PB||fetch(U,{cache:"no-store"}).then(function(r){return r.json();});
+window.__PB.then(function(data){
+var p=(data.piers||{})[KEY];
+if(!p){throw new Error("no pier");}
+var h=p.headline||{};
+var stamp=data.generated_at_utc?ago(data.generated_at_utc):null;
+var c=tone(p.band&&p.band.tone);
+var bars=(p.factors||[]).map(function(f,idx){
+var fc=f.score>=70?"var(--good)":(f.score>=45?"var(--warn)":"var(--bad)");
+var expl=(idx===0&&f.explain&&f.explain.text)?('<div class="expl">'+E(f.explain.text)+'</div>'):'';
+return '<div class="fr"><b>'+E(f.label)+'</b><span class="fv">'+E(f.score)+' &middot; '+E(f.weight)+'%</span>'+
+'<div class="bar"><i style="width:'+Math.max(2,Math.min(100,f.score))+'%;background:'+fc+'"></i></div>'+expl+'</div>';}).join('');
+var capHtml=(p.capped&&p.capped.active&&p.capped.reason)?'<div class="cap">'+E(p.capped.reason)+'</div>':'';
+var hzHtml=(p.beach_hazard&&p.beach_hazard.active)?'<div class="al hz">Beach hazard statement in effect for this shoreline. Check conditions before you go.</div>':'';
+var wt=(h.water_temp_f==null)?'&mdash;':(h.water_temp_f.toFixed(1)+'&deg;F');
+var wtSub=waterSub(h);
+var w=h.wind||{};
+var wv=(w.mph==null)?'&mdash;':(E(w.dir||'')+' '+w.mph.toFixed(1));
+var wvu=(w.mph==null)?'':'<span style="font-size:.62rem;color:var(--if)"> mph</span>';
+var wave=(h.wave_ft==null)?'&mdash;':(h.wave_ft.toFixed(1)+'<span style="font-size:.62rem;color:var(--if)"> ft</span>');
+var pr=(h.pressure_hpa==null)?'&mdash;':(h.pressure_hpa.toFixed(0)+'<span style="font-size:.62rem;color:var(--if)"> hPa</span>');
+var prSub=(h.pressure_hpa==null)?'Not reported by any station we trust here':'Live station reading';
+document.getElementById("pbmta").innerHTML=
+'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="index.html#pick-your-pier">ALL PIERS</a></div>'+
+'<div class="ey">Lake Michigan Pier Report</div>'+
+'<h1>Manitowoc</h1>'+
+'<div class="up">Updated '+(stamp?E(stamp):'recently')+'</div>'+
+hzHtml+
+'<div class="dis">The <b>Bite Index</b> scores the conditions we can measure &mdash; wind, water temperature, waves and storm risk. It describes the lake. It does not tell you to go, and it is not a safety rating.</div>'+
+'<div class="top">'+
+'<div class="gcd"><div class="sc" style="color:'+c+'">'+E(p.score==null?'--':p.score)+'</div>'+
+'<div class="bd" style="color:'+c+'">'+E((p.band&&p.band.label)||'')+'</div>'+
+'<div class="cf">'+E(p.verified_count)+' of '+E(p.factor_total)+' factors<br>measured live</div>'+
+trendBlock(h)+
+'</div>'+
+'<div class="fw">'+bars+'</div>'+
+'</div>'+
+capHtml+
+'<div class="gt">Right now at the pier</div>'+
+'<div class="gr">'+
+cell('Water temp',wt,h.water_temp_source,wtSub)+
+cell('Wind',wv+wvu,w.source,windSub(h,data))+
+cell('Waves',wave,h.wave_source,waveSub(data,h))+
+cell('Pressure',pr,h.pressure_hpa==null?null:'LIVE',prSub)+
+'</div>';
+}).catch(function(){
+document.getElementById("pbmta").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
+});
+})();</script>
+
+
+<!-- PIERBITE pbmtb | 2026-09-13 16:38 UTC | v6 | SPLIT: Sky/Moon/Forecast collapsible removed from this box per Paul's explicit request - now lives in its own separate box (pbmtbsky, delivered alongside this file). This box is now WIND-ONLY: the 72-hour wind ribbon, read-out sentence, and colour ramp legend. Same pier-specific split already applied to Sturgeon Bay, Algoma, Kewaunee, and Two Rivers this session; not applied to remaining piers unless Paul asks for each. HKEY="mtw" preserved verbatim. UPWELLING_COMPONENT table preserved unchanged (verbatim from fetch_data.py, D315 - frozen band, not re-derived). -->
+<div id="pbmtb"></div>
+<style>#pbmtb{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--good:#34c878;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
+#pbmtb *{box-sizing:border-box;margin:0;padding:0}
+#pbmtb .sec{margin-bottom:18px}
+#pbmtb .ey{font-family:var(--fm);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+#pbmtb h2{font-family:var(--fd);font-weight:700;text-transform:uppercase;font-size:1.35rem;letter-spacing:.01em;margin-bottom:3px}
+#pbmtb .sd{font-size:.74rem;color:var(--im);line-height:1.55;margin-bottom:12px}
+#pbmtb .card{background:var(--p1);border:1px solid var(--p2);border-radius:16px;padding:16px 18px}
+#pbmtb .rib{display:flex;align-items:flex-end;gap:1px;height:104px;padding-left:34px;position:relative;border-bottom:1px solid var(--p2)}
+#pbmtb .ax{position:absolute;left:0;top:0;bottom:0;width:32px;font-family:var(--fm);font-size:.56rem;color:var(--if)}
+#pbmtb .ax span{position:absolute;right:4px;transform:translateY(-50%)}
+#pbmtb .gl{position:absolute;left:34px;right:0;border-top:1px dashed rgba(31,64,91,.7)}
+#pbmtb .bx{flex:1;min-width:0;display:flex;align-items:flex-end;height:100%;position:relative;z-index:1}
+#pbmtb .bx i{display:block;width:100%;border-radius:1px 1px 0 0}
+#pbmtb .days{display:flex;padding-left:34px;margin-top:5px;font-family:var(--fm);font-size:.56rem;color:var(--if);letter-spacing:.08em}
+#pbmtb .days span{flex:1;text-align:center}
+#pbmtb .read{margin-top:13px;padding-top:13px;border-top:1px solid var(--p2);font-size:.8rem;color:var(--im);line-height:1.6}
+#pbmtb .read b{color:var(--gold);font-weight:600}
+#pbmtb .ramp{margin-top:9px}
+#pbmtb .ramp-bar{height:8px;border-radius:4px;background:linear-gradient(to right,rgb(245,181,63) 0%,rgb(63,92,120) 50%,rgb(57,124,191) 100%)}
+#pbmtb .ramp-labels{display:flex;font-size:.66rem;margin-top:6px}
+#pbmtb .ramp-labels .rl-w{color:var(--gold);text-align:left;flex:0 0 auto}
+#pbmtb .ramp-labels .rl-c{color:var(--if);text-align:center;flex:1}
+#pbmtb .ramp-labels .rl-e{color:var(--lb);text-align:right;flex:0 0 auto}
+#pbmtb .ramp-note{font-size:.62rem;color:var(--if);line-height:1.5;margin-top:4px}
+#pbmtb .ld{padding:40px 20px;text-align:center;color:var(--im);font-family:var(--fm);font-size:.82rem}
+@media(max-width:760px){#pbmtb .rib{height:84px}#pbmtb h2{font-size:1.15rem}}
+</style>
+<script>(function(){
+var U="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json";
+var HKEY="mtw";
+var FAVOURABLE={S:1,SSW:1,SW:1,WSW:1,W:1};
+var AXIS=[0,10,20,30];
+var UPWELLING_COMPONENT={
+S:1.000,SSW:1.000,SW:1.000,WSW:1.000,W:1.000,
+WNW:0.541,NW:0.000,NNW:-0.541,
+N:-1.000,NNE:-1.000,NE:-1.000,ENE:-1.000,E:-1.000,
+ESE:-0.541,SE:0.000,SSE:0.541
+};
+function upwellingComponent(dir){
+var v=UPWELLING_COMPONENT[dir];
+return (v===undefined)?0:v;
+}
+function windColor(w){
+var SLATE=[63,92,120],GOLD=[245,181,63],BLUE=[55,138,221];
+var t,target;
+if(w>0.05){t=Math.pow(w,0.7);target=GOLD;}
+else if(w<-0.05){t=Math.pow(-w,0.7)*0.7;target=BLUE;}
+else return "rgb("+SLATE[0]+","+SLATE[1]+","+SLATE[2]+")";
+var r=Math.round(SLATE[0]+(target[0]-SLATE[0])*t);
+var g=Math.round(SLATE[1]+(target[1]-SLATE[1])*t);
+var b=Math.round(SLATE[2]+(target[2]-SLATE[2])*t);
+return "rgb("+r+","+g+","+b+")";
+}
+var STALE_HOURS=3;
+function lagHours(hist){
+if(!hist||!hist.observed_at_utc)return null;
+var t=new Date(hist.observed_at_utc).getTime();
+if(!isFinite(t))return null;
+var lag=(Date.now()-t)/3600000;
+return lag<0?0:lag;
+}
+function gapBar(ha){
+return '<div class="bx" title="No reading, '+E(ha)+'h ago"><i style="height:8%;background:repeating-linear-gradient(45deg,#3a5060 0,#3a5060 3px,#16283a 3px,#16283a 6px)"></i></div>';
+}
+function E(s){return String(s==null?"":s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+window.__PB=window.__PB||fetch(U,{cache:"no-store"}).then(function(r){return r.json();});
+window.__PB.then(function(data){
+var st=(data.station_history||{})[HKEY]||{};
+var hrs=st.hourly||[];
+var ribbon='',days='',read='',keyRow='';
+if(hrs.length){
+var byHour={},oldest=-1,newest=1e9;
+for(var i=0;i<hrs.length;i++){
+var ha=hrs[i].hours_ago;
+byHour[ha]=hrs[i];
+if(ha>oldest)oldest=ha;
+if(ha<newest)newest=ha;
+}
+var fav=0,peak=0,missing=0;
+for(var hh=oldest;hh>=newest;hh--){
+var rec=byHour[hh];
+if(rec){if(FAVOURABLE[rec.dir])fav++;if((rec.mph||0)>peak)peak=rec.mph;}else{missing++;}
+}
+var top=Math.max(20,Math.ceil(peak/10)*10);
+var barsHtml='';
+for(var hh2=oldest;hh2>=newest;hh2--){
+var rec2=byHour[hh2];
+if(!rec2){barsHtml+=gapBar(hh2);continue;}
+var mph=rec2.mph||0;
+var pct=Math.max(3,Math.round(mph/top*100));
+var col=windColor(upwellingComponent(rec2.dir));
+barsHtml+='<div class="bx" title="'+E(rec2.dir||'')+' '+mph+' mph, '+E(rec2.hours_ago)+'h ago"><i style="height:'+pct+'%;background:'+col+'"></i></div>';
+}
+ribbon=barsHtml;
+var grid=AXIS.filter(function(v){return v<=top;}).map(function(v){
+return '<div class="gl" style="bottom:'+(v/top*100)+'%"></div>';}).join('')+
+'<div class="ax">'+AXIS.filter(function(v){return v<=top;}).map(function(v){
+return '<span style="bottom:'+(v/top*100)+'%">'+v+'</span>';}).join('')+'</div>';
+ribbon=grid+ribbon;
+var lag=lagHours(st);
+var nowLabel=(lag===null)?"LATEST":(lag<STALE_HOURS?"NOW":(Math.round(lag)+"H AGO"));
+days='<div class="days"><span>3 DAYS AGO</span><span>2 DAYS AGO</span><span>YESTERDAY</span><span>'+nowLabel+'</span></div>';
+var totalSlots=oldest-newest+1;
+var missingLine=missing?('<div style="font-size:.72rem;color:var(--im);margin-top:6px;">'+missing+(missing===1?' hour':' hours')+' missing \u2014 the station did not report</div>'):'';
+var staleLine=(lag!==null&&lag>=STALE_HOURS)?('<div style="font-family:var(--fm);font-size:.68rem;color:var(--gold);margin-top:6px;">\u26a0 Latest reading '+Math.round(lag)+(Math.round(lag)===1?' hour':' hours')+' ago \u2014 not current</div>'):'';
+read='<div class="read"><b>'+fav+' of the last '+totalSlots+' hours</b> had wind from the favourable south-to-west band.'+missingLine+staleLine+'</div>';
+keyRow='<div class="ramp"><div class="ramp-bar"></div><div class="ramp-labels"><span class="rl-w">South &ndash; West</span><span class="rl-c">Neutral</span><span class="rl-e">North &ndash; East</span></div>'+
+'<div class="ramp-note">Bar height is wind speed, measured hourly. Colour is direction, weighted by PierBite&rsquo;s wind model &mdash; see the Wind / Upwelling factor on the score card above for what this pattern can mean.</div>'+
+'</div>';
+}else{
+ribbon='';days='';
+read='<div class="read">Hourly wind history is not available from this station right now.</div>';
+}
+document.getElementById("pbmtb").innerHTML=
+'<div class="sec"><div class="ey">The wind story</div>'+
+'<h2>Last 72 Hours of Wind</h2>'+
+'<div class="sd">Every hour, measured &mdash; not averaged, not forecast. Colour shows how favourable each hour was under PierBite&rsquo;s wind model &mdash; south through west is tied for most favourable, not west alone.</div>'+
+'<div class="card"><div class="rib">'+ribbon+'</div>'+days+read+keyRow+'</div></div>';
+}).catch(function(){
+document.getElementById("pbmtb").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
+});
+})();</script>
+
+
+<!-- PIERBITE pbmtbsky | 2026-09-13 16:38 UTC | v1 | NEW BOX - split out of pbmtb Pier B per Paul's explicit request (same treatment as Sturgeon Bay, Algoma, Kewaunee, Two Rivers this session). Manitowoc's own coordinates (44.0914/-87.6438) and zone key (ZKEY="mtz", PKEY="manitowoc") preserved verbatim. Collapsible, collapsed by default, same toggle pattern as every other pier. Fetches data.json independently (self-sufficient). -->
+<div id="pbmtbsky"></div>
+<style>#pbmtbsky{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
+#pbmtbsky *{box-sizing:border-box;margin:0;padding:0}
+#pbmtbsky .card{background:var(--p1);border:1px solid var(--p2);border-radius:16px;padding:16px 18px}
+#pbmtbsky .fc{font-size:.78rem;color:var(--im);line-height:1.6}
+#pbmtbsky .fp{padding:9px 0;border-bottom:1px solid rgba(31,64,91,.55)}
+#pbmtbsky .fp:last-child{border-bottom:0;padding-bottom:0}
+#pbmtbsky .fn{font-family:var(--fm);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lb);margin-bottom:2px}
+#pbmtbsky .ld{padding:40px 20px;text-align:center;color:var(--im);font-family:var(--fm);font-size:.82rem}
+#pbmtbsky .tog{display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:var(--p1);border:1px solid var(--p2);border-radius:12px;padding:11px 16px;width:100%;font-family:var(--fd);font-weight:700;text-transform:uppercase;font-size:.95rem;letter-spacing:.01em;color:var(--ink)}
+#pbmtbsky .tog:hover{border-color:var(--gold)}
+#pbmtbsky .tog-arrow{font-size:.8rem;color:var(--if);transition:transform .2s}
+#pbmtbsky .tog-arrow.open{transform:rotate(180deg)}
+#pbmtbsky .fc-wrap{display:none;margin-top:8px}
+#pbmtbsky .fc-wrap.open{display:block}
+#pbmtbsky .moon-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px 16px;align-items:center;padding:12px 16px;background:var(--p1);border:1px solid var(--p2);border-radius:12px;margin-bottom:8px}
+#pbmtbsky .moon-cell .k{font-size:.56rem;text-transform:uppercase;letter-spacing:.08em;color:var(--if)}
+#pbmtbsky .moon-cell .v{font-size:.9rem;font-weight:600;margin-top:2px}
+#pbmtbsky .moon-icon{display:flex;flex-direction:column;align-items:center;gap:3px}
+#pbmtbsky .moon-name{font-size:.65rem;font-weight:600;text-align:center}
+#pbmtbsky .moon-pct{font-size:.58rem;color:var(--if);text-align:center}
+</style>
+<script>(function(){
+var U="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json";
+var ZKEY="mtz";
+function E(s){return String(s==null?"":s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+var RAD=Math.PI/180,DAY_MS=864e5,J1970=2440588,J2000=2451545,OBLIQ=RAD*23.4397;
+var MLAT=44.0914,MLON=-87.6438;
+function toJulian(d){return d.valueOf()/DAY_MS-0.5+J1970;}
+function fromJulian(j){return new Date((j+0.5-J1970)*DAY_MS);}
+function toDays(d){return toJulian(d)-J2000;}
+function mRightAsc(l,b){return Math.atan2(Math.sin(l)*Math.cos(OBLIQ)-Math.tan(b)*Math.sin(OBLIQ),Math.cos(l));}
+function mDecl(l,b){return Math.asin(Math.sin(b)*Math.cos(OBLIQ)+Math.cos(b)*Math.sin(OBLIQ)*Math.sin(l));}
+function solarAnom(d){return RAD*(357.5291+0.98560028*d);}
+function eclLon(M){var C=RAD*(1.9148*Math.sin(M)+0.02*Math.sin(2*M)+0.0003*Math.sin(3*M)),P=RAD*102.9372;return M+C+P+Math.PI;}
+function siderealT(d,lw){return RAD*(280.16+360.9856235*d)-lw;}
+function julCycle(d,lw){return Math.round(d-0.0009-lw/(2*Math.PI));}
+function approxT(Ht,lw,n){return 0.0009+(Ht+lw)/(2*Math.PI)+n;}
+function solarTJ(ds,M,L){return J2000+ds+0.0053*Math.sin(M)-0.0069*Math.sin(2*L);}
+function hourAng(h,phi,d){return Math.acos(Math.max(-1,Math.min(1,(Math.sin(h)-Math.sin(phi)*Math.sin(d))/(Math.cos(phi)*Math.cos(d)))));}
+function sunTimes(date){
+var lw=RAD*-MLON,phi=RAD*MLAT,d=toDays(date);
+var n=julCycle(d,lw),ds=approxT(0,lw,n);
+var M=solarAnom(ds),L=eclLon(M),dec=mDecl(L,0);
+var Jnoon=solarTJ(ds,M,L),h0=-0.833*RAD;
+var w=hourAng(h0,phi,dec),a=approxT(w,lw,n);
+var Jset=solarTJ(a,M,L),Jrise=Jnoon-(Jset-Jnoon);
+return{sunrise:fromJulian(Jrise),sunset:fromJulian(Jset)};}
+function moonCoords(d){
+var L=RAD*(218.316+13.176396*d),M=RAD*(134.963+13.064993*d),F=RAD*(93.272+13.229350*d);
+var l=L+RAD*6.289*Math.sin(M),b=RAD*5.128*Math.sin(F);
+return{ra:mRightAsc(l,b),dec:mDecl(l,b)};}
+function moonAlt(date){
+var lw=RAD*-MLON,phi=RAD*MLAT,d=toDays(date);
+var c=moonCoords(d),H=siderealT(d,lw)-c.ra;
+return Math.asin(Math.sin(phi)*Math.sin(c.dec)+Math.cos(phi)*Math.cos(c.dec)*Math.cos(H));}
+function moonRiseSet(date){
+var t=new Date(date);t.setHours(0,0,0,0);
+var hc=0.133*RAD,rise=null,set=null,prev=moonAlt(t)-hc;
+for(var i=1;i<=24;i++){
+var t2=new Date(t.getTime()+i*3600*1000),alt=moonAlt(t2)-hc;
+if(prev<0&&alt>=0&&!rise)rise=new Date(t.getTime()+(i-1+(-prev)/(alt-prev))*3600*1000);
+if(prev>=0&&alt<0&&!set)set=new Date(t.getTime()+(i-1+prev/(prev-alt))*3600*1000);
+prev=alt;}
+return{rise:rise,set:set};}
+function moonPhase(date){
+var lp=2551443,ref=Date.UTC(2000,0,6,18,14,0)/1000;
+var phase=((date.getTime()/1000-ref)%lp+lp)%lp,frac=phase/lp;
+var illum=(1-Math.cos(2*Math.PI*frac))/2,name;
+if(frac<0.03||frac>0.97)name="New Moon";
+else if(frac<0.22)name="Waxing Crescent";
+else if(frac<0.28)name="First Quarter";
+else if(frac<0.47)name="Waxing Gibbous";
+else if(frac<0.53)name="Full Moon";
+else if(frac<0.72)name="Waning Gibbous";
+else if(frac<0.78)name="Last Quarter";
+else name="Waning Crescent";
+return{frac:frac,illum:illum,name:name};}
+function fmtT(d){if(!d)return"\u2014";var h=d.getHours(),m=d.getMinutes(),ap=h>=12?"PM":"AM",h12=h%12;if(h12===0)h12=12;return h12+":"+(m<10?"0":"")+m+" "+ap;}
+function moonSVG(phase){
+var r=16,cx=17,cy=17,theta=phase*2*Math.PI;
+var rx=r*Math.abs(Math.cos(theta)),waxing=phase<0.5;
+var s1=waxing?1:0,cosNeg=Math.cos(theta)<0;
+var s2=waxing?(cosNeg?1:0):(cosNeg?0:1);
+var d="M "+cx+" "+(cy-r)+" A "+r+" "+r+" 0 0 "+s1+" "+cx+" "+(cy+r)+" A "+rx.toFixed(2)+" "+r+" 0 0 "+s2+" "+cx+" "+(cy-r)+" Z";
+return'<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#22334a" stroke="#4a9fd4" stroke-width="0.5" opacity="0.9"></circle><path d="'+d+'" fill="#e8eef4"></path></svg>';}
+var now=new Date(),sun=sunTimes(now),moonRS=moonRiseSet(now),mp=moonPhase(now);
+var moonHtml='<div class="moon-grid">'+
+'<div class="moon-cell"><div class="k">Sunrise</div><div class="v">'+fmtT(sun.sunrise)+'</div></div>'+
+'<div class="moon-cell"><div class="k">Sunset</div><div class="v">'+fmtT(sun.sunset)+'</div></div>'+
+'<div class="moon-cell"><div class="k">Moonrise</div><div class="v">'+fmtT(moonRS.rise)+'</div></div>'+
+'<div class="moon-cell"><div class="k">Moonset</div><div class="v">'+fmtT(moonRS.set)+'</div></div>'+
+'<div class="moon-icon">'+moonSVG(mp.frac)+'<div class="moon-name">'+mp.name+'</div><div class="moon-pct">'+Math.round(mp.illum*100)+'% lit</div></div>'+
+'</div>';
+
+window.__PB=window.__PB||fetch(U,{cache:"no-store"}).then(function(r){return r.json();});
+window.__PB.then(function(data){
+var z=(data.zones||{})[ZKEY]||{};
+var f=z.forecast||{};
+var per=[];
+if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
+(f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
+var fcHtml=per.length?per.map(function(x){return '<div class="fp"><div class="fn">'+E(x.n||'')+'</div><div>'+E(x.t)+'</div></div>';}).join(''):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
+document.getElementById("pbmtbsky").innerHTML=
+'<button class="tog" id="pbmtbskyTog" type="button">'+
+'<span>\u25c6 Sky, Moon &amp; Forecast</span>'+
+'<span class="tog-arrow" id="pbmtbskyArr">\u25be</span>'+
+'</button>'+
+'<div class="fc-wrap" id="pbmtbskyWrap">'+
+moonHtml+
+'<div class="card"><div class="fn" style="margin-bottom:8px">NOAA Marine Forecast \u2014 '+E(z.label||"Nearshore waters")+'</div><div class="fc">'+fcHtml+'</div></div>'+
+'</div>';
+document.getElementById('pbmtbskyTog').addEventListener('click',function(){
+var w=document.getElementById('pbmtbskyWrap');
+var a=document.getElementById('pbmtbskyArr');
+w.classList.toggle('open');
+a.classList.toggle('open');
+});
+}).catch(function(){
+document.getElementById("pbmtbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
+});
+})();</script>
+
+
+
+
+
+
+<!-- PIERBITE pb-mtw-clean | 2026-09-11 12:55 UTC | v2 | CONSOLIDATION PASS — restructured into a collapsible toggle box to match Sheboygan's pb-sheb-clean pattern (was previously always-open). Recolored to the master palette and 16px card radius. Content (Manitowoc Marina, public access) unchanged. -->
+<div id="pb-mtw-clean">
+<button class="tog" id="pbmtwCleanTog" type="button">
+<span>&#9670; Fish Cleaning Stations</span>
+<span class="tog-arrow" id="pbmtwCleanArr">&#9662;</span>
+</button>
+<div class="fc-wrap" id="pbmtwCleanWrap">
+<div class="panel">
+<h3 class="lp-h3">Where to clean your catch</h3>
+<div class="lp-row" style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+<div><a class="lp-link" href="https://www.manitowoc-marina.com" target="_blank" rel="noopener">Manitowoc Marina</a><div class="lp-meta">425 Maritime Dr &middot; Open to any angler &middot; Restrooms on site</div></div>
+<span class="badge pub">Public</span>
+</div>
+<p class="note">Hours and access can change, especially off-season &mdash; call ahead to confirm before you go. Use caution around docks, launches, and slippery surfaces at any cleaning station.</p>
+</div>
+</div>
+</div>
+<style>
+#pb-mtw-clean{--p1:#112a3f;--p0:#0b1c2b;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--lb:#5fb6f0;--fy:"Inter",sans-serif;font-family:var(--fy);color:var(--ink);max-width:960px;margin:0 auto}
+#pb-mtw-clean *{box-sizing:border-box}
+#pb-mtw-clean .tog{display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:var(--p1);border:1px solid var(--p2);border-radius:12px;padding:11px 16px;width:100%;font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;text-transform:uppercase;font-size:.95rem;letter-spacing:.01em;color:var(--ink);margin-bottom:0}
+#pb-mtw-clean .tog:hover{border-color:var(--lake)}
+#pb-mtw-clean .tog-arrow{font-size:.8rem;color:var(--if);transition:transform .2s}
+#pb-mtw-clean .tog-arrow.open{transform:rotate(180deg)}
+#pb-mtw-clean .fc-wrap{display:none;margin-top:8px}
+#pb-mtw-clean .fc-wrap.open{display:block}
+#pb-mtw-clean .panel{background:var(--p1);border:1px solid var(--p2);border-radius:16px;padding:18px}
+#pb-mtw-clean .lp-h3{font-weight:600;font-size:1.05rem;margin:0 0 12px}
+#pb-mtw-clean .lp-row{border-top:1px solid #12222f;padding:10px 0}
+#pb-mtw-clean .lp-row:first-of-type{border-top:none;padding-top:0}
+#pb-mtw-clean .lp-link{font-size:.88rem;font-weight:500;color:var(--lb);text-decoration:none}
+#pb-mtw-clean .lp-link:hover{text-decoration:underline}
+#pb-mtw-clean .lp-meta{font-size:.73rem;color:var(--if);margin-top:2px}
+#pb-mtw-clean .badge{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:3px 9px;border-radius:999px}
+#pb-mtw-clean .badge.pub{background:rgba(143,212,60,.14);color:var(--lake);border:1px solid rgba(143,212,60,.38)}
+#pb-mtw-clean .note{color:var(--im);font-size:.76rem;text-align:center;margin-top:12px}
+</style>
+<script>(function(){
+var btn=document.getElementById("pbmtwCleanTog");
+var wrap=document.getElementById("pbmtwCleanWrap");
+var arr=document.getElementById("pbmtwCleanArr");
+if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
+})();</script>
+
+
+
+<!-- PIERBITE pbphmn | 2026-09-12 | v5 | FONT SIZE INCREASE -- same caption-overlay fix as v4, text made larger (.8rem to 1.05rem) for readability, per Paul's request. Wrapping for long captions was already built in and is unaffected. ORIGINAL v4 NOTE — v3 put the caption text under each thumbnail, which Paul did not want (it was not the prior behavior and wasn't the fix he asked for). Reverted thumbnails to plain photo squares, no caption text. Instead, moved the caption onto the enlarged (lightbox) view: it now sits as a shaded overlay strip on the BOTTOM EDGE of the photo itself (not as a separate block below it). Root cause of "you wouldn't see anything" in the old lightbox: the caption WAS being set (lbCap.textContent), but it sat as a separate flex item stacked below the image, and a tall photo could already fill nearly the full screen height, pushing the caption text off the visible area. Overlaying the caption directly on the image guarantees it's always visible regardless of photo height. If a photo has no caption, no overlay strip is shown at all. -->
+<div id="pbphmn">
+<button class="pbphmn-tog" id="pbphmnTog" type="button">
+<span>&#9670; Manitowoc Photo Gallery</span>
+<span class="pbphmn-arr" id="pbphmnArr">&#9662;</span>
+</button>
+<div class="pbphmn-wrap" id="pbphmnWrap">
+<div class="pbphmn-inner"></div>
+</div>
+</div>
+<div class="pbphmn-lb" id="pbphmn-lb">
+<div class="pbphmn-lbx" id="pbphmn-x">&times;</div>
+<div class="pbphmn-lbw">
+<img class="pbphmn-lbi" id="pbphmn-img" src=""/>
+<div class="pbphmn-lbc" id="pbphmn-cap"></div>
+</div>
+</div>
+<style>
+#pbphmn{--nd:#0b1c2b;--np:#112a3f;--nl:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;font-family:"Inter",sans-serif;color:var(--ink);max-width:960px;margin:0 auto}
+#pbphmn *{box-sizing:border-box;margin:0;padding:0}
+#pbphmn .pbphmn-tog{display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:var(--np);border:1px solid var(--nl);border-radius:12px;padding:11px 16px;width:100%;font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;text-transform:uppercase;font-size:.95rem;letter-spacing:.01em;color:var(--ink)}
+#pbphmn .pbphmn-tog:hover{border-color:var(--lake)}
+#pbphmn .pbphmn-arr{font-size:.8rem;color:var(--if);transition:transform .2s}
+#pbphmn .pbphmn-arr.open{transform:rotate(180deg)}
+#pbphmn .pbphmn-wrap{display:none;margin-top:8px}
+#pbphmn .pbphmn-wrap.open{display:block}
+#pbphmn .pbphmn-inner{padding:4px 0}
+#pbphmn .kck{font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:4px}
+#pbphmn h2{font-size:1.05rem;font-weight:600;margin:0 0 3px}
+#pbphmn .sub{font-size:.72rem;color:var(--im);margin:0 0 16px}
+#pbphmn .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+#pbphmn .th{position:relative;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:1px solid var(--nl);background:var(--np);cursor:pointer}
+#pbphmn .th img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .15s ease}
+#pbphmn .th:hover img{transform:scale(1.05)}
+#pbphmn .empty{background:var(--np);border:1px solid var(--nl);border-radius:16px;padding:24px;text-align:center;font-size:.75rem;color:var(--im)}
+.pbphmn-lb{display:none;position:fixed;inset:0;background:rgba(2,6,10,.92);z-index:9999;align-items:center;justify-content:center;padding:24px}
+.pbphmn-lb.open{display:flex}
+.pbphmn-lbw{position:relative;display:inline-flex;flex-direction:column;max-width:92vw}
+.pbphmn-lbi{max-width:90vw;max-height:80vh;object-fit:contain;border-radius:6px;display:block}
+.pbphmn-lbc{position:absolute;left:0;right:0;bottom:0;background:rgba(2,6,10,.72);color:#eef5fb;font-size:1.05rem;line-height:1.35;text-align:center;padding:10px 14px;border-radius:0 0 6px 6px;display:none}
+.pbphmn-lbc.show{display:block}
+.pbphmn-lbx{position:absolute;top:18px;right:24px;color:var(--ink);font-size:1.6rem;cursor:pointer;line-height:1;background:#112a3f;border:1px solid #1f405b;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+</style>
+<script>(function(){
+var PHOTOS_URL="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/photos.json";
+var PIER_KEY="manitowoc";
+var PIER_NAME="Manitowoc";
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+var tog=document.getElementById("pbphmnTog");
+var wrap=document.getElementById("pbphmnWrap");
+var arr=document.getElementById("pbphmnArr");
+var loaded=false;
+function loadPhotos(){
+if(loaded)return;
+loaded=true;
+var inner=document.querySelector("#pbphmn .pbphmn-inner");
+fetch(PHOTOS_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(data){
+var list=(data&&data[PIER_KEY])||[];
+var body;
+if(!list.length){
+body='<div class="empty">No photos yet for '+esc(PIER_NAME)+' &mdash; check back soon.</div>';
+}else{
+body='<div class="grid">'+list.map(function(p,i){
+return '<div class="th" data-i="'+i+'"><img src="'+esc(p.url)+'" alt="'+esc(p.caption||PIER_NAME+" photo")+'" loading="lazy"/></div>';
+}).join('')+'</div>';
+}
+inner.innerHTML='<span class="kck">Photo Gallery</span><h2>'+esc(PIER_NAME)+' Photos</h2><p class="sub">Recent shots from the pier</p>'+body;
+var thumbs=inner.querySelectorAll(".th");
+var lb=document.getElementById("pbphmn-lb");
+var lbImg=document.getElementById("pbphmn-img");
+var lbCap=document.getElementById("pbphmn-cap");
+function openLb(i){
+var p=list[i];
+lbImg.src=p.url;
+if(p.caption){lbCap.textContent=p.caption;lbCap.classList.add("show");}
+else{lbCap.textContent="";lbCap.classList.remove("show");}
+lb.classList.add("open");
+}
+function closeLb(){lb.classList.remove("open");lbImg.src="";}
+thumbs.forEach(function(t){t.addEventListener("click",function(){openLb(parseInt(t.getAttribute("data-i"),10));});});
+document.getElementById("pbphmn-x").addEventListener("click",closeLb);
+lb.addEventListener("click",function(e){if(e.target===lb)closeLb();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();});
+}).catch(function(){
+document.querySelector("#pbphmn .pbphmn-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';
+});}
+tog.addEventListener("click",function(){
+wrap.classList.toggle("open");
+arr.classList.toggle("open");
+loadPhotos();
+});
+})();</script>
+
+
+
+<!-- PIERBITE pbsap-manitowoc | 2026-09-11 12:55 UTC | v5 | STRUCTURAL FIX — renamed box ID from generic "pbsap" to "pbsap-manitowoc", same fix already applied to Sheboygan (D416/D417): the plain "pbsap" name is shared by every pier's copy of this box on the single long page, so whichever copy sits later in the DOM silently overrides the others' styling. Recolored to the master palette and 16px card radius at the same time. -->
+<div id="pbsap-manitowoc">
+<div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
+</div>
+<style>#pbsap-manitowoc{--navy-panel:#112a3f;--navy-line:#1f405b;--im:#a3bcd1;--ink:#eef5fb;--gold:#f5b53f;--fs:"Inter",sans-serif;font-family:var(--fs);max-width:960px;margin:0 auto;}
+#pbsap-manitowoc *{box-sizing:border-box;margin:0;padding:0;}
+#pbsap-manitowoc .card{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:var(--navy-panel);border:1px solid var(--navy-line);font-size:.8rem;line-height:1.4;color:var(--im);}
+#pbsap-manitowoc .card b{color:var(--ink);}
+#pbsap-manitowoc a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;}
+</style>
+
+
+
+
+<!-- PIERBITE pbwebcam-manitowoc | 2026-09-13 | v2 | Rebuilt to match Submit a
+Photo card style exactly (pbsap-portwashington v1 used as the reference
+file, per Paul's request). Same single-row card, same gold pill link.
+Link-out only, opens in a new tab, same as every other pier's webcam box. -->
+<div id="pbwebcam-manitowoc">
+<div class="card"><span>Check current conditions at the pier &mdash; <b>watch the Manitowoc Marina Harbor Cam live</b>.</span><a href="https://www.manitowoc-marina.com/harbor-cam/" target="_blank" rel="noopener">Watch Live</a></div>
+</div>
+<style>#pbwebcam-manitowoc{--navy-panel:#112a3f;--navy-line:#1f405b;--im:#a3bcd1;--ink:#eef5fb;--gold:#f5b53f;--fs:"Inter",sans-serif;font-family:var(--fs);max-width:960px;margin:0 auto;}
+#pbwebcam-manitowoc *{box-sizing:border-box;margin:0;padding:0;}
+#pbwebcam-manitowoc .card{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:var(--navy-panel);border:1px solid var(--navy-line);font-size:.8rem;line-height:1.4;color:var(--im);}
+#pbwebcam-manitowoc .card b{color:var(--ink);}
+#pbwebcam-manitowoc a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;min-width:112px;text-align:center;}
+</style>
+
+</main>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./PierBite-PWA-Service-Worker.js").catch(function (error) {
+      console.error("PierBite PWA service worker registration failed:", error);
+    });
+  });
+}
+</script>
+</body>
+</html>
