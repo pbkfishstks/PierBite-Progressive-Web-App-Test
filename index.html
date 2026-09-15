@@ -175,6 +175,29 @@
       margin:28px auto 0;
     }
 
+    .section-app-bar{
+      width:100%;
+      text-align:right;
+      padding:0 0 10px;
+      font-family:Inter,-apple-system,sans-serif;
+    }
+
+    .section-app-home{
+      display:inline-block;
+      color:#8fd43c;
+      text-decoration:none;
+      font-family:"JetBrains Mono",monospace;
+      font-size:.68rem;
+      letter-spacing:.10em;
+      border:1px solid rgba(143,212,60,.35);
+      border-radius:7px;
+      padding:7px 12px;
+    }
+
+    .section-app-home:hover{
+      border-color:#8fd43c;
+    }
+
     @media(max-width:1000px){
       .nav-grid{
         grid-template-columns:repeat(3,1fr);
@@ -344,6 +367,10 @@
 
     <section id="pick-your-pier" class="content-section">
 
+      <div class="section-app-bar">
+        <a class="section-app-home" href="index.html">APP HOME</a>
+      </div>
+
       <div id="pbpick">
         <div class="pbpick-inner">Loading live conditions&hellip;</div>
       </div>
@@ -355,7 +382,7 @@
           --npd:#0e2436;
           --nl:#1f405b;
           --ink:#eef5fb;
-          --im:#a3c2e8;
+          --im:#a3bcd1;
           --if:#8aa2b6;
           --lake:#8fd43c;
           --good:#34c878;
