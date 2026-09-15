@@ -5,58 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Water Temp / Wind | PierBite</title>
   <meta name="theme-color" content="#061522">
+
   <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
   <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
   <link rel="icon" href="PierBite-App-Icon-192x192.png">
 
   <style>
-    html {
+    html{
       background:#061522;
     }
 
-    body {
+    body{
       margin:0;
       background:#061522;
       color:#eef5fb;
     }
 
-    .pierbite-app-bar {
-      max-width:760px;
-      margin:0 auto;
-      padding:18px 16px 0;
-      font-family:Inter,-apple-system,sans-serif;
-      text-align:right;
-    }
-
-    .pierbite-app-home {
+    .pierbite-app-home{
       display:inline-block;
       color:#8fd43c;
       text-decoration:none;
       font-family:"JetBrains Mono",monospace;
       font-size:.68rem;
+      font-weight:600;
       letter-spacing:.10em;
       border:1px solid rgba(143,212,60,.35);
       border-radius:7px;
       padding:7px 12px;
+      white-space:nowrap;
     }
 
-    .pierbite-app-home:hover {
+    .pierbite-app-home:hover{
       border-color:#8fd43c;
     }
 
-    @media(max-width:620px) {
+    @media(max-width:620px){
 
-      #cp-root {
+      #cp-root{
         padding:1rem .7rem !important;
       }
 
-      #cp-rows > a {
+      #cp-rows > a{
         grid-template-columns:1fr 82px !important;
         gap:8px 10px !important;
       }
 
       #cp-rows > a > div:nth-child(3),
-      #cp-rows > a > div:nth-child(4) {
+      #cp-rows > a > div:nth-child(4){
         grid-column:1 / -1;
       }
 
@@ -66,16 +61,18 @@
 
 <body>
 
-<div class="pierbite-app-bar">
-  <a class="pierbite-app-home" href="index.html">APP HOME</a>
-</div>
-
 <div id="cp-root" style="background:#0b1c2b;padding:1.5rem 1rem;font-family:Inter,sans-serif;">
 
 <div style="max-width:760px;margin:0 auto;">
 
-<div style="font-family:'Barlow Semi Condensed',sans-serif;font-weight:700;font-size:16px;line-height:1;color:#eef5fb;margin-bottom:5px;">
-Pier<span style="color:#8fd43c;">Bite</span><span style="color:#8aa2b6;font-weight:500;">.com</span>
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:5px;">
+
+  <div style="font-family:'Barlow Semi Condensed',sans-serif;font-weight:700;font-size:16px;line-height:1;color:#eef5fb;padding-top:7px;">
+    Pier<span style="color:#8fd43c;">Bite</span><span style="color:#8aa2b6;font-weight:500;">.com</span>
+  </div>
+
+  <a class="pierbite-app-home" href="index.html">APP HOME</a>
+
 </div>
 
 <div style="font-family:'Barlow Semi Condensed',sans-serif;font-size:26px;font-weight:600;color:#eef5fb;margin-bottom:4px;">
@@ -100,7 +97,10 @@ Water temperature, wind, and where the numbers came from — all piers, one page
 
 <div id="cp-rows">Loading live conditions&hellip;</div>
 
-<div id="cp-legend" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:14px;border-top:0.5px solid #1f405b;font-size:11px;color:#8aa2b6;font-family:'JetBrains Mono',monospace;"></div>
+<div
+id="cp-legend"
+style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:14px;border-top:0.5px solid #1f405b;font-size:11px;color:#8aa2b6;font-family:'JetBrains Mono',monospace;">
+</div>
 
 </div>
 </div>
@@ -189,11 +189,11 @@ UNKNOWN:{dot:"#5d788f",label:"Unknown"}
 
 function westerly(dirStr,mph){
 
-if(mph !== undefined && mph <= 0.0) {
+if(mph !== undefined && mph <= 0.0){
 return 0.0;
 }
 
-if(!(dirStr in UPWELLING_COMPONENT)) {
+if(!(dirStr in UPWELLING_COMPONENT)){
 return 0.0;
 }
 
@@ -203,11 +203,11 @@ return UPWELLING_COMPONENT[dirStr];
 
 function windColor(v){
 
-if(v>0.15) {
+if(v>0.15){
 return "rgba(245,181,63,"+(0.35+Math.min(v,1)*0.65).toFixed(2)+")";
 }
 
-if(v<-0.15) {
+if(v<-0.15){
 return "rgba(95,182,240,"+(0.35+Math.min(-v,1)*0.65).toFixed(2)+")";
 }
 
@@ -242,11 +242,11 @@ var ha = hourly[i].hours_ago;
 
 byHour[ha] = hourly[i];
 
-if(ha>oldest) {
+if(ha>oldest){
 oldest = ha;
 }
 
-if(ha<newest) {
+if(ha<newest){
 newest = ha;
 }
 
@@ -318,7 +318,7 @@ missing:missing
 
 function windVerdict(hourly){
 
-if(!hourly || !hourly.length) {
+if(!hourly || !hourly.length){
 return "No wind history available.";
 }
 
@@ -342,9 +342,9 @@ hourly.length *
 
 var verdict;
 
-if(pctW>=60) {
+if(pctW>=60){
 verdict = "A sustained westerly push.";
-}else if(pctW>=30) {
+}else if(pctW>=30){
 verdict = "A mixed pattern.";
 }else{
 verdict = "Very little westerly wind.";
@@ -356,7 +356,7 @@ return west+" of the last "+hourly.length+" hours had wind out of the west. "+ve
 
 function lagHours(hist){
 
-if(!hist || !hist.observed_at_utc) {
+if(!hist || !hist.observed_at_utc){
 return null;
 }
 
@@ -365,7 +365,7 @@ new Date(
 hist.observed_at_utc
 ).getTime();
 
-if(!isFinite(t)) {
+if(!isFinite(t)){
 return null;
 }
 
@@ -401,11 +401,11 @@ return "<div style=\"font-family:'JetBrains Mono',monospace;font-size:10px;color
 
 function gapLine(missing){
 
-if(!missing) {
+if(!missing){
 return "";
 }
 
-return "<div style=\"font-size:10px;color:#a3c2e8;margin-top:4px;\">"+missing+(missing===1?" hour":" hours")+" missing &mdash; the station did not report</div>";
+return "<div style=\"font-size:10px;color:#a3bcd1;margin-top:4px;\">"+missing+(missing===1?" hour":" hours")+" missing &mdash; the station did not report</div>";
 
 }
 
@@ -627,7 +627,7 @@ PIER_ORDER[i];
 var pier =
 d.piers[key];
 
-if(!pier) {
+if(!pier){
 continue;
 }
 
@@ -662,7 +662,6 @@ document.getElementById(
 </script>
 
 <script>
-
 if("serviceWorker" in navigator){
 
 window.addEventListener(
@@ -687,7 +686,6 @@ error
 );
 
 }
-
 </script>
 
 </body>
