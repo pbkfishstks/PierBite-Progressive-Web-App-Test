@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Temp / Wind | PierBite</title>
+  <meta name="theme-color" content="#061522">
+  <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
+  <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+  <link rel="icon" href="PierBite-App-Icon-192x192.png">
+
+  <style>
+    html {
+      background:#061522;
+    }
+
+    body {
+      margin:0;
+      background:#061522;
+      color:#eef5fb;
+    }
+
+    .pierbite-app-bar {
+      max-width:760px;
+      margin:0 auto;
+      padding:18px 16px 0;
+      font-family:Inter,-apple-system,sans-serif;
+    }
+
+    .pierbite-app-home {
+      display:inline-block;
+      color:#8fd43c;
+      text-decoration:none;
+      font-family:"JetBrains Mono",monospace;
+      font-size:.68rem;
+      letter-spacing:.10em;
+      border:1px solid rgba(143,212,60,.35);
+      border-radius:7px;
+      padding:7px 12px;
+    }
+
+    .pierbite-app-home:hover {
+      border-color:#8fd43c;
+    }
+
+    @media(max-width:620px) {
+      #cp-root {
+        padding:1rem .7rem !important;
+      }
+
+      #cp-rows > a {
+        grid-template-columns:1fr 82px !important;
+        gap:8px 10px !important;
+      }
+
+      #cp-rows > a > div:nth-child(3),
+      #cp-rows > a > div:nth-child(4) {
+        grid-column:1 / -1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="pierbite-app-bar">
+  <a class="pierbite-app-home" href="index.html">APP HOME</a>
+</div>
+
+<div id="cp-root" style="background:#0b1c2b;padding:1.5rem 1rem;font-family:Inter,sans-serif;">
+
+<div style="max-width:760px;margin:0 auto;">
+
+<div style="font-family:'Barlow Semi Condensed',sans-serif;font-weight:700;font-size:16px;line-height:1;color:#eef5fb;margin-bottom:5px;">
+Pier<span style="color:#8fd43c;">Bite</span><span style="color:#8aa2b6;font-weight:500;">.com</span>
+</div>
+
+<div style="font-family:'Barlow Semi Condensed',sans-serif;font-size:26px;font-weight:600;color:#eef5fb;margin-bottom:4px;">
+Compare piers
+</div>
+
+<div style="font-size:13px;color:#8aa2b6;margin-bottom:14px;">
+Water temperature, wind, and where the numbers came from — all piers, one page.
+</div>
+
+<div style="margin-bottom:18px;">
+
+<div style="height:8px;border-radius:4px;background:linear-gradient(to right,rgb(245,181,63) 0%,rgb(63,92,120) 50%,rgb(57,124,191) 100%);"></div>
+
+<div style="display:flex;font-size:11px;margin-top:6px;">
+<span style="color:#f5b53f;text-align:left;flex:0 0 auto;">South </span>
+<span style="color:#8aa2b6;text-align:center;flex:1;">South / North </span>
+<span style="color:#5fb6f0;text-align:right;flex:0 0 auto;">East </span>
+</div>
+
+</div>
+
+<div id="cp-rows">Loading live conditions&hellip;</div>
+
+<div id="cp-legend" style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:14px;border-top:0.5px solid #1f405b;font-size:11px;color:#8aa2b6;font-family:'JetBrains Mono',monospace;"></div>
+
+</div>
+</div>
+
+<script>
+(function(){
+
+var PIER_ORDER = [
+"port_washington",
+"sheboygan",
+"manitowoc",
+"two_rivers",
+"kewaunee",
+"algoma",
+"sturgeon_bay"
+];
+
+var PIER_LABEL = {
+port_washington:"Port Washington",
+sheboygan:"Sheboygan",
+manitowoc:"Manitowoc",
+two_rivers:"Two Rivers",
+kewaunee:"Kewaunee",
+algoma:"Algoma",
+sturgeon_bay:"Sturgeon Bay"
+};
+
+var PIER_PAGE = {
+port_washington:"PierBite-Port-Washington.html",
+sheboygan:"PierBite-Sheboygan.html",
+manitowoc:"PierBite-Manitowoc.html",
+two_rivers:"PierBite-Two-Rivers.html",
+kewaunee:"PierBite-Kewaunee.html",
+algoma:"PierBite-Algoma.html",
+sturgeon_bay:"PierBite-Sturgeon-Bay.html"
+};
+
+var WIND_KEY = {
+port_washington:"pww",
+two_rivers:"trw",
+manitowoc:"mtw",
+sheboygan:"KSBM",
+kewaunee:"kww",
+algoma:"kww",
+sturgeon_bay:"KSUE"
+};
+
+var UPWELLING_COMPONENT = {
+S:1.000,
+SSW:1.000,
+SW:1.000,
+WSW:1.000,
+W:1.000,
+WNW:0.541,
+NW:0.000,
+NNW:-0.541,
+N:-1.000,
+NNE:-1.000,
+NE:-1.000,
+ENE:-1.000,
+E:-1.000,
+ESE:-0.541,
+SE:0.000,
+SSE:0.541
+};
+
+var FAVORABLE_DIRS = {
+S:1,
+SSW:1,
+SW:1,
+WSW:1,
+W:1
+};
+
+var STALE_HOURS = 3;
+
+var HATCH =
+"repeating-linear-gradient(45deg,#3a5060 0,#3a5060 2px,#16283a 2px,#16283a 4px)";
+
+var TIER = {
+LIVE:{dot:"#34c878",label:"Measured"},
+MODELED:{dot:"#f5b53f",label:"Modeled"},
+ESTIMATED:{dot:"#5fb6f0",label:"Forecast"},
+UNKNOWN:{dot:"#5d788f",label:"Unknown"}
+};
+
+function westerly(dirStr,mph){
+
+if(mph !== undefined && mph <= 0.0) {
+return 0.0;
+}
+
+if(!(dirStr in UPWELLING_COMPONENT)) {
+return 0.0;
+}
+
+return UPWELLING_COMPONENT[dirStr];
+
+}
+
+function windColor(v){
+
+if(v>0.15) {
+return "rgba(245,181,63,"+(0.35+Math.min(v,1)*0.65).toFixed(2)+")";
+}
+
+if(v<-0.15) {
+return "rgba(95,182,240,"+(0.35+Math.min(-v,1)*0.65).toFixed(2)+")";
+}
+
+return "#2c4a63";
+
+}
+
+function gapBar(){
+
+return "<div title=\"No reading for this hour\" style=\"width:4px;height:22px;background:"+HATCH+";border-radius:1px;\"></div>";
+
+}
+
+function buildRibbon(hourly){
+
+if(!hourly || !hourly.length){
+
+return {
+bars:"<div style=\"font-size:11px;color:#5d788f;\">No wind history available.</div>",
+missing:0
+};
+
+}
+
+var byHour = {};
+var oldest = -1;
+var newest = 1e9;
+
+for(var i=0;i<hourly.length;i++){
+
+var ha = hourly[i].hours_ago;
+
+byHour[ha] = hourly[i];
+
+if(ha>oldest) {
+oldest = ha;
+}
+
+if(ha<newest) {
+newest = ha;
+}
+
+}
+
+var slots = [];
+var missing = 0;
+
+for(var hh=oldest;hh>=newest;hh--){
+
+var rec = byHour[hh];
+
+if(rec){
+
+slots.push(rec);
+
+}else{
+
+slots.push(null);
+missing++;
+
+}
+
+}
+
+var bars = "";
+
+for(var j=0;j<slots.length;j+=2){
+
+var s = slots[j];
+
+if(!s){
+
+bars += gapBar();
+continue;
+
+}
+
+var w = westerly(s.dir,s.mph);
+
+var h =
+6 +
+Math.min(
+Math.abs(s.mph)/25,
+1
+)*16;
+
+bars +=
+"<div title=\""+
+s.hours_ago+
+"h ago: "+
+s.dir+
+" "+
+s.mph+
+" mph\" style=\"width:4px;height:"+
+h.toFixed(0)+
+"px;background:"+
+windColor(w)+
+";border-radius:1px;\"></div>";
+
+}
+
+return {
+bars:"<div style=\"display:flex;align-items:flex-end;gap:1.5px;height:22px;\">"+bars+"</div>",
+missing:missing
+};
+
+}
+
+function windVerdict(hourly){
+
+if(!hourly || !hourly.length) {
+return "No wind history available.";
+}
+
+var west = 0;
+
+for(var i=0;i<hourly.length;i++){
+
+if(
+hourly[i].mph > 0.0 &&
+FAVORABLE_DIRS[hourly[i].dir]
+){
+west++;
+}
+
+}
+
+var pctW =
+west /
+hourly.length *
+100;
+
+var verdict;
+
+if(pctW>=60) {
+verdict = "A sustained westerly push.";
+}else if(pctW>=30) {
+verdict = "A mixed pattern.";
+}else{
+verdict = "Very little westerly wind.";
+}
+
+return west+" of the last "+hourly.length+" hours had wind out of the west. "+verdict;
+
+}
+
+function lagHours(hist){
+
+if(!hist || !hist.observed_at_utc) {
+return null;
+}
+
+var t =
+new Date(
+hist.observed_at_utc
+).getTime();
+
+if(!isFinite(t)) {
+return null;
+}
+
+var lag =
+(
+Date.now() -
+t
+) /
+3600000;
+
+return lag<0 ? 0 : lag;
+
+}
+
+function staleLine(hist){
+
+var lag =
+lagHours(hist);
+
+if(
+lag===null ||
+lag<STALE_HOURS
+){
+return "";
+}
+
+var n =
+Math.round(lag);
+
+return "<div style=\"font-family:'JetBrains Mono',monospace;font-size:10px;color:#f5b53f;margin-top:4px;\">&#9888; Latest reading "+n+(n===1?" hour":" hours")+" ago &mdash; not current</div>";
+
+}
+
+function gapLine(missing){
+
+if(!missing) {
+return "";
+}
+
+return "<div style=\"font-size:10px;color:#a3bcd1;margin-top:4px;\">"+missing+(missing===1?" hour":" hours")+" missing &mdash; the station did not report</div>";
+
+}
+
+function fmtTemp(v){
+
+if(
+v===null ||
+v===undefined
+){
+return "&mdash;";
+}
+
+return v.toFixed(1)+"\u00b0F";
+
+}
+
+function renderRow(pierKey,pier,stationHistory){
+
+var h =
+pier.headline ||
+{};
+
+var sourceKey =
+h.water_temp_source ||
+"UNKNOWN";
+
+var tier =
+TIER[sourceKey] ||
+TIER.UNKNOWN;
+
+var stationLabel =
+h.water_temp_station_label ||
+"No current reading";
+
+var distance =
+h.water_temp_distance_mi;
+
+var distText =
+(
+distance===null ||
+distance===undefined
+)
+?
+""
+:
+" &middot; "+distance.toFixed(2)+" mi";
+
+var windKey =
+WIND_KEY[pierKey];
+
+var hist =
+stationHistory[windKey];
+
+var windLabel =
+(
+h.wind_station_label ||
+(
+hist &&
+hist.label
+) ||
+"Wind station unavailable"
+);
+
+var windDist =
+h.wind_distance_mi;
+
+var windDistText =
+(
+windDist===null ||
+windDist===undefined
+)
+?
+""
+:
+windDist.toFixed(2)+" mi";
+
+var avail =
+!!(
+hist &&
+hist.available
+);
+
+var rib =
+avail
+?
+buildRibbon(hist.hourly)
+:
+{
+bars:"<div style=\"font-size:11px;color:#5d788f;\">No wind history available.</div>",
+missing:0
+};
+
+var verdictText =
+avail
+?
+windVerdict(hist.hourly)
+:
+"No wind history available.";
+
+return "" +
+
+"<a href=\""+
+PIER_PAGE[pierKey]+
+"\" style=\"display:grid;grid-template-columns:130px 90px 1fr 190px;align-items:center;gap:16px;padding:14px 8px;border-bottom:0.5px solid #1f405b;text-decoration:none;color:inherit;cursor:pointer;\">" +
+
+"<div style=\"font-family:'Barlow Semi Condensed',sans-serif;font-size:16px;font-weight:600;color:#eef5fb;\">"+
+PIER_LABEL[pierKey]+
+"</div>" +
+
+"<div style=\"font-family:'JetBrains Mono',monospace;font-size:19px;color:#eef5fb;\">"+
+fmtTemp(h.water_temp_f)+
+"</div>" +
+
+"<div>"+
+rib.bars+
+
+"<div style=\"font-size:10px;color:#8aa2b6;margin-top:5px;line-height:1.4;\">"+
+verdictText+
+"</div>" +
+
+gapLine(rib.missing) +
+
+staleLine(hist) +
+
+"<div style=\"font-size:9px;color:#5d788f;margin-top:3px;font-family:'JetBrains Mono',monospace;\">"+
+windLabel+
+(
+windDistText
+?
+" &middot; "+windDistText
+:
+""
+)+
+"</div>"+
+"</div>" +
+
+"<div style=\"display:flex;align-items:flex-start;gap:7px;\">" +
+
+"<span style=\"width:8px;height:8px;border-radius:50%;background:"+
+tier.dot+
+";flex-shrink:0;margin-top:4px;\"></span>" +
+
+"<div style=\"font-size:11px;line-height:1.35;\">" +
+
+"<div style=\"color:"+
+tier.dot+
+";font-family:'JetBrains Mono',monospace;\">"+
+tier.label+
+"</div>" +
+
+"<div style=\"color:#8aa2b6;\">"+
+stationLabel+
+distText+
+"</div>" +
+
+"</div>" +
+
+"</div>" +
+
+"</a>";
+
+}
+
+function renderLegend(){
+
+var items = [
+"LIVE",
+"MODELED",
+"ESTIMATED",
+"UNKNOWN"
+];
+
+var html = "";
+
+for(var i=0;i<items.length;i++){
+
+var t =
+TIER[items[i]];
+
+html +=
+"<span><span style=\"display:inline-block;width:7px;height:7px;border-radius:50%;background:"+
+t.dot+
+";margin-right:5px;\"></span>"+
+t.label+
+"</span>";
+
+}
+
+html +=
+"<span><span style=\"display:inline-block;width:7px;height:9px;background:"+
+HATCH+
+";margin-right:5px;vertical-align:middle;\"></span>No reading</span>";
+
+document.getElementById(
+"cp-legend"
+).innerHTML =
+html;
+
+}
+
+fetch(
+"https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?nocache="+
+Date.now()
+)
+
+.then(function(r){
+return r.json();
+})
+
+.then(function(d){
+
+var rowsHtml = "";
+
+for(var i=0;i<PIER_ORDER.length;i++){
+
+var key =
+PIER_ORDER[i];
+
+var pier =
+d.piers[key];
+
+if(!pier) {
+continue;
+}
+
+rowsHtml +=
+renderRow(
+key,
+pier,
+d.station_history || {}
+);
+
+}
+
+document.getElementById(
+"cp-rows"
+).innerHTML =
+rowsHtml;
+
+renderLegend();
+
+})
+
+.catch(function(){
+
+document.getElementById(
+"cp-rows"
+).innerHTML =
+"<div style=\"color:#ec5547;font-size:13px;\">Could not load live conditions right now. Please refresh.</div>";
+
+});
+
+})();
+</script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+window.addEventListener(
+"load",
+function(){
+
+navigator.serviceWorker
+.register(
+"./PierBite-PWA-Service-Worker.js"
+)
+
+.catch(function(error){
+
+console.error(
+"PierBite PWA service worker registration failed:",
+error
+);
+
+});
+
+}
+);
+
+}
+
+</script>
+
+</body>
+</html>
