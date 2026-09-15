@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions Map | PierBite</title>
+  <meta name="theme-color" content="#061522">
+  <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
+  <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+  <link rel="icon" href="PierBite-App-Icon-192x192.png">
+  <style>
+    *{box-sizing:border-box}
+    html{background:#061522}
+    body{margin:0;background:#061522;color:#eef5fb;font-family:Arial,Helvetica,sans-serif}
+    .pb-page{max-width:1000px;margin:0 auto;padding:18px 20px 42px}
+    .pb-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #1f405b;padding:0 0 12px;margin-bottom:18px}
+    .pb-brand{font-weight:700;font-size:.95rem;letter-spacing:.01em}
+    .pb-brand .bite{color:#8fd43c}
+    .pb-brand .dotcom{color:#8aa2b6;font-weight:500}
+    .pb-home{color:#8fd43c;text-decoration:none;font-family:monospace;font-size:.72rem;letter-spacing:.08em;border:1px solid rgba(143,212,60,.3);padding:6px 10px;border-radius:7px}
+    .pb-home:hover{border-color:#8fd43c}
+    @media(max-width:650px){.pb-page{padding:12px 10px 30px}}
+  </style>
+</head>
+<body>
+<main class="pb-page">
+  <div class="pb-topbar">
+    <div class="pb-brand">Pier<span class="bite">Bite</span><span class="dotcom">.com</span></div>
+    <a class="pb-home" href="index.html">APP HOME</a>
+  </div>
+<!-- PIERBITE buoy-watch-a | 2026-09-01 21:40 UTC | v12 | Restored from v11 after accidental overwrite. Fix: wind marker 'wmtw' (Manitowoc) was drifting into the Sheboygan/Two Rivers cluster via the generic up-only collision loop; added manual override placing it under the Manitowoc label, skipped for this id only. -->
+<div id="bsa"></div>
+<style>#bsa{--cd:#0a1420;--ln:#1e3448;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--gn:#8fd43c;--gd:#f5b53f;--lb:#5fb6f0;--fd:'Barlow Semi Condensed',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;font-family:var(--fb);color:var(--ink);line-height:1.5}#bsa *{box-sizing:border-box;margin:0;padding:0}#bsa .cd{background:var(--cd);border:1px solid var(--ln);border-radius:12px}#bsa .wm{font-family:var(--fd);font-weight:700;font-size:1.02rem;letter-spacing:.01em;color:var(--ink);line-height:1;margin-bottom:5px}#bsa .be{font-family:var(--fd);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;color:var(--gn)}#bsa .bh{font-family:var(--fd);font-weight:700;font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1.12;margin-top:5px}#bsa .bl{color:var(--im);font-size:.85rem;max-width:600px;margin-top:8px}#bsa .hd{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:space-between}#bsa .sb{font-family:var(--fd);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.62rem;color:var(--if);background:none;border:1px solid var(--ln);border-radius:6px;padding:8px 13px;cursor:pointer}#bsa .sb:hover{color:var(--gd);border-color:var(--gd)}#bsa .bc{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:12px;overflow:hidden;margin:20px 0}#bsa .c1{background:var(--cd);padding:13px 16px}#bsa .bn{font-family:var(--fm);font-weight:700;font-size:1.45rem;line-height:1}#bsa .b2{font-family:var(--fd);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:.58rem;color:var(--if);margin-top:5px}#bsa .g2{display:grid;grid-template-columns:1fr 290px;gap:18px}#bsa .mw{overflow:hidden;position:relative}#bsa .mc{position:absolute;top:11px;left:13px;font-family:var(--fm);font-size:.58rem;color:var(--if);letter-spacing:.06em}#bsa svg text{font-family:var(--fm)}#bsa .st{cursor:pointer}#bsa .pr{transform-origin:center;transform-box:fill-box;animation:bsaP 2.4s ease-in-out infinite}@keyframes bsaP{0%{opacity:.55;transform:scale(.6)}70%,100%{opacity:0;transform:scale(2.2)}}#bsa .sw{transform-origin:240px 216px;animation:bsaS 9s linear infinite}@keyframes bsaS{to{transform:rotate(360deg)}}#bsa .dt{padding:16px}#bsa .dn{font-family:var(--fd);font-weight:700;font-size:1.02rem;line-height:1.2}#bsa .ds{font-family:var(--fm);font-size:.6rem;color:var(--if);margin-top:3px}#bsa .dr{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--ln);font-size:.73rem}#bsa .dr:last-child{border-bottom:0}#bsa .dk{color:var(--if)}#bsa .dv{font-family:var(--fm);font-size:.68rem;text-align:right}#bsa .bd{display:inline-block;font-family:var(--fd);font-weight:600;letter-spacing:.09em;text-transform:uppercase;font-size:.56rem;border-radius:4px;padding:3px 7px;margin-top:8px;border:1px solid}#bsa .lg{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--fm);font-size:.58rem;color:var(--if);padding:14px 16px}#bsa .lg i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;font-style:normal}#bsa .hn{font-family:var(--fm);font-size:.6rem;color:var(--if);padding:0 16px 14px;line-height:1.6}@media(max-width:820px){#bsa .g2{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){#bsa .pr,#bsa .sw{animation:none}}</style>
+<script>
+(function(){
+var U='https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+Date.now();
+fetch(U).then(function(r){return r.json()}).then(bld).catch(function(e){console.error('PIERBITE buoy-watch-a:',e);document.getElementById('bsa').innerHTML='<div class="bl">Could not load live data. Refresh to retry.</div>'});
+function X(lo){return (lo+88)/1.7*520}
+function Y(la){return (45.05-la)/1.45*420}
+function ag(t){var s=Math.max(0,(Date.now()-Date.parse(t))/1e3),h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h>0?h+' h '+m+' min ago':m+' min '+Math.floor(s%60)+' s ago'}
+function hh(t){return (Date.now()-Date.parse(t))/36e5}
+function tempColor(f){
+var stops=[[32,78,42,102],[44,20,153,166],[51,125,221,9],[60,255,254,12],[67,249,164,31],[74,247,11,66],[85,154,5,5]];
+if(f<=stops[0][0])return 'rgb('+stops[0][1]+','+stops[0][2]+','+stops[0][3]+')';
+if(f>=stops[stops.length-1][0])return 'rgb('+stops[stops.length-1][1]+','+stops[stops.length-1][2]+','+stops[stops.length-1][3]+')';
+for(var i=0;i<stops.length-1;i++){
+var a=stops[i],b=stops[i+1];
+if(f>=a[0]&&f<=b[0]){
+var t=(f-a[0])/(b[0]-a[0]);
+var r=Math.round(a[1]+(b[1]-a[1])*t),g=Math.round(a[2]+(b[2]-a[2])*t),bl=Math.round(a[3]+(b[3]-a[3])*t);
+return 'rgb('+r+','+g+','+bl+')';
+}
+}
+return 'rgb(140,198,63)';
+}
+function bld(j){
+var M=j.model_water_temp||{},PT=M.points||{},P=j.piers||{},S=j.stations||{},src=[],seen={},k,v;
+for(k in PT){if(k.indexOf('open_lake')===0||!P[k])continue;v=PT[k];
+src.push({id:'m'+k,nm:(P[k].name||k).split(' /')[0],sub:'NOAA lake model, computed '+(v.distance_mi!=null?v.distance_mi+' mi off the pier':'at the pier'),kind:'model',la:P[k].coordinates.lat,lo:P[k].coordinates.lon,t:v.water_temp_f,c:v.water_change_72h_f,av:v.available,rt:M.run_time_utc});}
+for(k in S){v=S[k];if(!v||!v.label||seen[v.label])continue;seen[v.label]=1;
+src.push({id:'s'+k,nm:v.label.split(' (')[0],sub:v.label,kind:v.water_temp_f!=null?'buoy':'shore',la:v.lat,lo:v.lon,t:v.water_temp_f,w:v.wave_ft,dp:v.water_depth_ft,av:v.available,ot:v.observed_at_utc});}
+var SH=j.station_history||{};
+for(k in SH){v=SH[k];if(!v||!v.available||v.lat==null||v.lon==null||!v.label||seen[v.label])continue;seen[v.label]=1;
+src.push({id:'w'+k,nm:v.label.split(' (')[0],sub:v.label,kind:'wind',la:v.lat,lo:v.lon,wd:v.current_wind_dir,wm:v.current_wind_mph,av:v.available,ot:v.observed_at_utc});}
+src.forEach(function(s){
+if(s.kind==='model'){s.st=!s.av?'q':(M.stale?'q':(M.disclose_age?'a':'g'));s.ts=s.rt;}
+else{s.st=!s.av||!s.ot?'q':(hh(s.ot)<3?'g':'a');s.ts=s.ot;}});
+var rep=src.filter(function(s){return s.st==='g'}).length,qt=src.length-rep;
+var buoys=src.filter(function(s){return s.kind==='buoy'&&s.av&&s.t!=null&&s.dp;});
+var W=(buoys[0]?buoys[0].w:0)||0;
+var washHtml='';
+var LAND='M 293 -3 C 281 19 267 33 253 53 C 235 81 221 97 203 118 C 191 136 183 145 179 163 C 173 191 171 210 161 252 C 153 272 143 277 135 299 C 127 328 125 343 119 369 C 115 388 113 397 111 420 C 107 442 87 462 71 478 C 67 494 61 508 59 520 L -90 520 L -90 -3 Z';
+var shoreT=[];
+for(k in PT){if(k.indexOf('open_lake')===0||!P[k])continue;v=PT[k];
+if(v.available&&v.water_temp_f!=null)shoreT.push({y:Y(P[k].coordinates.lat),t:v.water_temp_f});}
+shoreT.sort(function(a,b){return a.y-b.y;});
+var deepT=null,OL=PT['open_lake_45210'];
+if(OL&&OL.available&&OL.water_temp_f!=null)deepT=OL.water_temp_f;
+if(deepT==null){var ob=src.filter(function(s){return s.kind==='buoy'&&s.t!=null&&s.dp;});if(ob.length)deepT=ob[0].t;}
+var WBASE=12,WSPAN=90;
+if(shoreT.length&&deepT!=null){
+var BANDS=6,defs='',rects='';
+for(var bi=BANDS-1;bi>=0;bi--){
+var mix=bi/(BANDS-1);
+var gid='bsaB'+bi;
+var st=shoreT.map(function(p){
+var mixT=p.t+(deepT-p.t)*mix;
+return '<stop offset="'+Math.max(0,Math.min(100,p.y/520*100)).toFixed(1)+'%" stop-color="'+tempColor(mixT)+'"/>';}).join('');
+var f0=shoreT[0],fN=shoreT[shoreT.length-1];
+var cap0='<stop offset="0%" stop-color="'+tempColor(f0.t+(deepT-f0.t)*mix)+'"/>';
+var capN='<stop offset="100%" stop-color="'+tempColor(fN.t+(deepT-fN.t)*mix)+'"/>';
+defs+='<linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="520" gradientUnits="userSpaceOnUse">'+cap0+st+capN+'</linearGradient>';
+rects+='<path transform="translate('+Math.round(WBASE+mix*WSPAN)+',0)" d="'+LAND+'" fill="url(#'+gid+')"/>';
+}
+washHtml='<defs>'+defs+'<filter id="bsaSoft" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="10"/></filter></defs>'+
+'<g filter="url(#bsaSoft)" opacity=".72">'+rects+'</g>';
+}
+var dots='',used=[];
+src.forEach(function(s){if(s.la==null)return;var x=X(s.lo),y=Y(s.la),ar='';
+if(s.la>44.98){y=17;ar='<line x1="'+x.toFixed(0)+'" y1="38" x2="'+x.toFixed(0)+'" y2="22" stroke="#1e3448" stroke-dasharray="2 3"/><text x="'+x.toFixed(0)+'" y="49" text-anchor="middle" fill="#8aa2b6" font-size="9">north &#8593;</text>';}
+if(s.kind==='shore'){var cy=[[0,293],[53,253],[118,203],[163,179],[252,161],[299,135],[369,119],[420,111],[478,71],[520,59]],cx=cy[0][1],i2;
+for(i2=0;i2<cy.length-1;i2++){if(y>=cy[i2][0]&&y<=cy[i2+1][0]){var f=(y-cy[i2][0])/(cy[i2+1][0]-cy[i2][0]);cx=cy[i2][1]+f*(cy[i2+1][1]-cy[i2][1]);break;}}
+if(y>cy[cy.length-1][0])cx=cy[cy.length-1][1];
+if(x>cx-10)x=cx-22;y+=20;}
+if(s.id==='wmtw'){x=X(-87.6437);y=Y(44.0915)+24;}
+if(s.id!=='wmtw'){var tries=0,clash=1;while(clash&&tries<14){clash=0;for(var u2=0;u2<used.length;u2++){if(Math.abs(used[u2][0]-x)<16&&Math.abs(used[u2][1]-y)<16){clash=1;if(s.kind==='shore'){y+=16;}else if(s.kind==='wind'){y-=16;}else{x+=12;y+=8;}break;}}tries++;}}used.push([x,y]);
+var kc=s.kind==='model'?'#5fb6f0':((s.kind==='shore'||s.kind==='wind')?'#a78bfa':'#8fd43c');
+var co=s.st==='q'?'#5a6673':kc,op=s.st==='q'?'.5':'1';
+var pu=s.st==='g'?'<circle class="pr" cx="'+x.toFixed(0)+'" cy="'+y.toFixed(0)+'" r="7" fill="none" stroke="'+kc+'" stroke-width="1.4"/>':(s.st==='a'?'<circle cx="'+x.toFixed(0)+'" cy="'+y.toFixed(0)+'" r="8.5" fill="none" stroke="#f5b53f" stroke-width="1.6" opacity=".95"/>':'');
+var lb=s.kind==='model'?'<text x="'+(x-11).toFixed(0)+'" y="'+(y+4).toFixed(0)+'" fill="#a3bcd1" font-size="10" text-anchor="end">'+s.nm+'</text>':(s.kind==='wind'?'<text x="'+x.toFixed(0)+'" y="'+(y-10).toFixed(0)+'" fill="#a78bfa" font-size="7.5" text-anchor="middle">wind</text>':(s.kind==='shore'?'<text x="'+x.toFixed(0)+'" y="'+(y+18).toFixed(0)+'" fill="#a78bfa" font-size="7.5" text-anchor="middle">wind</text>':(s.kind==='buoy'&&s.la<=44.98?'<text x="'+(x+12).toFixed(0)+'" y="'+(y+4).toFixed(0)+'" fill="#a3bcd1" font-size="10">'+s.nm+(s.t!=null?' &#183; '+s.t.toFixed(1)+'&#176;F':'')+'</text>':'')));
+var shp=(s.kind==='shore'||s.kind==='wind')?'<rect x="'+(x-4.6).toFixed(1)+'" y="'+(y-4.6).toFixed(1)+'" width="9.2" height="9.2" fill="'+co+'" transform="rotate(45 '+x.toFixed(1)+' '+y.toFixed(1)+')"/>':'<circle cx="'+x.toFixed(0)+'" cy="'+y.toFixed(0)+'" r="'+(s.kind==='buoy'?5.5:4.5)+'" fill="'+co+'"/>';
+dots+='<g class="st" data-i="'+s.id+'" opacity="'+op+'">'+ar+pu+shp+lb+'</g>';});
+var MIPX=(69.17*Math.cos(44.3*Math.PI/180))/(520/1.7);
+var offMi=Math.round((WBASE+WSPAN)*MIPX);
+var html='<div class="hd"><div><div class="wm">Pier<span style="color:var(--gn)">Bite</span><span style="color:var(--if);font-weight:500">.com</span></div><div class="be">The Network</div><div class="bh">Every station this site listens to</div><p class="bl">A dot pulses only when it recently reported. Tap one to inspect it.</p></div><div style="text-align:right"><button class="sb" id="bsaS2" type="button">&#9834; sound: off</button></div></div>'
++'<div class="bc"><div class="c1"><div class="bn" style="color:#8fd43c">'+src.length+'</div><div class="b2">Sources</div></div><div class="c1"><div class="bn" style="color:#8fd43c">'+rep+'</div><div class="b2">Reporting</div></div><div class="c1"><div class="bn" style="color:'+(qt?'#f5b53f':'#8aa2b6')+'">'+qt+'</div><div class="b2">Not current</div></div></div>'
++'<div class="g2"><div class="cd mw"><div class="mc">LAKE MICHIGAN &#183; WASH ~'+offMi+' MI OFFSHORE</div><svg viewBox="-80 0 600 520" width="100%">'+washHtml+'<path d="M 293 -3 C 281 19 267 33 253 53 C 235 81 221 97 203 118 C 191 136 183 145 179 163 C 173 191 171 210 161 252 C 153 272 143 277 135 299 C 127 328 125 343 119 369 C 115 388 113 397 111 420 C 107 442 87 462 71 478 C 67 494 61 508 59 520 L -90 520 L -90 -3 Z" fill="#0a1626" stroke="#2a4a66"/><g class="sw" opacity=".5"><line x1="240" y1="216" x2="240" y2="32" stroke="#8fd43c" opacity=".55"/><path d="M 240 216 L 240 32 A 184 184 0 0 0 179 40 Z" fill="#8fd43c" opacity=".05"/></g><g>'+dots+'</g></svg></div>'
++'<div><div class="cd dt" id="bsaT"></div><div class="cd" style="margin-top:14px"><div class="lg"><span><i style="background:#a78bfa;border-radius:2px;transform:rotate(45deg)"></i>wind only</span><span><i style="background:#5fb6f0"></i>modeled</span><span><i style="background:#8fd43c"></i>buoy</span><span><i style="background:none;border:1.5px solid #8fd43c"></i>pulsing = current</span><span><i style="background:none;border:1.5px solid #f5b53f"></i>ring = delayed</span><span><i style="background:#5a6673"></i>quiet</span></div><div class="hn">When a station stops reporting, the site borrows from the nearest one still working.</div></div></div></div>';
+var E=document.getElementById('bsa');E.innerHTML=html;
+function dt(id,sc){var s=null;src.forEach(function(q){if(q.id===id)s=q;});if(!s)return;
+var r='';if(s.t!=null)r+='<div class="dr"><span class="dk">Water temp</span><span class="dv">'+s.t.toFixed(1)+'&#176;F</span></div>';
+if(s.c!=null)r+='<div class="dr"><span class="dk">72-hour change</span><span class="dv">'+(s.c>0?'+':'')+s.c.toFixed(1)+'&#176;F</span></div>';
+if(s.w!=null)r+='<div class="dr"><span class="dk">Waves</span><span class="dv">'+s.w+' ft</span></div>';
+if(s.dp)r+='<div class="dr"><span class="dk">Depth here</span><span class="dv">'+s.dp+' ft</span></div>';
+if(s.kind==='shore')r+='<div class="dr"><span class="dk">Water sensor</span><span class="dv">none &#8212; wind &amp; waves only</span></div>';
+if(s.kind==='wind'){if(s.wd!=null&&s.wm!=null)r+='<div class="dr"><span class="dk">Wind now</span><span class="dv">'+s.wd+' '+s.wm+' mph</span></div>';r+='<div class="dr"><span class="dk">Water sensor</span><span class="dv">none &#8212; wind only</span></div>';}
+if(s.ts)r+='<div class="dr"><span class="dk">'+(s.kind==='model'?'Model run':'Last reading')+'</span><span class="dv"><span class="ag" data-t="'+s.ts+'"></span></span></div>';
+var bc=s.kind==='model'?'#5fb6f0':((s.kind==='shore'||s.kind==='wind')?'#a78bfa':'#8fd43c'),bt=s.kind==='model'?'MODELED &#9684;':(s.kind==='shore'?'WIND &amp; WAVES &#9670; NO WATER SENSOR':(s.kind==='wind'?'WIND ONLY &#9670; MEASURED':'MEASURED &#9679; LIVE'));
+document.getElementById('bsaT').innerHTML='<div class="dn">'+s.nm+'</div><div class="ds">'+s.sub+'</div><span class="bd" style="color:'+bc+';border-color:'+bc+'66">'+bt+'</span><div style="margin-top:9px">'+r+'</div>';tk();
+if(s.kind==='model'){window.PBLastPierTap=s.id;try{window.dispatchEvent(new CustomEvent('pbPierTap',{detail:{id:s.id}}));}catch(e){}}
+if(sc){var eT=document.getElementById('bsaT'),rT=eT.getBoundingClientRect();if(rT.top<0||rT.bottom>innerHeight)eT.scrollIntoView({behavior:'smooth',block:'nearest'});}}
+E.addEventListener('click',function(e){var t=e.target;while(t&&t!==E){if(t.getAttribute&&t.getAttribute('data-i')){dt(t.getAttribute('data-i'),true);return}t=t.parentNode}});
+dt(buoys[0]?buoys[0].id:src[0].id);
+function tk(){var n=E.querySelectorAll('.ag'),i;for(i=0;i<n.length;i++)n[i].textContent=ag(n[i].getAttribute('data-t'))}
+tk();setInterval(tk,1000);
+var AC=null;
+document.getElementById('bsaS2').addEventListener('click',function(){var b=this;
+if(AC){AC.close();AC=null;b.innerHTML='&#9834; sound: off';return}
+AC=new(window.AudioContext||window.webkitAudioContext)();
+var N=AC.sampleRate*2,bf=AC.createBuffer(1,N,AC.sampleRate),dd=bf.getChannelData(0),i;
+for(i=0;i<N;i++)dd[i]=Math.random()*2-1;
+var so=AC.createBufferSource();so.buffer=bf;so.loop=true;
+var f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=420;
+var g=AC.createGain(),am=Math.min(.14,.05+W*.03);g.gain.value=am;
+var l=AC.createOscillator();l.frequency.value=.09;var lg=AC.createGain();lg.gain.value=am*.6;
+l.connect(lg);lg.connect(g.gain);l.start();
+so.connect(f);f.connect(g);g.connect(AC.destination);so.start();
+b.innerHTML='&#9834; sound: on';});
+}
+})();
+</script>
+
+<!-- PIERBITE buoy-watch-c | 2026-09-02 10:00 UTC | v2 | Added live temperature dot: fetches data.json, averages all available shore model temps, places a marker on the gradient bar at the correct position with the °F value shown above it. All seven colour stops and label values unchanged from v1 — must stay identical to tempColor() in buoy-watch-a. Fix: moved .kw content inside #bwc so CSS scoping applies. -->
+<div id="bwc">
+<div class="kw">
+<div class="kt">Water temperature</div>
+<div class="kb" id="bwcBar">
+<div class="kd" id="bwcLabel" style="display:none"></div>
+<div class="km" id="bwcMark" style="display:none"></div>
+</div>
+<div class="kl"><span>32&#176;F</span><span>44&#176;</span><span>51&#176;</span><span>60&#176;</span><span>67&#176;</span><span>74&#176;</span><span>85&#176;F</span></div>
+<div class="kn" id="bwcNote">Colour on the lake shows water temperature at the nearest reporting station. Land is not coloured.</div>
+</div>
+</div>
+<style>
+#bwc{--cd:#0a1420;--ln:#1e3448;--if:#8aa2b6;--im:#a3bcd1;font-family:'Inter',sans-serif;color:#eef5fb}
+#bwc *{box-sizing:border-box;margin:0;padding:0}
+#bwc .kw{background:var(--cd);border:1px solid var(--ln);border-radius:12px;padding:14px 16px}
+#bwc .kt{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--if);margin-bottom:10px}
+#bwc .kb{height:14px;border-radius:3px;background:linear-gradient(to right,rgb(78,42,102),rgb(20,153,166),rgb(125,221,9),rgb(255,254,12),rgb(249,164,31),rgb(247,11,66),rgb(154,5,5));position:relative;margin-top:20px}
+#bwc .kd{position:absolute;top:-22px;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#eef5fb;white-space:nowrap;pointer-events:none}
+#bwc .kd::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#eef5fb}
+#bwc .km{position:absolute;top:-2px;bottom:-2px;width:3px;background:#eef5fb;border-radius:2px;transform:translateX(-50%);pointer-events:none}
+#bwc .kl{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--im);margin-top:6px}
+#bwc .kn{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--if);line-height:1.6;margin-top:9px}
+</style>
+<script>
+(function(){
+var STOPS=[32,44,51,60,67,74,85];
+var MIN=STOPS[0],MAX=STOPS[STOPS.length-1];
+function pct(f){
+f=Math.max(MIN,Math.min(MAX,f));
+for(var i=0;i<STOPS.length-1;i++){
+if(f>=STOPS[i]&&f<=STOPS[i+1]){
+var segW=1/(STOPS.length-1);
+var segPos=i*segW;
+var frac=(f-STOPS[i])/(STOPS[i+1]-STOPS[i]);
+return (segPos+frac*segW)*100;
+}
+}
+return 100;
+}
+var U='https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+Date.now();
+fetch(U).then(function(r){return r.json()}).then(function(j){
+var pts=((j.model_water_temp||{}).points)||{};
+var vals=[],k,v;
+for(k in pts){
+if(k.indexOf('open_lake')===0)continue;
+v=pts[k];
+if(v&&v.available&&v.water_temp_f!=null)vals.push(v.water_temp_f);
+}
+if(!vals.length)return;
+var avg=vals.reduce(function(a,b){return a+b},0)/vals.length;
+var p=pct(avg);
+var lbl=document.getElementById('bwcLabel');
+var mrk=document.getElementById('bwcMark');
+lbl.textContent=avg.toFixed(1)+'\u00b0F avg';
+lbl.style.left=p.toFixed(1)+'%';
+lbl.style.display='block';
+mrk.style.left=p.toFixed(1)+'%';
+mrk.style.display='block';
+document.getElementById('bwcNote').textContent='Colour on the lake shows water temperature at the nearest reporting station. Land is not coloured. Marker shows current pier average.';
+}).catch(function(){});
+})();
+</script>
+
+
+
+
+<!-- PIERBITE buoy-watch-a-wind | 2026-09-01 18:10 UTC | v1 | Wind-direction chevrons overlaid on the buoy-watch-a map. Fully independent box: own fetch of data.json (same pattern as buoy-watch-b), reads each pier dot's real rendered position straight off buoy-watch-a's DOM (circle cx/cy inside g.st[data-i^="m"]), draws an absolutely-positioned overlay SVG on top using the identical viewBox so it lines up exactly with no coupling or shared code needed. Zero changes to buoy-watch-a required. Design: 3 small chevrons per pier chasing toward the dot, color #eef5fb (not gold - gold already means "aging data" on this map), chase speed scaled to wind mph, small dashed ring for confirmed-calm (<0.3 mph), nothing drawn when no wind reading exists. Adds one legend entry to buoy-watch-a's existing legend row at runtime (DOM injection, not a file edit). Place this Code Embed directly after buoy-watch-a in Carrd's design view. -->
+<div id="bsaw" style="display:none"></div>
+<style>
+.bsaWc{fill:none;stroke:#eef5fb;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;animation-name:bsaWChase;animation-timing-function:linear;animation-iteration-count:infinite;opacity:0}
+@keyframes bsaWChase{0%{transform:translateX(-18px);opacity:0}15%{opacity:1}88%{opacity:1}100%{transform:translateX(2px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bsaWc{animation:none;opacity:.85;transform:translateX(-7px)}}
+</style>
+<script>
+(function(){
+var WD={N:0,NNE:22.5,NE:45,ENE:67.5,E:90,ESE:112.5,SE:135,SSE:157.5,S:180,SSW:202.5,SW:225,WSW:247.5,W:270,WNW:292.5,NW:315,NNW:337.5};
+var U='https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+Date.now();
+var jd=null;
+fetch(U).then(function(r){return r.json()}).then(function(j){jd=j;}).catch(function(e){console.error('PIERBITE buoy-watch-a-wind:',e);});
+
+var tries=0;
+var poll=setInterval(function(){
+tries++;
+var mapSvg=document.querySelector('#bsa .mw svg');
+var dots=mapSvg?mapSvg.querySelectorAll('g.st[data-i^="m"]'):[];
+if(jd&&mapSvg&&dots.length){clearInterval(poll);render(mapSvg,dots,jd);}
+else if(tries>40){clearInterval(poll);}
+},150);
+
+function render(mapSvg,dots,j){
+var vb=mapSvg.getAttribute('viewBox')||'-80 0 600 520';
+var piers=j.piers||{};
+var arrows='';
+dots.forEach(function(g){
+var did=g.getAttribute('data-i');
+if(!did||did.charAt(0)!=='m')return;
+var pk=did.slice(1);
+var circ=g.querySelector('circle');
+if(!circ)return;
+var x=circ.getAttribute('cx'),y=circ.getAttribute('cy');
+var hw=(piers[pk]&&piers[pk].headline&&piers[pk].headline.wind)||{};
+var dir=hw.dir,mph=hw.mph;
+if(dir==null||mph==null||!(dir in WD))return;
+if(mph<0.3){
+arrows+='<circle cx="'+x+'" cy="'+y+'" r="9" fill="none" stroke="#eef5fb" stroke-width="1.2" stroke-dasharray="2 3" opacity=".8"/>';
+return;
+}
+var rot=((WD[dir]+90)%360).toFixed(1);
+var dur=Math.max(1.4,Math.min(4.2,4.2-mph*0.12)).toFixed(2);
+var d2=(-(dur/3)).toFixed(2),d3=(-(dur*2/3)).toFixed(2);
+arrows+='<g transform="translate('+x+' '+y+') rotate('+rot+')">'
++'<path class="bsaWc" style="animation-duration:'+dur+'s;animation-delay:0s" d="M-4,-3 L2,0 L-4,3"/>'
++'<path class="bsaWc" style="animation-duration:'+dur+'s;animation-delay:'+d2+'s" d="M-4,-3 L2,0 L-4,3"/>'
++'<path class="bsaWc" style="animation-duration:'+dur+'s;animation-delay:'+d3+'s" d="M-4,-3 L2,0 L-4,3"/>'
++'</g>';
+});
+if(!arrows)return;
+var host=mapSvg.parentNode;
+if(!host)return;
+var ov=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ov.setAttribute('viewBox',vb);
+ov.setAttribute('width','100%');
+ov.setAttribute('height','100%');
+ov.setAttribute('style','position:absolute;top:0;left:0;pointer-events:none;z-index:2');
+ov.innerHTML=arrows;
+host.appendChild(ov);
+var lg=document.querySelector('#bsa .lg');
+if(lg&&!lg.querySelector('.bsaWLegend')){
+lg.insertAdjacentHTML('beforeend','<span class="bsaWLegend"><i style="background:none;border:1.5px solid #eef5fb"></i>wind direction</span>');
+}
+}
+})();
+</script>
+
+
+
+
+
+
+
+</main>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./PierBite-PWA-Service-Worker.js").catch(function (error) {
+      console.error("PierBite PWA service worker registration failed:", error);
+    });
+  });
+}
+</script>
+</body>
+</html>
