@@ -1,0 +1,101 @@
+name: Update LMHOFS Temperature Map
+
+"on":
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/update-lmhofs-temperature.yml'
+      - 'scripts/build_lmhofs_temperature.py'
+  schedule:
+    - cron: '20 2,8,14,20 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lmhofs-temperature-map
+  cancel-in-progress: false
+
+jobs:
+  build-temperature-overlay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy matplotlib requests netCDF4
+
+      - name: Verify generator before using NOAA data
+        run: python scripts/build_lmhofs_temperature.py --self-test
+
+      - name: Build latest NOAA LMHOFS temperature overlay
+        run: python scripts/build_lmhofs_temperature.py
+
+      - name: Verify generated files
+        run: |
+          test -s lmhofs-temperature.png
+          test -s lmhofs-temperature.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          png = Path('lmhofs-temperature.png')
+          meta_path = Path('lmhofs-temperature.json')
+          meta = json.loads(meta_path.read_text(encoding='utf-8'))
+
+          required = {
+              'generated_at_utc',
+              'valid_time_utc',
+              'source_file',
+              'source_url',
+              'bounds',
+              'scale_min_f',
+              'scale_max_f',
+              'actual_min_f',
+              'actual_max_f',
+          }
+          missing = sorted(required - set(meta))
+          if missing:
+              raise SystemExit(f'Missing metadata keys: {missing}')
+
+          bounds = meta['bounds']
+          for key in ('west', 'east', 'south', 'north'):
+              if key not in bounds:
+                  raise SystemExit(f'Missing bounds key: {key}')
+
+          if png.stat().st_size < 50_000:
+              raise SystemExit('Generated PNG is unexpectedly small.')
+
+          print('Generated files verified successfully.')
+          print(f'PNG bytes: {png.stat().st_size}')
+          print(f"NOAA source file: {meta['source_file']}")
+          print(f"Valid time UTC: {meta['valid_time_utc']}")
+          PY
+
+      - name: Commit refreshed temperature files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lmhofs-temperature.png lmhofs-temperature.json
+
+          if git diff --cached --quiet; then
+            echo 'No temperature-file changes to commit.'
+            exit 0
+          fi
+
+          git commit -m 'Update NOAA LMHOFS temperature overlay'
+          git push
