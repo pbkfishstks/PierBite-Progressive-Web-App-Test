@@ -1,2127 +1,2128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Conditions Map | PierBite</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Conditions Map | PierBite</title>
+  <meta name="theme-color" content="#061522">
+  <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
+  <link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+  <link rel="icon" href="PierBite-App-Icon-192x192.png">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 
-<meta name="theme-color" content="#061522">
-<link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
-<link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
-<link rel="icon" href="PierBite-App-Icon-192x192.png">
+  <style>
+    :root{
+      --bg:#061522;
+      --panel:#0b1c2b;
+      --card:#112a3f;
+      --line:#1f405b;
+      --ink:#eef5fb;
+      --muted:#a3bcd1;
+      --faint:#8aa2b6;
+      --lime:#8fd43c;
+      --gold:#f5b53f;
+      --blue:#5fb6f0;
+      --purple:#a78bfa;
+      --green:#34c878;
+      --red:#ec5547;
+    }
 
-<style>
-*{box-sizing:border-box}
-html{background:#061522}
-body{
-margin:0;
-background:#061522;
-color:#eef5fb;
-font-family:Arial,Helvetica,sans-serif
-}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+    body{min-height:100vh}
 
-.pb-page{
-max-width:1000px;
-margin:0 auto;
-padding:18px 20px 42px
-}
+    .page{max-width:1120px;margin:0 auto;padding:14px 14px 34px}
 
-.pb-topbar{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-border-bottom:1px solid #1f405b;
-padding:0 0 12px;
-margin-bottom:18px
-}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:4px 2px 12px;
+      border-bottom:1px solid var(--line);
+      margin-bottom:14px;
+    }
 
-.pb-brand{
-font-weight:700;
-font-size:.95rem;
-letter-spacing:.01em
-}
+    .brand{font-weight:800;font-size:1rem;letter-spacing:.01em}
+    .brand .bite{color:var(--lime)}
+    .brand .dotcom{color:var(--faint);font-weight:500}
 
-.pb-brand .bite{color:#8fd43c}
+    .home{
+      color:var(--lime);
+      text-decoration:none;
+      font-family:monospace;
+      font-size:.72rem;
+      letter-spacing:.08em;
+      border:1px solid rgba(143,212,60,.35);
+      padding:7px 10px;
+      border-radius:8px;
+    }
 
-.pb-brand .dotcom{
-color:#8aa2b6;
-font-weight:500
-}
+    .heading{margin:0 0 12px}
+    .eyebrow{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);font-weight:700}
+    h1{font-size:clamp(1.55rem,5vw,2.35rem);line-height:1.08;margin:6px 0 8px}
+    .dek{color:var(--muted);font-size:.92rem;line-height:1.5;max-width:760px}
 
-.pb-home{
-color:#8fd43c;
-text-decoration:none;
-font-family:monospace;
-font-size:.72rem;
-letter-spacing:.08em;
-border:1px solid rgba(143,212,60,.3);
-padding:6px 10px;
-border-radius:7px
-}
+    .status-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .status-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 10px;
+      font-family:monospace;
+      font-size:.66rem;
+      color:var(--muted);
+    }
+    .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:0 0 auto}
+    .status-chip.warn .status-dot{background:var(--gold)}
+    .status-chip.bad .status-dot{background:var(--red)}
 
-.pb-home:hover{border-color:#8fd43c}
+    .map-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    #map{height:min(72vh,720px);min-height:500px;width:100%;background:#071624}
 
-@media(max-width:650px){
-.pb-page{padding:12px 10px 30px}
-}
-</style>
+    .map-message{
+      display:none;
+      padding:10px 12px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      background:var(--card);
+      font-size:.78rem;
+      line-height:1.45;
+    }
+    .map-message.show{display:block}
+    .map-message.warn{color:#ffe1a8}
+    .map-message.bad{color:#ffb6af}
+
+    .legend{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-top:14px;
+      padding:14px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:12px;
+    }
+
+    .legend-title{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-family:monospace;margin-bottom:8px}
+    .tempbar{height:14px;border-radius:4px;background:linear-gradient(to right,rgb(78,42,102),rgb(20,153,166),rgb(125,221,9),rgb(255,254,12),rgb(249,164,31),rgb(247,11,66),rgb(154,5,5))}
+    .templabels{display:flex;justify-content:space-between;color:var(--muted);font-family:monospace;font-size:.58rem;margin-top:5px}
+
+    .keys{display:flex;flex-wrap:wrap;gap:10px 16px;color:var(--muted);font-size:.72rem}
+    .key{display:flex;align-items:center;gap:7px}
+    .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+    .diamond{width:8px;height:8px;display:inline-block;transform:rotate(45deg);border-radius:1px}
+
+    .note{margin-top:12px;color:var(--faint);font-size:.72rem;line-height:1.5}
+
+    .maplibregl-popup-content{
+      background:#10283c;
+      color:#eef5fb;
+      border:1px solid #28506f;
+      border-radius:10px;
+      padding:12px 14px;
+      box-shadow:0 8px 28px rgba(0,0,0,.35);
+      min-width:210px;
+    }
+    .maplibregl-popup-tip{border-top-color:#10283c!important;border-bottom-color:#10283c!important}
+    .maplibregl-popup-close-button{color:#a3bcd1;font-size:19px;padding:4px 7px}
+    .pop-name{font-weight:800;font-size:.96rem;margin-right:16px}
+    .pop-sub{color:#8aa2b6;font-size:.68rem;margin-top:2px}
+    .pop-grid{margin-top:9px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:.72rem}
+    .pop-k{color:#8aa2b6}
+    .pop-v{font-family:monospace;text-align:right}
+
+    .wind-marker{width:34px;height:34px;display:flex;align-items:center;justify-content:center;pointer-events:auto}
+    .wind-arrow{
+      color:#ffffff;
+      font-size:18px;
+      line-height:1;
+      text-shadow:0 1px 3px rgba(0,0,0,.9);
+      transform-origin:center;
+    }
+    .wind-badge{
+      position:absolute;
+      margin-top:31px;
+      font:600 9px/1 Arial,sans-serif;
+      color:#ffffff;
+      background:rgba(6,21,34,.78);
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:5px;
+      padding:3px 4px;
+      white-space:nowrap;
+    }
+
+    .maplibregl-ctrl-group{background:#10283c;border:1px solid #28506f}
+    .maplibregl-ctrl-group button{filter:invert(1) brightness(1.8)}
+    .maplibregl-ctrl-attrib{font-size:10px!important}
+
+    @media(max-width:650px){
+      .page{padding:10px 8px 26px}
+      #map{height:68vh;min-height:460px}
+      .dek{font-size:.86rem}
+      .status-row{gap:6px}
+      .status-chip{font-size:.6rem;padding:6px 8px}
+      .legend{padding:12px}
+    }
+
+    @media(max-height:680px) and (max-width:650px){
+      #map{height:64vh;min-height:390px}
+    }
+  </style>
 </head>
 
 <body>
 
-<main class="pb-page">
-
-<div class="pb-topbar">
-<div class="pb-brand">
-Pier<span class="bite">Bite</span><span class="dotcom">.com</span>
-</div>
-<a class="pb-home" href="index.html">APP HOME</a>
-</div>
-
-<!--
-PIERBITE CONDITIONS MAP
-MOBILE COLOR FIX v2
-Temperature wash now uses ONLY direct solid SVG fills.
-No gradients. No SVG filters. No Gaussian blur.
--->
-
-<div id="bsa"></div>
-
-<style>
-#bsa{
---cd:#0a1420;
---ln:#1e3448;
---ink:#eef5fb;
---im:#a3bcd1;
---if:#8aa2b6;
---gn:#8fd43c;
---gd:#f5b53f;
---lb:#5fb6f0;
---fd:'Barlow Semi Condensed',sans-serif;
---fb:'Inter',sans-serif;
---fm:'JetBrains Mono',monospace;
-font-family:var(--fb);
-color:var(--ink);
-line-height:1.5
-}
-
-#bsa *{box-sizing:border-box;margin:0;padding:0}
-
-#bsa .cd{
-background:var(--cd);
-border:1px solid var(--ln);
-border-radius:12px
-}
-
-#bsa .wm{
-font-family:var(--fd);
-font-weight:700;
-font-size:1.02rem;
-letter-spacing:.01em;
-color:var(--ink);
-line-height:1;
-margin-bottom:5px
-}
-
-#bsa .be{
-font-family:var(--fd);
-font-weight:600;
-letter-spacing:.14em;
-text-transform:uppercase;
-font-size:.72rem;
-color:var(--gn)
-}
-
-#bsa .bh{
-font-family:var(--fd);
-font-weight:700;
-font-size:clamp(1.5rem,3.2vw,2.2rem);
-line-height:1.12;
-margin-top:5px
-}
-
-#bsa .bl{
-color:var(--im);
-font-size:.85rem;
-max-width:600px;
-margin-top:8px
-}
-
-#bsa .hd{
-display:flex;
-flex-wrap:wrap;
-gap:14px;
-align-items:flex-start;
-justify-content:space-between
-}
-
-#bsa .sb{
-font-family:var(--fd);
-font-weight:600;
-letter-spacing:.08em;
-text-transform:uppercase;
-font-size:.62rem;
-color:var(--if);
-background:none;
-border:1px solid var(--ln);
-border-radius:6px;
-padding:8px 13px;
-cursor:pointer
-}
-
-#bsa .sb:hover{
-color:var(--gd);
-border-color:var(--gd)
-}
-
-#bsa .bc{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:1px;
-background:var(--ln);
-border:1px solid var(--ln);
-border-radius:12px;
-overflow:hidden;
-margin:20px 0
-}
-
-#bsa .c1{
-background:var(--cd);
-padding:13px 16px
-}
-
-#bsa .bn{
-font-family:var(--fm);
-font-weight:700;
-font-size:1.45rem;
-line-height:1
-}
-
-#bsa .b2{
-font-family:var(--fd);
-font-weight:600;
-letter-spacing:.1em;
-text-transform:uppercase;
-font-size:.58rem;
-color:var(--if);
-margin-top:5px
-}
-
-#bsa .g2{
-display:grid;
-grid-template-columns:1fr 290px;
-gap:18px
-}
-
-#bsa .mw{
-overflow:hidden;
-position:relative
-}
-
-#bsa .mc{
-position:absolute;
-top:11px;
-left:13px;
-font-family:var(--fm);
-font-size:.58rem;
-color:var(--if);
-letter-spacing:.06em;
-z-index:3
-}
-
-#bsa svg text{font-family:var(--fm)}
-
-#bsa .st{cursor:pointer}
-
-#bsa .pr{
-transform-origin:center;
-transform-box:fill-box;
-animation:bsaP 2.4s ease-in-out infinite
-}
-
-@keyframes bsaP{
-0%{opacity:.55;transform:scale(.6)}
-70%,100%{opacity:0;transform:scale(2.2)}
-}
-
-#bsa .sw{
-transform-origin:240px 216px;
-animation:bsaS 9s linear infinite
-}
-
-@keyframes bsaS{
-to{transform:rotate(360deg)}
-}
-
-#bsa .dt{padding:16px}
-
-#bsa .dn{
-font-family:var(--fd);
-font-weight:700;
-font-size:1.02rem;
-line-height:1.2
-}
-
-#bsa .ds{
-font-family:var(--fm);
-font-size:.6rem;
-color:var(--if);
-margin-top:3px
-}
-
-#bsa .dr{
-display:flex;
-justify-content:space-between;
-gap:10px;
-padding:7px 0;
-border-bottom:1px solid var(--ln);
-font-size:.73rem
-}
-
-#bsa .dr:last-child{border-bottom:0}
-
-#bsa .dk{color:var(--if)}
-
-#bsa .dv{
-font-family:var(--fm);
-font-size:.68rem;
-text-align:right
-}
-
-#bsa .bd{
-display:inline-block;
-font-family:var(--fd);
-font-weight:600;
-letter-spacing:.09em;
-text-transform:uppercase;
-font-size:.56rem;
-border-radius:4px;
-padding:3px 7px;
-margin-top:8px;
-border:1px solid
-}
-
-#bsa .lg{
-display:flex;
-flex-wrap:wrap;
-gap:14px;
-font-family:var(--fm);
-font-size:.58rem;
-color:var(--if);
-padding:14px 16px
-}
-
-#bsa .lg i{
-width:8px;
-height:8px;
-border-radius:50%;
-display:inline-block;
-margin-right:6px;
-font-style:normal
-}
-
-#bsa .hn{
-font-family:var(--fm);
-font-size:.6rem;
-color:var(--if);
-padding:0 16px 14px;
-line-height:1.6
-}
-
-@media(max-width:820px){
-#bsa .g2{grid-template-columns:1fr}
-}
-
-@media(prefers-reduced-motion:reduce){
-#bsa .pr,#bsa .sw{animation:none}
-}
-</style>
-
-<script>
-(function(){
-
-var U=
-'https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+
-Date.now();
-
-fetch(U)
-.then(function(r){return r.json()})
-.then(bld)
-.catch(function(e){
-console.error('PIERBITE buoy-watch-a:',e);
-document.getElementById('bsa').innerHTML=
-'<div class="bl">Could not load live data. Refresh to retry.</div>';
-});
-
-function X(lo){
-return (lo+88)/1.7*520;
-}
-
-function Y(la){
-return (45.05-la)/1.45*420;
-}
-
-function ag(t){
-var s=Math.max(0,(Date.now()-Date.parse(t))/1e3);
-var h=Math.floor(s/3600);
-var m=Math.floor(s%3600/60);
-return h>0
-?h+' h '+m+' min ago'
-:m+' min '+Math.floor(s%60)+' s ago';
-}
-
-function hh(t){
-return (Date.now()-Date.parse(t))/36e5;
-}
-
-function tempColor(f){
-
-var stops=[
-[32,78,42,102],
-[44,20,153,166],
-[51,125,221,9],
-[60,255,254,12],
-[67,249,164,31],
-[74,247,11,66],
-[85,154,5,5]
-];
-
-if(f<=stops[0][0]){
-return 'rgb('+
-stops[0][1]+','+
-stops[0][2]+','+
-stops[0][3]+')';
-}
-
-if(f>=stops[stops.length-1][0]){
-var z=stops[stops.length-1];
-return 'rgb('+z[1]+','+z[2]+','+z[3]+')';
-}
-
-for(var i=0;i<stops.length-1;i++){
-
-var a=stops[i];
-var b=stops[i+1];
-
-if(f>=a[0]&&f<=b[0]){
-
-var t=(f-a[0])/(b[0]-a[0]);
-
-var r=Math.round(a[1]+(b[1]-a[1])*t);
-var g=Math.round(a[2]+(b[2]-a[2])*t);
-var bl=Math.round(a[3]+(b[3]-a[3])*t);
-
-return 'rgb('+r+','+g+','+bl+')';
-}
-}
-
-return 'rgb(140,198,63)';
-}
-
-function bld(j){
-
-var M=j.model_water_temp||{};
-var PT=M.points||{};
-var P=j.piers||{};
-var S=j.stations||{};
-var src=[];
-var seen={};
-var k,v;
-
-for(k in PT){
-
-if(k.indexOf('open_lake')===0||!P[k])continue;
-
-v=PT[k];
-
-src.push({
-id:'m'+k,
-nm:(P[k].name||k).split(' /')[0],
-sub:'NOAA lake model, computed '+
-(v.distance_mi!=null
-?v.distance_mi+' mi off the pier'
-:'at the pier'),
-kind:'model',
-la:P[k].coordinates.lat,
-lo:P[k].coordinates.lon,
-t:v.water_temp_f,
-c:v.water_change_72h_f,
-av:v.available,
-rt:M.run_time_utc
-});
-}
-
-for(k in S){
-
-v=S[k];
-
-if(!v||!v.label||seen[v.label])continue;
-
-seen[v.label]=1;
-
-src.push({
-id:'s'+k,
-nm:v.label.split(' (')[0],
-sub:v.label,
-kind:v.water_temp_f!=null?'buoy':'shore',
-la:v.lat,
-lo:v.lon,
-t:v.water_temp_f,
-w:v.wave_ft,
-dp:v.water_depth_ft,
-av:v.available,
-ot:v.observed_at_utc
-});
-}
-
-var SH=j.station_history||{};
-
-for(k in SH){
-
-v=SH[k];
-
-if(
-!v||
-!v.available||
-v.lat==null||
-v.lon==null||
-!v.label||
-seen[v.label]
-)continue;
-
-seen[v.label]=1;
-
-src.push({
-id:'w'+k,
-nm:v.label.split(' (')[0],
-sub:v.label,
-kind:'wind',
-la:v.lat,
-lo:v.lon,
-wd:v.current_wind_dir,
-wm:v.current_wind_mph,
-av:v.available,
-ot:v.observed_at_utc
-});
-}
-
-src.forEach(function(s){
-
-if(s.kind==='model'){
-
-s.st=
-!s.av
-?'q'
-:(M.stale
-?'q'
-:(M.disclose_age?'a':'g'));
-
-s.ts=s.rt;
-
-}else{
-
-s.st=
-!s.av||!s.ot
-?'q'
-:(hh(s.ot)<3?'g':'a');
-
-s.ts=s.ot;
-}
-});
-
-var rep=
-src.filter(function(s){
-return s.st==='g';
-}).length;
-
-var qt=src.length-rep;
-
-var buoys=
-src.filter(function(s){
-return s.kind==='buoy'&&
-s.av&&
-s.t!=null&&
-s.dp;
-});
-
-var W=(buoys[0]?buoys[0].w:0)||0;
-
-var LAND=
-'M 293 -3 '+
-'C 281 19 267 33 253 53 '+
-'C 235 81 221 97 203 118 '+
-'C 191 136 183 145 179 163 '+
-'C 173 191 171 210 161 252 '+
-'C 153 272 143 277 135 299 '+
-'C 127 328 125 343 119 369 '+
-'C 115 388 113 397 111 420 '+
-'C 107 442 87 462 71 478 '+
-'C 67 494 61 508 59 520 '+
-'L -90 520 L -90 -3 Z';
-
-var shoreT=[];
-
-for(k in PT){
-
-if(k.indexOf('open_lake')===0||!P[k])continue;
-
-v=PT[k];
-
-if(v.available&&v.water_temp_f!=null){
-
-shoreT.push({
-y:Y(P[k].coordinates.lat),
-t:v.water_temp_f
-});
-}
-}
-
-shoreT.sort(function(a,b){
-return a.y-b.y;
-});
-
-var deepT=null;
-
-var OL=PT['open_lake_45210'];
-
-if(
-OL&&
-OL.available&&
-OL.water_temp_f!=null
-){
-deepT=OL.water_temp_f;
-}
-
-if(deepT==null){
-
-var ob=
-src.filter(function(s){
-return s.kind==='buoy'&&
-s.t!=null&&
-s.dp;
-});
-
-if(ob.length){
-deepT=ob[0].t;
-}
-}
-
-var WBASE=12;
-var WSPAN=90;
-
-var coast=[
-[0,293],
-[53,253],
-[118,203],
-[163,179],
-[252,161],
-[299,135],
-[369,119],
-[420,111],
-[478,71],
-[520,59]
-];
-
-function shoreXAt(y){
-
-if(y<=coast[0][0]){
-return coast[0][1];
-}
-
-if(y>=coast[coast.length-1][0]){
-return coast[coast.length-1][1];
-}
-
-for(var i=0;i<coast.length-1;i++){
-
-var a=coast[i];
-var b=coast[i+1];
-
-if(y>=a[0]&&y<=b[0]){
-
-var f=(y-a[0])/(b[0]-a[0]);
-
-return a[1]+
-f*(b[1]-a[1]);
-}
-}
-
-return coast[coast.length-1][1];
-}
-
-function shoreTempAt(y){
-
-if(!shoreT.length){
-return deepT;
-}
-
-if(y<=shoreT[0].y){
-return shoreT[0].t;
-}
-
-if(y>=shoreT[shoreT.length-1].y){
-return shoreT[shoreT.length-1].t;
-}
-
-for(var i=0;i<shoreT.length-1;i++){
-
-var a=shoreT[i];
-var b=shoreT[i+1];
-
-if(y>=a.y&&y<=b.y){
-
-var f=(y-a.y)/(b.y-a.y);
-
-return a.t+
-f*(b.t-a.t);
-}
-}
-
-return shoreT[shoreT.length-1].t;
-}
-
-/*
-MOBILE-SAFE WATER-TEMPERATURE WASH
-
-NO:
-linearGradient
-radialGradient
-filter
-Gaussian blur
-url(#...)
-
-Every colored piece has its RGB value directly
-on the SVG polygon itself.
-*/
-
-var washHtml='';
-
-if(
-shoreT.length&&
-deepT!=null
-){
-
-var ROWS=32;
-var COLS=10;
-var cells='';
-
-for(var ri=0;ri<ROWS;ri++){
-
-var y0=ri*520/ROWS;
-var y1=(ri+1)*520/ROWS;
-var ym=(y0+y1)/2;
-
-var nearT=shoreTempAt(ym);
-
-var sx0=shoreXAt(y0);
-var sx1=shoreXAt(y1);
-
-for(var ci=0;ci<COLS;ci++){
-
-var m0=ci/COLS;
-var m1=(ci+1)/COLS;
-var mm=(m0+m1)/2;
-
-var x00=
-sx0+
-WBASE+
-m0*WSPAN;
-
-var x01=
-sx0+
-WBASE+
-m1*WSPAN;
-
-var x10=
-sx1+
-WBASE+
-m0*WSPAN;
-
-var x11=
-sx1+
-WBASE+
-m1*WSPAN;
-
-var cellTemp=
-nearT+
-(deepT-nearT)*mm;
-
-var col=
-tempColor(cellTemp);
-
-cells+=
-'<polygon '+
-'points="'+
-x00.toFixed(1)+','+y0.toFixed(1)+' '+
-x01.toFixed(1)+','+y0.toFixed(1)+' '+
-x11.toFixed(1)+','+y1.toFixed(1)+' '+
-x10.toFixed(1)+','+y1.toFixed(1)+
-'" fill="'+col+'" '+
-'stroke="'+col+'" '+
-'stroke-width="0.7"/>';
-}
-}
-
-washHtml=
-'<g opacity=".78">'+
-cells+
-'</g>';
-}
-
-var dots='';
-var used=[];
-
-src.forEach(function(s){
-
-if(s.la==null)return;
-
-var x=X(s.lo);
-var y=Y(s.la);
-var ar='';
-
-if(s.la>44.98){
-
-y=17;
-
-ar=
-'<line '+
-'x1="'+x.toFixed(0)+'" '+
-'y1="38" '+
-'x2="'+x.toFixed(0)+'" '+
-'y2="22" '+
-'stroke="#1e3448" '+
-'stroke-dasharray="2 3"/>'+
-'<text '+
-'x="'+x.toFixed(0)+'" '+
-'y="49" '+
-'text-anchor="middle" '+
-'fill="#8aa2b6" '+
-'font-size="9">'+
-'north &#8593;'+
-'</text>';
-}
-
-if(s.kind==='shore'){
-
-var cy=[
-[0,293],
-[53,253],
-[118,203],
-[163,179],
-[252,161],
-[299,135],
-[369,119],
-[420,111],
-[478,71],
-[520,59]
-];
-
-var cx=cy[0][1];
-
-var i2;
-
-for(i2=0;i2<cy.length-1;i2++){
-
-if(
-y>=cy[i2][0]&&
-y<=cy[i2+1][0]
-){
-
-var f=
-(y-cy[i2][0])/
-(cy[i2+1][0]-cy[i2][0]);
-
-cx=
-cy[i2][1]+
-f*(cy[i2+1][1]-cy[i2][1]);
-
-break;
-}
-}
-
-if(y>cy[cy.length-1][0]){
-cx=cy[cy.length-1][1];
-}
-
-if(x>cx-10){
-x=cx-22;
-}
-
-y+=20;
-}
-
-if(s.id==='wmtw'){
-x=X(-87.6437);
-y=Y(44.0915)+24;
-}
-
-if(s.id!=='wmtw'){
-
-var tries=0;
-var clash=1;
-
-while(clash&&tries<14){
-
-clash=0;
-
-for(var u2=0;u2<used.length;u2++){
-
-if(
-Math.abs(used[u2][0]-x)<16&&
-Math.abs(used[u2][1]-y)<16
-){
-
-clash=1;
-
-if(s.kind==='shore'){
-y+=16;
-}else if(s.kind==='wind'){
-y-=16;
-}else{
-x+=12;
-y+=8;
-}
-
-break;
-}
-}
-
-tries++;
-}
-}
-
-used.push([x,y]);
-
-var kc=
-s.kind==='model'
-?'#5fb6f0'
-:((s.kind==='shore'||s.kind==='wind')
-?'#a78bfa'
-:'#8fd43c');
-
-var co=
-s.st==='q'
-?'#5a6673'
-:kc;
-
-var op=
-s.st==='q'
-?'.5'
-:'1';
-
-var pu=
-s.st==='g'
-?'<circle class="pr" '+
-'cx="'+x.toFixed(0)+'" '+
-'cy="'+y.toFixed(0)+'" '+
-'r="7" '+
-'fill="none" '+
-'stroke="'+kc+'" '+
-'stroke-width="1.4"/>'
-:(s.st==='a'
-?'<circle '+
-'cx="'+x.toFixed(0)+'" '+
-'cy="'+y.toFixed(0)+'" '+
-'r="8.5" '+
-'fill="none" '+
-'stroke="#f5b53f" '+
-'stroke-width="1.6" '+
-'opacity=".95"/>'
-:'');
-
-var lb=
-s.kind==='model'
-?'<text '+
-'x="'+(x-11).toFixed(0)+'" '+
-'y="'+(y+4).toFixed(0)+'" '+
-'fill="#a3bcd1" '+
-'font-size="10" '+
-'text-anchor="end">'+
-s.nm+
-'</text>'
-:(s.kind==='wind'
-?'<text '+
-'x="'+x.toFixed(0)+'" '+
-'y="'+(y-10).toFixed(0)+'" '+
-'fill="#a78bfa" '+
-'font-size="7.5" '+
-'text-anchor="middle">'+
-'wind'+
-'</text>'
-:(s.kind==='shore'
-?'<text '+
-'x="'+x.toFixed(0)+'" '+
-'y="'+(y+18).toFixed(0)+'" '+
-'fill="#a78bfa" '+
-'font-size="7.5" '+
-'text-anchor="middle">'+
-'wind'+
-'</text>'
-:(s.kind==='buoy'&&s.la<=44.98
-?'<text '+
-'x="'+(x+12).toFixed(0)+'" '+
-'y="'+(y+4).toFixed(0)+'" '+
-'fill="#a3bcd1" '+
-'font-size="10">'+
-s.nm+
-(s.t!=null
-?' &#183; '+s.t.toFixed(1)+'&#176;F'
-:'')+
-'</text>'
-:'')));
-
-var shp=
-(s.kind==='shore'||s.kind==='wind')
-?'<rect '+
-'x="'+(x-4.6).toFixed(1)+'" '+
-'y="'+(y-4.6).toFixed(1)+'" '+
-'width="9.2" '+
-'height="9.2" '+
-'fill="'+co+'" '+
-'transform="rotate(45 '+
-x.toFixed(1)+' '+
-y.toFixed(1)+
-')"/>'
-:'<circle '+
-'cx="'+x.toFixed(0)+'" '+
-'cy="'+y.toFixed(0)+'" '+
-'r="'+(s.kind==='buoy'?5.5:4.5)+'" '+
-'fill="'+co+'"/>';
-
-dots+=
-'<g class="st" '+
-'data-i="'+s.id+'" '+
-'opacity="'+op+'">'+
-ar+
-pu+
-shp+
-lb+
-'</g>';
-});
-
-var MIPX=
-(69.17*
-Math.cos(44.3*Math.PI/180))/
-(520/1.7);
-
-var offMi=
-Math.round(
-(WBASE+WSPAN)*
-MIPX
-);
-
-var html=
-
-'<div class="hd">'+
-
-'<div>'+
-'<div class="wm">'+
-'Pier<span style="color:var(--gn)">Bite</span>'+
-'<span style="color:var(--if);font-weight:500">.com</span>'+
-'</div>'+
-'<div class="be">The Network</div>'+
-'<div class="bh">Every station this site listens to</div>'+
-'<p class="bl">'+
-'A dot pulses only when it recently reported. Tap one to inspect it.'+
-'</p>'+
-'</div>'+
-
-'<div style="text-align:right">'+
-'<button class="sb" id="bsaS2" type="button">'+
-'&#9834; sound: off'+
-'</button>'+
-'</div>'+
-
-'</div>'+
-
-'<div class="bc">'+
-
-'<div class="c1">'+
-'<div class="bn" style="color:#8fd43c">'+
-src.length+
-'</div>'+
-'<div class="b2">Sources</div>'+
-'</div>'+
-
-'<div class="c1">'+
-'<div class="bn" style="color:#8fd43c">'+
-rep+
-'</div>'+
-'<div class="b2">Reporting</div>'+
-'</div>'+
-
-'<div class="c1">'+
-'<div class="bn" style="color:'+
-(qt?'#f5b53f':'#8aa2b6')+
-'">'+
-qt+
-'</div>'+
-'<div class="b2">Not current</div>'+
-'</div>'+
-
-'</div>'+
-
-'<div class="g2">'+
-
-'<div class="cd mw">'+
-
-'<div class="mc">'+
-'LAKE MICHIGAN &#183; WASH ~'+
-offMi+
-' MI OFFSHORE'+
-'</div>'+
-
-'<svg '+
-'viewBox="-80 0 600 520" '+
-'width="100%" '+
-'xmlns="http://www.w3.org/2000/svg">'+
-
-washHtml+
-
-'<path '+
-'d="'+LAND+'" '+
-'fill="#0a1626" '+
-'stroke="#2a4a66"/>'+
-
-'<g class="sw" opacity=".5">'+
-'<line '+
-'x1="240" y1="216" '+
-'x2="240" y2="32" '+
-'stroke="#8fd43c" '+
-'opacity=".55"/>'+
-'<path '+
-'d="M 240 216 L 240 32 A 184 184 0 0 0 179 40 Z" '+
-'fill="#8fd43c" '+
-'opacity=".05"/>'+
-'</g>'+
-
-'<g>'+
-dots+
-'</g>'+
-
-'</svg>'+
-
-'</div>'+
-
-'<div>'+
-
-'<div class="cd dt" id="bsaT"></div>'+
-
-'<div class="cd" style="margin-top:14px">'+
-
-'<div class="lg">'+
-
-'<span>'+
-'<i style="background:#a78bfa;border-radius:2px;transform:rotate(45deg)"></i>'+
-'wind only'+
-'</span>'+
-
-'<span>'+
-'<i style="background:#5fb6f0"></i>'+
-'modeled'+
-'</span>'+
-
-'<span>'+
-'<i style="background:#8fd43c"></i>'+
-'buoy'+
-'</span>'+
-
-'<span>'+
-'<i style="background:none;border:1.5px solid #8fd43c"></i>'+
-'pulsing = current'+
-'</span>'+
-
-'<span>'+
-'<i style="background:none;border:1.5px solid #f5b53f"></i>'+
-'ring = delayed'+
-'</span>'+
-
-'<span>'+
-'<i style="background:#5a6673"></i>'+
-'quiet'+
-'</span>'+
-
-'</div>'+
-
-'<div class="hn">'+
-'When a station stops reporting, the site borrows from the nearest one still working.'+
-'</div>'+
-
-'</div>'+
-
-'</div>'+
-
-'</div>';
-
-var E=document.getElementById('bsa');
-
-E.innerHTML=html;
-
-function dt(id,sc){
-
-var s=null;
-
-src.forEach(function(q){
-if(q.id===id)s=q;
-});
-
-if(!s)return;
-
-var r='';
-
-if(s.t!=null){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Water temp</span>'+
-'<span class="dv">'+
-s.t.toFixed(1)+
-'&#176;F'+
-'</span>'+
-'</div>';
-}
-
-if(s.c!=null){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">72-hour change</span>'+
-'<span class="dv">'+
-(s.c>0?'+':'')+
-s.c.toFixed(1)+
-'&#176;F'+
-'</span>'+
-'</div>';
-}
-
-if(s.w!=null){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Waves</span>'+
-'<span class="dv">'+
-s.w+
-' ft'+
-'</span>'+
-'</div>';
-}
-
-if(s.dp){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Depth here</span>'+
-'<span class="dv">'+
-s.dp+
-' ft'+
-'</span>'+
-'</div>';
-}
-
-if(s.kind==='shore'){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Water sensor</span>'+
-'<span class="dv">'+
-'none &#8212; wind &amp; waves only'+
-'</span>'+
-'</div>';
-}
-
-if(s.kind==='wind'){
-
-if(
-s.wd!=null&&
-s.wm!=null
-){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Wind now</span>'+
-'<span class="dv">'+
-s.wd+' '+
-s.wm+
-' mph'+
-'</span>'+
-'</div>';
-}
-
-r+=
-'<div class="dr">'+
-'<span class="dk">Water sensor</span>'+
-'<span class="dv">'+
-'none &#8212; wind only'+
-'</span>'+
-'</div>';
-}
-
-if(s.ts){
-
-r+=
-'<div class="dr">'+
-'<span class="dk">'+
-(s.kind==='model'
-?'Model run'
-:'Last reading')+
-'</span>'+
-'<span class="dv">'+
-'<span class="ag" data-t="'+
-s.ts+
-'"></span>'+
-'</span>'+
-'</div>';
-}
-
-var bc=
-s.kind==='model'
-?'#5fb6f0'
-:((s.kind==='shore'||s.kind==='wind')
-?'#a78bfa'
-:'#8fd43c');
-
-var bt=
-s.kind==='model'
-?'MODELED &#9684;'
-:(s.kind==='shore'
-?'WIND &amp; WAVES &#9670; NO WATER SENSOR'
-:(s.kind==='wind'
-?'WIND ONLY &#9670; MEASURED'
-:'MEASURED &#9679; LIVE'));
-
-document.getElementById('bsaT').innerHTML=
-
-'<div class="dn">'+
-s.nm+
-'</div>'+
-
-'<div class="ds">'+
-s.sub+
-'</div>'+
-
-'<span class="bd" style="color:'+
-bc+
-';border-color:'+
-bc+
-'66">'+
-bt+
-'</span>'+
-
-'<div style="margin-top:9px">'+
-r+
-'</div>';
-
-tk();
-
-if(s.kind==='model'){
-
-window.PBLastPierTap=s.id;
-
-try{
-window.dispatchEvent(
-new CustomEvent(
-'pbPierTap',
-{detail:{id:s.id}}
-)
-);
-}catch(e){}
-}
-
-if(sc){
-
-var eT=document.getElementById('bsaT');
-
-var rT=eT.getBoundingClientRect();
-
-if(
-rT.top<0||
-rT.bottom>innerHeight
-){
-
-eT.scrollIntoView({
-behavior:'smooth',
-block:'nearest'
-});
-}
-}
-}
-
-E.addEventListener('click',function(e){
-
-var t=e.target;
-
-while(t&&t!==E){
-
-if(
-t.getAttribute&&
-t.getAttribute('data-i')
-){
-
-dt(
-t.getAttribute('data-i'),
-true
-);
-
-return;
-}
-
-t=t.parentNode;
-}
-});
-
-dt(
-buoys[0]
-?buoys[0].id
-:src[0].id
-);
-
-function tk(){
-
-var n=
-E.querySelectorAll('.ag');
-
-var i;
-
-for(i=0;i<n.length;i++){
-
-n[i].textContent=
-ag(
-n[i].getAttribute('data-t')
-);
-}
-}
-
-tk();
-
-setInterval(tk,1000);
-
-var AC=null;
-
-document
-.getElementById('bsaS2')
-.addEventListener('click',function(){
-
-var b=this;
-
-if(AC){
-
-AC.close();
-AC=null;
-
-b.innerHTML=
-'&#9834; sound: off';
-
-return;
-}
-
-AC=
-new(
-window.AudioContext||
-window.webkitAudioContext
-)();
-
-var N=AC.sampleRate*2;
-
-var bf=
-AC.createBuffer(
-1,
-N,
-AC.sampleRate
-);
-
-var dd=
-bf.getChannelData(0);
-
-var i;
-
-for(i=0;i<N;i++){
-
-dd[i]=
-Math.random()*2-1;
-}
-
-var so=
-AC.createBufferSource();
-
-so.buffer=bf;
-so.loop=true;
-
-var f=
-AC.createBiquadFilter();
-
-f.type='lowpass';
-f.frequency.value=420;
-
-var g=
-AC.createGain();
-
-var am=
-Math.min(
-.14,
-.05+
-W*.03
-);
-
-g.gain.value=am;
-
-var l=
-AC.createOscillator();
-
-l.frequency.value=.09;
-
-var lg=
-AC.createGain();
-
-lg.gain.value=
-am*.6;
-
-l.connect(lg);
-lg.connect(g.gain);
-
-l.start();
-
-so.connect(f);
-f.connect(g);
-g.connect(AC.destination);
-
-so.start();
-
-b.innerHTML=
-'&#9834; sound: on';
-
-});
-
-}
-
-})();
-</script>
-
-<div id="bwc">
-
-<div class="kw">
-
-<div class="kt">
-Water temperature
-</div>
-
-<div class="kb" id="bwcBar">
-
-<div class="kd" id="bwcLabel" style="display:none"></div>
-
-<div class="km" id="bwcMark" style="display:none"></div>
-
-</div>
-
-<div class="kl">
-<span>32&#176;F</span>
-<span>44&#176;</span>
-<span>51&#176;</span>
-<span>60&#176;</span>
-<span>67&#176;</span>
-<span>74&#176;</span>
-<span>85&#176;F</span>
-</div>
-
-<div class="kn" id="bwcNote">
-Colour on the lake shows water temperature at the nearest reporting station. Land is not coloured.
-</div>
-
-</div>
-
-</div>
-
-<style>
-
-#bwc{
---cd:#0a1420;
---ln:#1e3448;
---if:#8aa2b6;
---im:#a3bcd1;
-font-family:'Inter',sans-serif;
-color:#eef5fb
-}
-
-#bwc *{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
-
-#bwc .kw{
-background:var(--cd);
-border:1px solid var(--ln);
-border-radius:12px;
-padding:14px 16px;
-margin-top:18px
-}
-
-#bwc .kt{
-font-family:'JetBrains Mono',monospace;
-font-size:.6rem;
-letter-spacing:.14em;
-text-transform:uppercase;
-color:var(--if);
-margin-bottom:10px
-}
-
-#bwc .kb{
-height:14px;
-border-radius:3px;
-background:
-linear-gradient(
-to right,
-rgb(78,42,102),
-rgb(20,153,166),
-rgb(125,221,9),
-rgb(255,254,12),
-rgb(249,164,31),
-rgb(247,11,66),
-rgb(154,5,5)
-);
-position:relative;
-margin-top:20px
-}
-
-#bwc .kd{
-position:absolute;
-top:-22px;
-transform:translateX(-50%);
-font-family:'JetBrains Mono',monospace;
-font-size:.62rem;
-color:#eef5fb;
-white-space:nowrap;
-pointer-events:none
-}
-
-#bwc .kd::after{
-content:'';
-position:absolute;
-top:100%;
-left:50%;
-transform:translateX(-50%);
-border:4px solid transparent;
-border-top-color:#eef5fb
-}
-
-#bwc .km{
-position:absolute;
-top:-2px;
-bottom:-2px;
-width:3px;
-background:#eef5fb;
-border-radius:2px;
-transform:translateX(-50%);
-pointer-events:none
-}
-
-#bwc .kl{
-display:flex;
-justify-content:space-between;
-font-family:'JetBrains Mono',monospace;
-font-size:.6rem;
-color:var(--im);
-margin-top:6px
-}
-
-#bwc .kn{
-font-family:'JetBrains Mono',monospace;
-font-size:.6rem;
-color:var(--if);
-line-height:1.6;
-margin-top:9px
-}
-
-</style>
-
-<script>
-
-(function(){
-
-var STOPS=[
-32,
-44,
-51,
-60,
-67,
-74,
-85
-];
-
-var MIN=STOPS[0];
-
-var MAX=
-STOPS[STOPS.length-1];
-
-function pct(f){
-
-f=
-Math.max(
-MIN,
-Math.min(
-MAX,
-f
-)
-);
-
-for(var i=0;i<STOPS.length-1;i++){
-
-if(
-f>=STOPS[i]&&
-f<=STOPS[i+1]
-){
-
-var segW=
-1/(STOPS.length-1);
-
-var segPos=
-i*segW;
-
-var frac=
-(f-STOPS[i])/
-(STOPS[i+1]-STOPS[i]);
-
-return(
-segPos+
-frac*segW
-)*100;
-}
-}
-
-return 100;
-}
-
-var U=
-'https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+
-Date.now();
-
-fetch(U)
-.then(function(r){
-return r.json();
-})
-.then(function(j){
-
-var pts=
-((j.model_water_temp||{}).points)||{};
-
-var vals=[];
-var k,v;
-
-for(k in pts){
-
-if(
-k.indexOf('open_lake')===0
-)continue;
-
-v=pts[k];
-
-if(
-v&&
-v.available&&
-v.water_temp_f!=null
-){
-
-vals.push(
-v.water_temp_f
-);
-}
-}
-
-if(!vals.length)return;
-
-var avg=
-vals.reduce(
-function(a,b){
-return a+b;
-},
-0
-)/
-vals.length;
-
-var p=pct(avg);
-
-var lbl=
-document.getElementById('bwcLabel');
-
-var mrk=
-document.getElementById('bwcMark');
-
-lbl.textContent=
-avg.toFixed(1)+
-'\u00b0F avg';
-
-lbl.style.left=
-p.toFixed(1)+'%';
-
-lbl.style.display=
-'block';
-
-mrk.style.left=
-p.toFixed(1)+'%';
-
-mrk.style.display=
-'block';
-
-document
-.getElementById('bwcNote')
-.textContent=
-'Colour on the lake shows water temperature at the nearest reporting station. Land is not coloured. Marker shows current pier average.';
-
-})
-.catch(function(){});
-
-})();
-
-</script>
-
-<div id="bsaw" style="display:none"></div>
-
-<style>
-
-.bsaWc{
-fill:none;
-stroke:#eef5fb;
-stroke-width:1.6;
-stroke-linecap:round;
-stroke-linejoin:round;
-animation-name:bsaWChase;
-animation-timing-function:linear;
-animation-iteration-count:infinite;
-opacity:0
-}
-
-@keyframes bsaWChase{
-
-0%{
-transform:translateX(-18px);
-opacity:0
-}
-
-15%{
-opacity:1
-}
-
-88%{
-opacity:1
-}
-
-100%{
-transform:translateX(2px);
-opacity:0
-}
-
-}
-
-@media(prefers-reduced-motion:reduce){
-
-.bsaWc{
-animation:none;
-opacity:.85;
-transform:translateX(-7px)
-}
-
-}
-
-</style>
-
-<script>
-
-(function(){
-
-var WD={
-N:0,
-NNE:22.5,
-NE:45,
-ENE:67.5,
-E:90,
-ESE:112.5,
-SE:135,
-SSE:157.5,
-S:180,
-SSW:202.5,
-SW:225,
-WSW:247.5,
-W:270,
-WNW:292.5,
-NW:315,
-NNW:337.5
-};
-
-var U=
-'https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json?x='+
-Date.now();
-
-var jd=null;
-
-fetch(U)
-.then(function(r){
-return r.json();
-})
-.then(function(j){
-jd=j;
-})
-.catch(function(e){
-console.error(
-'PIERBITE buoy-watch-a-wind:',
-e
-);
-});
-
-var tries=0;
-
-var poll=
-setInterval(function(){
-
-tries++;
-
-var mapSvg=
-document.querySelector(
-'#bsa .mw svg'
-);
-
-var dots=
-mapSvg
-?mapSvg.querySelectorAll(
-'g.st[data-i^="m"]'
-)
-:[];
-
-if(
-jd&&
-mapSvg&&
-dots.length
-){
-
-clearInterval(poll);
-
-render(
-mapSvg,
-dots,
-jd
-);
-
-}else if(tries>40){
-
-clearInterval(poll);
-
-}
-
-},150);
-
-function render(mapSvg,dots,j){
-
-var vb=
-mapSvg.getAttribute('viewBox')||
-'-80 0 600 520';
-
-var piers=j.piers||{};
-
-var arrows='';
-
-dots.forEach(function(g){
-
-var did=
-g.getAttribute('data-i');
-
-if(
-!did||
-did.charAt(0)!=='m'
-)return;
-
-var pk=
-did.slice(1);
-
-var circ=
-g.querySelector('circle');
-
-if(!circ)return;
-
-var x=
-circ.getAttribute('cx');
-
-var y=
-circ.getAttribute('cy');
-
-var hw=
-(
-piers[pk]&&
-piers[pk].headline&&
-piers[pk].headline.wind
-)||{};
-
-var dir=hw.dir;
-
-var mph=hw.mph;
-
-if(
-dir==null||
-mph==null||
-!(dir in WD)
-)return;
-
-if(mph<0.3){
-
-arrows+=
-'<circle '+
-'cx="'+x+'" '+
-'cy="'+y+'" '+
-'r="9" '+
-'fill="none" '+
-'stroke="#eef5fb" '+
-'stroke-width="1.2" '+
-'stroke-dasharray="2 3" '+
-'opacity=".8"/>';
-
-return;
-}
-
-var rot=
-((WD[dir]+90)%360)
-.toFixed(1);
-
-var dur=
-Math.max(
-1.4,
-Math.min(
-4.2,
-4.2-mph*.12
-)
-).toFixed(2);
-
-var d2=
-(-(dur/3))
-.toFixed(2);
-
-var d3=
-(-(dur*2/3))
-.toFixed(2);
-
-arrows+=
-
-'<g transform="translate('+
-x+' '+y+
-') rotate('+
-rot+
-')">'+
-
-'<path class="bsaWc" '+
-'style="animation-duration:'+
-dur+
-'s;animation-delay:0s" '+
-'d="M-4,-3 L2,0 L-4,3"/>'+
-
-'<path class="bsaWc" '+
-'style="animation-duration:'+
-dur+
-'s;animation-delay:'+
-d2+
-'s" '+
-'d="M-4,-3 L2,0 L-4,3"/>'+
-
-'<path class="bsaWc" '+
-'style="animation-duration:'+
-dur+
-'s;animation-delay:'+
-d3+
-'s" '+
-'d="M-4,-3 L2,0 L-4,3"/>'+
-
-'</g>';
-
-});
-
-if(!arrows)return;
-
-var host=
-mapSvg.parentNode;
-
-if(!host)return;
-
-var ov=
-document.createElementNS(
-'http://www.w3.org/2000/svg',
-'svg'
-);
-
-ov.setAttribute(
-'viewBox',
-vb
-);
-
-ov.setAttribute(
-'width',
-'100%'
-);
-
-ov.setAttribute(
-'height',
-'100%'
-);
-
-ov.setAttribute(
-'style',
-'position:absolute;top:0;left:0;pointer-events:none;z-index:2'
-);
-
-ov.innerHTML=
-arrows;
-
-host.appendChild(ov);
-
-var lg=
-document.querySelector(
-'#bsa .lg'
-);
-
-if(
-lg&&
-!lg.querySelector('.bsaWLegend')
-){
-
-lg.insertAdjacentHTML(
-'beforeend',
-'<span class="bsaWLegend">'+
-'<i style="background:none;border:1.5px solid #eef5fb"></i>'+
-'wind direction'+
-'</span>'
-);
-
-}
-
-}
-
-})();
-
-</script>
+<main class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      Pier<span class="bite">Bite</span><span class="dotcom">.com</span>
+    </div>
+    <a class="home" href="index.html">APP HOME</a>
+  </div>
+
+  <section class="heading">
+    <div class="eyebrow">Conditions map</div>
+    <h1>Lake Michigan at a glance</h1>
+    <div class="dek">
+      Water-temperature shading, pier conditions, reporting stations and wind
+      across Wisconsin&rsquo;s west shore. Pinch to zoom. Drag to move.
+      Tap a dot for details.
+    </div>
+  </section>
+
+  <div class="status-row">
+    <div class="status-chip" id="dataStatus">
+      <span class="status-dot"></span>
+      <span>Loading PierBite data&hellip;</span>
+    </div>
+
+    <div class="status-chip" id="tempStatus">
+      <span class="status-dot"></span>
+      <span>Temperature layer loading&hellip;</span>
+    </div>
+  </div>
+
+  <section class="map-card">
+    <div id="map" aria-label="Interactive PierBite Lake Michigan conditions map"></div>
+    <div class="map-message" id="mapMessage"></div>
+  </section>
+
+  <section class="legend">
+
+    <div>
+      <div class="legend-title">Water temperature</div>
+      <div class="tempbar"></div>
+
+      <div class="templabels">
+        <span>32&deg;F</span>
+        <span>44&deg;</span>
+        <span>51&deg;</span>
+        <span>60&deg;</span>
+        <span>67&deg;</span>
+        <span>74&deg;</span>
+        <span>85&deg;F</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="legend-title">Sources</div>
+
+      <div class="keys">
+
+        <span class="key">
+          <i class="dot" style="background:#5fb6f0"></i>
+          Modeled pier water
+        </span>
+
+        <span class="key">
+          <i class="dot" style="background:#34c878"></i>
+          Measured water station
+        </span>
+
+        <span class="key">
+          <i class="diamond" style="background:#a78bfa"></i>
+          Wind / shore station
+        </span>
+
+        <span class="key">
+          <span style="font-size:16px;color:#fff">&#10148;</span>
+          Wind direction
+        </span>
+
+      </div>
+    </div>
+
+  </section>
+
+  <div class="note">
+    Temperature shading uses PierBite&rsquo;s NOAA nearshore model points
+    and blends them toward the open-lake comparison when that comparison
+    is available. If the offshore comparison is unavailable, nearshore
+    temperatures are still shown instead of silently removing the color layer.
+  </div>
 
 </main>
 
+
 <script>
+(function(){
 
-if("serviceWorker" in navigator){
+  'use strict';
 
-window.addEventListener(
-"load",
-function(){
 
-navigator.serviceWorker
-.register(
-"./PierBite-PWA-Service-Worker.js"
-)
-.catch(function(error){
+  var DATA_URL=
+  'https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json';
 
-console.error(
-"PierBite PWA service worker registration failed:",
-error
-);
 
-});
+  var MAP_STYLE=
+  'https://tiles.openfreemap.org/styles/dark';
 
+
+  var PIER_ORDER=[
+    'port_washington',
+    'sheboygan',
+    'manitowoc',
+    'two_rivers',
+    'kewaunee',
+    'algoma',
+    'sturgeon_bay'
+  ];
+
+
+  var PIER_LABEL={
+    port_washington:'Port Washington',
+    sheboygan:'Sheboygan',
+    manitowoc:'Manitowoc',
+    two_rivers:'Two Rivers',
+    kewaunee:'Kewaunee',
+    algoma:'Algoma',
+    sturgeon_bay:'Sturgeon Bay'
+  };
+
+
+  var DIR_DEG={
+    N:0,
+    NNE:22.5,
+    NE:45,
+    ENE:67.5,
+    E:90,
+    ESE:112.5,
+    SE:135,
+    SSE:157.5,
+    S:180,
+    SSW:202.5,
+    SW:225,
+    WSW:247.5,
+    W:270,
+    WNW:292.5,
+    NW:315,
+    NNW:337.5
+  };
+
+
+  var map=null;
+  var windMarkers=[];
+  var firstFit=true;
+
+
+  function setChip(id,text,state){
+
+    var el=
+    document.getElementById(id);
+
+    el.className=
+    'status-chip'+
+    (state?' '+state:'');
+
+    el
+    .querySelector('span:last-child')
+    .textContent=text;
+  }
+
+
+  function showMessage(text,state){
+
+    var el=
+    document.getElementById('mapMessage');
+
+    if(!text){
+
+      el.className=
+      'map-message';
+
+      el.textContent='';
+
+      return;
+    }
+
+    el.textContent=text;
+
+    el.className=
+    'map-message show'+
+    (state?' '+state:'');
+  }
+
+
+  function ageText(iso){
+
+    if(!iso){
+      return 'time unavailable';
+    }
+
+    var ms=
+    Date.now()-
+    Date.parse(iso);
+
+    if(!isFinite(ms)){
+      return 'time unavailable';
+    }
+
+    var mins=
+    Math.max(
+      0,
+      Math.round(ms/60000)
+    );
+
+    if(mins<1){
+      return 'updated just now';
+    }
+
+    if(mins<60){
+      return 'updated '+
+      mins+
+      ' min ago';
+    }
+
+    var hrs=
+    Math.round(
+      mins/60
+    );
+
+    return 'updated '+
+    hrs+
+    ' h ago';
+  }
+
+
+  function esc(s){
+
+    return String(
+      s==null?'':s
+    )
+    .replace(
+      /[&<>"']/g,
+      function(c){
+
+        return {
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[c];
+
+      }
+    );
+  }
+
+
+  function fmt(v,digits,suffix){
+
+    return(
+      typeof v==='number'&&
+      isFinite(v)
+    )
+    ?
+    v.toFixed(digits)+
+    (suffix||'')
+    :
+    '—';
+  }
+
+
+  function offshoreLon(lat,nearLon,miles){
+
+    var milesPerLon=
+    69.172*
+    Math.cos(
+      lat*
+      Math.PI/
+      180
+    );
+
+    if(
+      !milesPerLon||
+      milesPerLon<1
+    ){
+      return nearLon+0.5;
+    }
+
+    return nearLon+
+    (
+      miles/
+      milesPerLon
+    );
+  }
+
+
+  function interp(a,b,t){
+
+    return a+
+    (b-a)*t;
+  }
+
+
+  function buildTempCells(data){
+
+    var model=
+    data.model_water_temp||
+    {};
+
+    var pts=
+    model.points||
+    {};
+
+    var piers=
+    data.piers||
+    {};
+
+    var rows=[];
+
+
+    PIER_ORDER.forEach(
+      function(key){
+
+        var p=
+        pts[key];
+
+        var pier=
+        piers[key]||
+        {};
+
+        if(
+          !p||
+          !p.available||
+          typeof p.water_temp_f!=='number'
+        ){
+          return;
+        }
+
+        var lat=
+        (
+          typeof p.node_lat==='number'
+        )
+        ?
+        p.node_lat
+        :
+        (
+          pier.coordinates&&
+          pier.coordinates.lat
+        );
+
+        var lon=
+        (
+          typeof p.node_lon==='number'
+        )
+        ?
+        p.node_lon
+        :
+        (
+          pier.coordinates&&
+          pier.coordinates.lon
+        );
+
+        if(
+          typeof lat!=='number'||
+          typeof lon!=='number'
+        ){
+          return;
+        }
+
+        rows.push({
+          key:key,
+          lat:lat,
+          lon:lon,
+          temp:p.water_temp_f
+        });
+
+      }
+    );
+
+
+    rows.sort(
+      function(a,b){
+        return a.lat-b.lat;
+      }
+    );
+
+
+    if(rows.length<2){
+
+      return {
+        fc:{
+          type:'FeatureCollection',
+          features:[]
+        },
+        rows:rows,
+        deepTemp:null,
+        hasDeep:false
+      };
+    }
+
+
+    var deep=null;
+
+
+    var open=
+    pts.open_lake_45210;
+
+
+    if(
+      open&&
+      open.available&&
+      typeof open.water_temp_f==='number'
+    ){
+
+      deep=
+      open.water_temp_f;
+    }
+
+
+    if(deep==null){
+
+      var stations=
+      data.stations||
+      {};
+
+      var candidate=null;
+
+
+      Object
+      .keys(stations)
+      .some(
+        function(key){
+
+          var s=
+          stations[key];
+
+          if(
+            s&&
+            s.available&&
+            typeof s.water_temp_f==='number'&&
+            typeof s.water_depth_ft==='number'&&
+            s.water_depth_ft>=100
+          ){
+
+            candidate=
+            s.water_temp_f;
+
+            return true;
+          }
+
+          return false;
+        }
+      );
+
+
+      if(candidate!=null){
+
+        deep=
+        candidate;
+      }
+    }
+
+
+    var features=[];
+
+    var SUBROWS=7;
+    var COLS=10;
+    var OFFSHORE_MILES=24;
+
+
+    for(
+      var i=0;
+      i<rows.length-1;
+      i++
+    ){
+
+      var a=
+      rows[i];
+
+      var b=
+      rows[i+1];
+
+
+      for(
+        var r=0;
+        r<SUBROWS;
+        r++
+      ){
+
+        var t0=
+        r/
+        SUBROWS;
+
+        var t1=
+        (r+1)/
+        SUBROWS;
+
+
+        var lat0=
+        interp(
+          a.lat,
+          b.lat,
+          t0
+        );
+
+        var lat1=
+        interp(
+          a.lat,
+          b.lat,
+          t1
+        );
+
+
+        var nearLon0=
+        interp(
+          a.lon,
+          b.lon,
+          t0
+        );
+
+        var nearLon1=
+        interp(
+          a.lon,
+          b.lon,
+          t1
+        );
+
+
+        var nearTemp0=
+        interp(
+          a.temp,
+          b.temp,
+          t0
+        );
+
+        var nearTemp1=
+        interp(
+          a.temp,
+          b.temp,
+          t1
+        );
+
+
+        var farLon0=
+        offshoreLon(
+          lat0,
+          nearLon0,
+          OFFSHORE_MILES
+        );
+
+        var farLon1=
+        offshoreLon(
+          lat1,
+          nearLon1,
+          OFFSHORE_MILES
+        );
+
+
+        for(
+          var c=0;
+          c<COLS;
+          c++
+        ){
+
+          var m0=
+          c/
+          COLS;
+
+          var m1=
+          (c+1)/
+          COLS;
+
+          var mm=
+          (m0+m1)/
+          2;
+
+
+          var nearAvg=
+          (
+            nearTemp0+
+            nearTemp1
+          )/
+          2;
+
+
+          var cellTemp=
+          (
+            deep!=null
+          )
+          ?
+          interp(
+            nearAvg,
+            deep,
+            mm
+          )
+          :
+          nearAvg;
+
+
+          features.push({
+
+            type:'Feature',
+
+            properties:{
+              temp:cellTemp
+            },
+
+            geometry:{
+
+              type:'Polygon',
+
+              coordinates:[[
+                [
+                  interp(
+                    nearLon0,
+                    farLon0,
+                    m0
+                  ),
+                  lat0
+                ],
+                [
+                  interp(
+                    nearLon0,
+                    farLon0,
+                    m1
+                  ),
+                  lat0
+                ],
+                [
+                  interp(
+                    nearLon1,
+                    farLon1,
+                    m1
+                  ),
+                  lat1
+                ],
+                [
+                  interp(
+                    nearLon1,
+                    farLon1,
+                    m0
+                  ),
+                  lat1
+                ],
+                [
+                  interp(
+                    nearLon0,
+                    farLon0,
+                    m0
+                  ),
+                  lat0
+                ]
+              ]]
+            }
+          });
+
+        }
+      }
+    }
+
+
+    return {
+
+      fc:{
+        type:'FeatureCollection',
+        features:features
+      },
+
+      rows:rows,
+
+      deepTemp:deep,
+
+      hasDeep:
+      deep!=null
+    };
+  }
+
+
+  function buildPierPoints(data){
+
+    var model=
+    (
+      data.model_water_temp||
+      {}
+    ).points||
+    {};
+
+    var piers=
+    data.piers||
+    {};
+
+    var features=[];
+
+
+    PIER_ORDER.forEach(
+      function(key){
+
+        var pier=
+        piers[key]||
+        {};
+
+        var p=
+        model[key]||
+        {};
+
+        var coords=
+        pier.coordinates||
+        {};
+
+
+        var lat=
+        (
+          typeof p.node_lat==='number'
+        )
+        ?
+        p.node_lat
+        :
+        coords.lat;
+
+
+        var lon=
+        (
+          typeof p.node_lon==='number'
+        )
+        ?
+        p.node_lon
+        :
+        coords.lon;
+
+
+        if(
+          typeof lat!=='number'||
+          typeof lon!=='number'
+        ){
+          return;
+        }
+
+
+        var wind=
+        (
+          pier.headline&&
+          pier.headline.wind
+        )||
+        {};
+
+
+        features.push({
+
+          type:'Feature',
+
+          properties:{
+
+            key:key,
+
+            name:
+            PIER_LABEL[key]||
+            pier.name||
+            key,
+
+            temp:
+            (
+              typeof p.water_temp_f==='number'
+            )
+            ?
+            p.water_temp_f
+            :
+            null,
+
+            change:
+            (
+              typeof p.water_change_72h_f==='number'
+            )
+            ?
+            p.water_change_72h_f
+            :
+            null,
+
+            score:
+            (
+              typeof pier.score==='number'
+            )
+            ?
+            pier.score
+            :
+            null,
+
+            windDir:
+            wind.dir||
+            '',
+
+            windMph:
+            (
+              typeof wind.mph==='number'
+            )
+            ?
+            wind.mph
+            :
+            null,
+
+            source:
+            'Modeled nearshore water'
+          },
+
+          geometry:{
+            type:'Point',
+            coordinates:[
+              lon,
+              lat
+            ]
+          }
+        });
+
+      }
+    );
+
+
+    return {
+      type:'FeatureCollection',
+      features:features
+    };
+  }
+
+
+  function buildStationPoints(data){
+
+    var stations=
+    data.stations||
+    {};
+
+    var features=[];
+    var seen={};
+
+
+    Object
+    .keys(stations)
+    .forEach(
+      function(key){
+
+        var s=
+        stations[key];
+
+
+        if(
+          !s||
+          !s.available||
+          typeof s.lat!=='number'||
+          typeof s.lon!=='number'
+        ){
+          return;
+        }
+
+
+        var dedupe=
+        (s.label||'')+
+        '|'+
+        s.lat.toFixed(4)+
+        '|'+
+        s.lon.toFixed(4);
+
+
+        if(seen[dedupe]){
+          return;
+        }
+
+
+        seen[dedupe]=1;
+
+
+        var water=
+        typeof s.water_temp_f==='number';
+
+
+        var wind=
+        (
+          s.wind_dir||
+          typeof s.wind_mph==='number'
+        );
+
+
+        features.push({
+
+          type:'Feature',
+
+          properties:{
+
+            key:key,
+
+            name:
+            s.label||
+            key,
+
+            kind:
+            water
+            ?
+            'water'
+            :
+            (
+              wind
+              ?
+              'wind'
+              :
+              'station'
+            ),
+
+            temp:
+            water
+            ?
+            s.water_temp_f
+            :
+            null,
+
+            wave:
+            (
+              typeof s.wave_ft==='number'
+            )
+            ?
+            s.wave_ft
+            :
+            null,
+
+            windDir:
+            s.wind_dir||
+            '',
+
+            windMph:
+            (
+              typeof s.wind_mph==='number'
+            )
+            ?
+            s.wind_mph
+            :
+            null,
+
+            observed:
+            s.observed_at_utc||
+            ''
+          },
+
+          geometry:{
+            type:'Point',
+            coordinates:[
+              s.lon,
+              s.lat
+            ]
+          }
+        });
+
+      }
+    );
+
+
+    return {
+      type:'FeatureCollection',
+      features:features
+    };
+  }
+
+
+  function popupHTML(p,isPier){
+
+    var html=
+    '<div class="pop-name">'+
+    esc(p.name)+
+    '</div>';
+
+
+    html+=
+    '<div class="pop-sub">'+
+    (
+      isPier
+      ?
+      'PierBite nearshore model'
+      :
+      'Reporting station'
+    )+
+    '</div>';
+
+
+    html+=
+    '<div class="pop-grid">';
+
+
+    if(p.temp!=null){
+
+      html+=
+      '<span class="pop-k">Water temp</span>'+
+      '<span class="pop-v">'+
+      fmt(
+        Number(p.temp),
+        1,
+        '°F'
+      )+
+      '</span>';
+    }
+
+
+    if(
+      isPier&&
+      p.change!=null
+    ){
+
+      html+=
+      '<span class="pop-k">72-hour change</span>'+
+      '<span class="pop-v">'+
+      (
+        Number(p.change)>0
+        ?
+        '+'
+        :
+        ''
+      )+
+      fmt(
+        Number(p.change),
+        1,
+        '°'
+      )+
+      '</span>';
+    }
+
+
+    if(
+      isPier&&
+      p.score!=null
+    ){
+
+      html+=
+      '<span class="pop-k">Bite index</span>'+
+      '<span class="pop-v">'+
+      esc(p.score)+
+      '</span>';
+    }
+
+
+    if(
+      p.windDir||
+      p.windMph!=null
+    ){
+
+      html+=
+      '<span class="pop-k">Wind</span>'+
+      '<span class="pop-v">'+
+      esc(
+        p.windDir||
+        ''
+      )+
+      (
+        p.windMph!=null
+        ?
+        ' '+
+        fmt(
+          Number(p.windMph),
+          1,
+          ' mph'
+        )
+        :
+        ''
+      )+
+      '</span>';
+    }
+
+
+    if(
+      !isPier&&
+      p.wave!=null
+    ){
+
+      html+=
+      '<span class="pop-k">Waves</span>'+
+      '<span class="pop-v">'+
+      fmt(
+        Number(p.wave),
+        1,
+        ' ft'
+      )+
+      '</span>';
+    }
+
+
+    if(
+      !isPier&&
+      p.observed
+    ){
+
+      html+=
+      '<span class="pop-k">Reading</span>'+
+      '<span class="pop-v">'+
+      esc(
+        ageText(
+          p.observed
+        )
+      )+
+      '</span>';
+    }
+
+
+    html+=
+    '</div>';
+
+
+    return html;
+  }
+
+
+  function bindPopupLayer(layerId,isPier){
+
+    map.on(
+      'click',
+      layerId,
+      function(e){
+
+        if(
+          !e.features||
+          !e.features.length
+        ){
+          return;
+        }
+
+
+        var f=
+        e.features[0];
+
+
+        new maplibregl.Popup({
+          closeButton:true,
+          closeOnClick:true,
+          maxWidth:'300px'
+        })
+        .setLngLat(
+          f.geometry.coordinates.slice()
+        )
+        .setHTML(
+          popupHTML(
+            f.properties||
+            {},
+            isPier
+          )
+        )
+        .addTo(map);
+      }
+    );
+
+
+    map.on(
+      'mouseenter',
+      layerId,
+      function(){
+
+        map
+        .getCanvas()
+        .style.cursor=
+        'pointer';
+      }
+    );
+
+
+    map.on(
+      'mouseleave',
+      layerId,
+      function(){
+
+        map
+        .getCanvas()
+        .style.cursor=
+        '';
+      }
+    );
+  }
+
+
+  function clearWindMarkers(){
+
+    windMarkers.forEach(
+      function(m){
+        m.remove();
+      }
+    );
+
+    windMarkers=[];
+  }
+
+
+  function addWindMarkers(data){
+
+    clearWindMarkers();
+
+
+    var piers=
+    data.piers||
+    {};
+
+
+    PIER_ORDER.forEach(
+      function(key){
+
+        var pier=
+        piers[key]||
+        {};
+
+        var coords=
+        pier.coordinates||
+        {};
+
+        var wind=
+        (
+          pier.headline&&
+          pier.headline.wind
+        )||
+        {};
+
+
+        if(
+          typeof coords.lat!=='number'||
+          typeof coords.lon!=='number'||
+          !wind.dir||
+          typeof wind.mph!=='number'
+        ){
+          return;
+        }
+
+
+        if(
+          !(wind.dir in DIR_DEG)
+        ){
+          return;
+        }
+
+
+        var wrap=
+        document.createElement('div');
+
+        wrap.className=
+        'wind-marker';
+
+
+        wrap.title=
+        (
+          PIER_LABEL[key]||
+          key
+        )+
+        ' wind '+
+        wind.dir+
+        ' '+
+        wind.mph.toFixed(1)+
+        ' mph';
+
+
+        var arrow=
+        document.createElement('div');
+
+
+        arrow.className=
+        'wind-arrow';
+
+
+        arrow.innerHTML=
+        '&#10148;';
+
+
+        arrow.style.transform=
+        'rotate('+
+        (
+          (
+            DIR_DEG[wind.dir]+
+            90
+          )%
+          360
+        )+
+        'deg)';
+
+
+        wrap.appendChild(
+          arrow
+        );
+
+
+        var badge=
+        document.createElement('div');
+
+
+        badge.className=
+        'wind-badge';
+
+
+        badge.textContent=
+        wind.dir+
+        ' '+
+        wind.mph.toFixed(0);
+
+
+        wrap.appendChild(
+          badge
+        );
+
+
+        var marker=
+        new maplibregl.Marker({
+          element:wrap,
+          anchor:'center'
+        })
+        .setLngLat([
+          coords.lon,
+          coords.lat
+        ])
+        .addTo(map);
+
+
+        windMarkers.push(
+          marker
+        );
+      }
+    );
+  }
+
+
+  function upsertSource(name,data){
+
+    var s=
+    map.getSource(name);
+
+
+    if(s){
+
+      s.setData(data);
+
+      return false;
+    }
+
+
+    map.addSource(
+      name,
+      {
+        type:'geojson',
+        data:data
+      }
+    );
+
+
+    return true;
+  }
+
+
+  function ensureLayers(
+    tempInfo,
+    pierPoints,
+    stationPoints
+  ){
+
+    var tempNew=
+    upsertSource(
+      'pb-temp',
+      tempInfo.fc
+    );
+
+
+    var pierNew=
+    upsertSource(
+      'pb-piers',
+      pierPoints
+    );
+
+
+    var stationNew=
+    upsertSource(
+      'pb-stations',
+      stationPoints
+    );
+
+
+    if(tempNew){
+
+      var firstSymbol=null;
+
+      var styleLayers=
+      (
+        map.getStyle&&
+        map.getStyle().layers
+      )||
+      [];
+
+
+      for(
+        var si=0;
+        si<styleLayers.length;
+        si++
+      ){
+
+        if(
+          styleLayers[si].type===
+          'symbol'
+        ){
+
+          firstSymbol=
+          styleLayers[si].id;
+
+          break;
+        }
+      }
+
+
+      map.addLayer(
+        {
+
+          id:'pb-temp-fill',
+
+          type:'fill',
+
+          source:'pb-temp',
+
+          paint:{
+
+            'fill-color':[
+              'interpolate',
+              ['linear'],
+              ['get','temp'],
+
+              32,
+              'rgb(78,42,102)',
+
+              44,
+              'rgb(20,153,166)',
+
+              51,
+              'rgb(125,221,9)',
+
+              60,
+              'rgb(255,254,12)',
+
+              67,
+              'rgb(249,164,31)',
+
+              74,
+              'rgb(247,11,66)',
+
+              85,
+              'rgb(154,5,5)'
+            ],
+
+            'fill-opacity':
+            0.62,
+
+            'fill-outline-color':
+            'rgba(0,0,0,0)'
+          }
+        },
+
+        firstSymbol||
+        undefined
+      );
+    }
+
+
+    if(pierNew){
+
+      map.addLayer({
+
+        id:'pb-pier-circles',
+
+        type:'circle',
+
+        source:'pb-piers',
+
+        paint:{
+          'circle-radius':7,
+          'circle-color':'#5fb6f0',
+          'circle-stroke-color':'#eef5fb',
+          'circle-stroke-width':1.4
+        }
+      });
+
+
+      bindPopupLayer(
+        'pb-pier-circles',
+        true
+      );
+    }
+
+
+    if(stationNew){
+
+      map.addLayer({
+
+        id:'pb-water-stations',
+
+        type:'circle',
+
+        source:'pb-stations',
+
+        filter:[
+          '==',
+          ['get','kind'],
+          'water'
+        ],
+
+        paint:{
+          'circle-radius':6,
+          'circle-color':'#34c878',
+          'circle-stroke-color':'#eef5fb',
+          'circle-stroke-width':1.2
+        }
+      });
+
+
+      map.addLayer({
+
+        id:'pb-wind-stations',
+
+        type:'circle',
+
+        source:'pb-stations',
+
+        filter:[
+          '!=',
+          ['get','kind'],
+          'water'
+        ],
+
+        paint:{
+          'circle-radius':6,
+          'circle-color':'#a78bfa',
+          'circle-stroke-color':'#eef5fb',
+          'circle-stroke-width':1.2
+        }
+      });
+
+
+      bindPopupLayer(
+        'pb-water-stations',
+        false
+      );
+
+
+      bindPopupLayer(
+        'pb-wind-stations',
+        false
+      );
+    }
+  }
+
+
+  function fitMap(
+    tempInfo,
+    pierPoints
+  ){
+
+    if(!firstFit){
+      return;
+    }
+
+
+    var bounds=
+    new maplibregl.LngLatBounds();
+
+
+    var has=false;
+
+
+    pierPoints.features.forEach(
+      function(f){
+
+        bounds.extend(
+          f.geometry.coordinates
+        );
+
+        has=true;
+      }
+    );
+
+
+    if(tempInfo.rows.length){
+
+      tempInfo.rows.forEach(
+        function(r){
+
+          bounds.extend([
+            r.lon,
+            r.lat
+          ]);
+
+
+          bounds.extend([
+            offshoreLon(
+              r.lat,
+              r.lon,
+              24
+            ),
+            r.lat
+          ]);
+
+
+          has=true;
+        }
+      );
+    }
+
+
+    if(has){
+
+      map.fitBounds(
+        bounds,
+        {
+          padding:{
+            top:48,
+            bottom:48,
+            left:28,
+            right:28
+          },
+
+          maxZoom:8.1,
+
+          duration:0
+        }
+      );
+
+
+      firstFit=false;
+    }
+  }
+
+
+  function applyData(data){
+
+    var tempInfo=
+    buildTempCells(data);
+
+
+    var pierPoints=
+    buildPierPoints(data);
+
+
+    var stationPoints=
+    buildStationPoints(data);
+
+
+    ensureLayers(
+      tempInfo,
+      pierPoints,
+      stationPoints
+    );
+
+
+    addWindMarkers(
+      data
+    );
+
+
+    fitMap(
+      tempInfo,
+      pierPoints
+    );
+
+
+    var generatedAge=
+    (
+      Date.now()-
+      Date.parse(
+        data.generated_at_utc
+      )
+    )/
+    36e5;
+
+
+    var staleHours=
+    (
+      typeof data.stale_after_hours===
+      'number'
+    )
+    ?
+    data.stale_after_hours
+    :
+    3;
+
+
+    setChip(
+      'dataStatus',
+      'PierBite '+
+      ageText(
+        data.generated_at_utc
+      ),
+      (
+        isFinite(generatedAge)&&
+        generatedAge>staleHours
+      )
+      ?
+      'warn'
+      :
+      ''
+    );
+
+
+    if(
+      tempInfo.fc.features.length
+    ){
+
+      var model=
+      data.model_water_temp||
+      {};
+
+
+      var modelWarn=
+      !!model.stale;
+
+
+      if(tempInfo.hasDeep){
+
+        setChip(
+          'tempStatus',
+          'Temperature shading on · offshore '+
+          fmt(
+            tempInfo.deepTemp,
+            1,
+            '°F'
+          ),
+          modelWarn
+          ?
+          'warn'
+          :
+          ''
+        );
+
+
+        showMessage(
+          '',
+          ''
+        );
+
+      }else{
+
+        setChip(
+          'tempStatus',
+          'Nearshore temperature shading on',
+          'warn'
+        );
+
+
+        showMessage(
+          'Open-lake comparison is unavailable right now. Nearshore temperatures are still being shown; PierBite is not hiding the color layer.',
+          'warn'
+        );
+      }
+
+    }else{
+
+      setChip(
+        'tempStatus',
+        'Temperature shading unavailable',
+        'bad'
+      );
+
+
+      showMessage(
+        'The current PierBite data returned fewer than two usable nearshore model temperatures, so there is not enough information to draw a temperature surface. Station dots remain available.',
+        'bad'
+      );
+    }
+  }
+
+
+  function loadData(){
+
+    setChip(
+      'dataStatus',
+      'Refreshing PierBite data…',
+      ''
+    );
+
+
+    fetch(
+      DATA_URL+
+      '?x='+
+      Date.now(),
+      {
+        cache:'no-store'
+      }
+    )
+    .then(
+      function(r){
+
+        if(!r.ok){
+
+          throw new Error(
+            'HTTP '+
+            r.status
+          );
+        }
+
+        return r.json();
+      }
+    )
+    .then(
+      applyData
+    )
+    .catch(
+      function(err){
+
+        console.error(
+          'PierBite map data error:',
+          err
+        );
+
+
+        setChip(
+          'dataStatus',
+          'Live data could not be loaded',
+          'bad'
+        );
+
+
+        showMessage(
+          'PierBite could not load its live data file. The basemap may still work, but conditions cannot update until the data connection returns.',
+          'bad'
+        );
+      }
+    );
+  }
+
+
+  function start(){
+
+    if(
+      typeof maplibregl===
+      'undefined'
+    ){
+
+      setChip(
+        'dataStatus',
+        'Map library did not load',
+        'bad'
+      );
+
+
+      showMessage(
+        'The mobile map library did not load. Check the connection and refresh.',
+        'bad'
+      );
+
+
+      return;
+    }
+
+
+    map=
+    new maplibregl.Map({
+
+      container:'map',
+
+      style:
+      MAP_STYLE,
+
+      center:[
+        -87.42,
+        44.12
+      ],
+
+      zoom:6.9,
+
+      minZoom:5.5,
+
+      maxZoom:13,
+
+      attributionControl:true,
+
+      hash:false,
+
+      cooperativeGestures:false
+    });
+
+
+    map.addControl(
+      new maplibregl.NavigationControl({
+        showCompass:true,
+        showZoom:true
+      }),
+      'top-right'
+    );
+
+
+    map.addControl(
+      new maplibregl.FullscreenControl(),
+      'top-right'
+    );
+
+
+    map.on(
+      'load',
+      function(){
+
+        loadData();
+
+
+        setInterval(
+          loadData,
+          15*
+          60*
+          1000
+        );
+      }
+    );
+
+
+    map.on(
+      'error',
+      function(e){
+
+        console.error(
+          'PierBite map error:',
+          e&&e.error
+          ?
+          e.error
+          :
+          e
+        );
+      }
+    );
+  }
+
+
+  start();
+
+})();
+</script>
+
+
+<script>
+if(
+  'serviceWorker' in navigator
+){
+
+  window.addEventListener(
+    'load',
+    function(){
+
+      navigator
+      .serviceWorker
+      .register(
+        './PierBite-PWA-Service-Worker.js'
+      )
+      .catch(
+        function(error){
+
+          console.error(
+            'PierBite PWA service worker registration failed:',
+            error
+          );
+        }
+      );
+    }
+  );
 }
-);
-
-}
-
 </script>
 
 </body>
