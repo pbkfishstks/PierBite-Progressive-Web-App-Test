@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Install PierBite</title>
+
+<meta name="theme-color" content="#061522">
+
+<link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
+
+<link rel="apple-touch-icon" href="PierBite-Apple-Touch-Icon-180x180.png">
+
+<link rel="icon" href="PierBite-App-Icon-192x192.png">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+html{
+background:#061522;
+}
+
+body{
+margin:0;
+background:#061522;
+color:#eef5fb;
+font-family:"Inter",Arial,sans-serif;
+}
+
+#pbinstall{
+--bg:#061522;
+--panel:#0d2031;
+--panel2:#112a3f;
+--line:#1f405b;
+--ink:#eef5fb;
+--muted:#9ab8d1;
+--faint:#7894aa;
+--lime:#8fd43c;
+--blue:#27b9ea;
+
+min-height:100vh;
+background:var(--bg);
+}
+
+#pbinstall *{
+box-sizing:border-box;
+}
+
+#pbinstall .wrap{
+width:92%;
+max-width:820px;
+margin:0 auto;
+padding:30px 0 50px;
+}
+
+
+/* ---------- TOP ---------- */
+
+#pbinstall .top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:18px;
+padding-bottom:20px;
+border-bottom:1px solid var(--line);
+}
+
+#pbinstall .brand{
+font-family:"Barlow Semi Condensed","Inter",sans-serif;
+font-size:clamp(1.8rem,5vw,2.7rem);
+font-weight:700;
+line-height:1;
+}
+
+#pbinstall .pier{
+color:#fff;
+}
+
+#pbinstall .bite{
+color:var(--lime);
+}
+
+#pbinstall .com{
+color:#7899bb;
+font-weight:500;
+}
+
+#pbinstall .home{
+display:inline-block;
+color:var(--lime);
+text-decoration:none;
+font-family:"JetBrains Mono",monospace;
+font-size:.68rem;
+font-weight:600;
+letter-spacing:.10em;
+border:1px solid rgba(143,212,60,.35);
+border-radius:7px;
+padding:7px 12px;
+white-space:nowrap;
+}
+
+#pbinstall .home:hover,
+#pbinstall .home:focus-visible{
+border-color:var(--lime);
+}
+
+
+/* ---------- HERO ---------- */
+
+#pbinstall .hero{
+text-align:center;
+padding:48px 18px 30px;
+}
+
+#pbinstall .app-icon{
+width:112px;
+height:112px;
+border-radius:22px;
+display:block;
+margin:0 auto 22px;
+}
+
+#pbinstall h1{
+margin:0;
+font-family:"Barlow Semi Condensed","Inter",sans-serif;
+font-size:clamp(2.3rem,7vw,4rem);
+line-height:1;
+color:#fff;
+}
+
+#pbinstall .lead{
+max-width:620px;
+margin:16px auto 0;
+color:var(--muted);
+font-size:1rem;
+line-height:1.6;
+}
+
+#pbinstall .install-button{
+display:none;
+margin:28px auto 0;
+border:0;
+border-radius:10px;
+padding:14px 26px;
+background:var(--lime);
+color:#142009;
+font-size:1rem;
+font-weight:800;
+cursor:pointer;
+}
+
+#pbinstall .install-button:hover{
+filter:brightness(1.06);
+}
+
+#pbinstall .installed{
+display:none;
+margin:26px auto 0;
+max-width:560px;
+padding:14px 18px;
+border:1px solid rgba(143,212,60,.45);
+border-radius:10px;
+background:rgba(143,212,60,.08);
+color:var(--lime);
+font-weight:700;
+}
+
+
+/* ---------- INSTRUCTIONS ---------- */
+
+#pbinstall .cards{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:16px;
+margin-top:18px;
+}
+
+#pbinstall .card{
+background:var(--panel);
+border:1px solid var(--line);
+border-radius:13px;
+padding:24px;
+}
+
+#pbinstall .card h2{
+margin:0 0 12px;
+font-family:"Barlow Semi Condensed","Inter",sans-serif;
+font-size:1.45rem;
+color:#fff;
+}
+
+#pbinstall .card p{
+margin:0;
+color:var(--muted);
+font-size:.91rem;
+line-height:1.55;
+}
+
+#pbinstall .steps{
+margin:18px 0 0;
+padding:0;
+list-style:none;
+counter-reset:pbstep;
+}
+
+#pbinstall .steps li{
+position:relative;
+counter-increment:pbstep;
+padding:0 0 14px 38px;
+color:#d7e5ef;
+font-size:.9rem;
+line-height:1.45;
+}
+
+#pbinstall .steps li::before{
+content:counter(pbstep);
+position:absolute;
+left:0;
+top:-2px;
+width:25px;
+height:25px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(143,212,60,.12);
+border:1px solid rgba(143,212,60,.4);
+color:var(--lime);
+font-size:.75rem;
+font-weight:800;
+}
+
+#pbinstall .note{
+margin-top:22px;
+padding:18px 20px;
+background:var(--panel2);
+border:1px solid var(--line);
+border-radius:12px;
+color:var(--muted);
+font-size:.85rem;
+line-height:1.55;
+}
+
+#pbinstall .open-app{
+text-align:center;
+margin-top:28px;
+}
+
+#pbinstall .open-app a{
+display:inline-block;
+padding:11px 22px;
+border:1px solid var(--blue);
+border-radius:9px;
+color:var(--blue);
+text-decoration:none;
+font-weight:700;
+font-size:.9rem;
+}
+
+#pbinstall .open-app a:hover{
+background:rgba(39,185,234,.08);
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:650px){
+
+#pbinstall .wrap{
+width:94%;
+padding-top:20px;
+}
+
+#pbinstall .hero{
+padding:36px 10px 24px;
+}
+
+#pbinstall .app-icon{
+width:92px;
+height:92px;
+}
+
+#pbinstall .cards{
+grid-template-columns:1fr;
+}
+
+#pbinstall .card{
+padding:20px;
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div id="pbinstall">
+
+<div class="wrap">
+
+
+<!-- ---------- TOP ---------- -->
+
+<div class="top">
+
+<div class="brand">
+<span class="pier">Pier</span><span class="bite">Bite</span><span class="com">.com</span>
+</div>
+
+<a class="home" href="index.html">
+APP HOME
+</a>
+
+</div>
+
+
+<!-- ---------- HERO ---------- -->
+
+<section class="hero">
+
+<img
+src="PierBite-App-Icon-192x192.png"
+alt="PierBite app icon"
+class="app-icon"
+>
+
+<h1>
+Install PierBite
+</h1>
+
+<p class="lead">
+Put PierBite on your phone just like an app.
+Open it with one tap for pier conditions, water temperature,
+wind, webcams, photos, and more.
+</p>
+
+<button
+type="button"
+id="installButton"
+class="install-button"
+>
+Install PierBite
+</button>
+
+<div
+id="installedMessage"
+class="installed"
+>
+PierBite is already running as an installed app.
+</div>
+
+</section>
+
+
+<!-- ---------- INSTALL INSTRUCTIONS ---------- -->
+
+<div class="cards">
+
+
+<section class="card">
+
+<h2>
+Android
+</h2>
+
+<p>
+Chrome may show the green Install PierBite button above.
+If it does not, use Chrome's menu.
+</p>
+
+<ol class="steps">
+
+<li>
+Open this page in Chrome.
+</li>
+
+<li>
+Tap the three-dot menu.
+</li>
+
+<li>
+Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.
+</li>
+
+<li>
+Confirm the installation.
+</li>
+
+</ol>
+
+</section>
+
+
+<section class="card">
+
+<h2>
+iPhone / iPad
+</h2>
+
+<p>
+Apple uses Safari's Add to Home Screen feature.
+</p>
+
+<ol class="steps">
+
+<li>
+Open this page in Safari.
+</li>
+
+<li>
+Tap the Share button.
+</li>
+
+<li>
+Choose <strong>Add to Home Screen</strong>.
+</li>
+
+<li>
+Tap <strong>Add</strong>.
+</li>
+
+</ol>
+
+</section>
+
+
+</div>
+
+
+<div class="note">
+Installing PierBite does not create a separate set of information.
+The installed app uses the same PierBite live data and photo information
+used by the PierBite website.
+</div>
+
+
+<div class="open-app">
+
+<a href="index.html">
+Open PierBite
+</a>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+let deferredInstallPrompt=null;
+
+const installButton=
+document.getElementById("installButton");
+
+const installedMessage=
+document.getElementById("installedMessage");
+
+
+function runningStandalone(){
+
+return(
+window.matchMedia("(display-mode: standalone)").matches ||
+window.navigator.standalone===true
+);
+
+}
+
+
+if(runningStandalone()){
+
+installedMessage.style.display="block";
+
+}
+
+
+window.addEventListener(
+"beforeinstallprompt",
+function(event){
+
+event.preventDefault();
+
+deferredInstallPrompt=event;
+
+installButton.style.display="inline-block";
+
+}
+);
+
+
+installButton.addEventListener(
+"click",
+async function(){
+
+if(!deferredInstallPrompt){
+return;
+}
+
+deferredInstallPrompt.prompt();
+
+try{
+
+await deferredInstallPrompt.userChoice;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+deferredInstallPrompt=null;
+
+installButton.style.display="none";
+
+}
+);
+
+
+window.addEventListener(
+"appinstalled",
+function(){
+
+installButton.style.display="none";
+
+installedMessage.textContent=
+"PierBite has been installed.";
+
+installedMessage.style.display="block";
+
+}
+);
+
+
+if("serviceWorker" in navigator){
+
+window.addEventListener(
+"load",
+function(){
+
+navigator.serviceWorker
+.register("./PierBite-PWA-Service-Worker.js")
+.catch(function(error){
+
+console.error(
+"PierBite service worker registration failed:",
+error
+);
+
+});
+
+}
+);
+
+}
+
+</script>
+
+
+</body>
+
+</html>
