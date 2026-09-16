@@ -691,8 +691,7 @@ def build_mask(
         node_good.size
     ):
 
-        node_good &=
-        field.wet_nodes
+        node_good &= field.wet_nodes
 
     tri = field.triangles
 
