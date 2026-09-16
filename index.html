@@ -206,28 +206,36 @@
     }
 
     @media(max-width:650px){
-      .page{padding:0 0 30px}
+      .page{
+        padding:0 0 30px;
+      }
 
       .hero{
         min-height:100vh;
         padding:34px 16px 38px;
       }
 
-      .brand-row{gap:14px}
+      .brand-row{
+        gap:14px;
+      }
 
       .brand-icon{
         width:76px;
         height:76px;
       }
 
-      .brand{letter-spacing:-2px}
+      .brand{
+        letter-spacing:-2px;
+      }
 
       .brand-pier,
       .brand-bite{
         font-size:clamp(3rem,15vw,4.6rem);
       }
 
-      .brand-bite{margin-left:4px}
+      .brand-bite{
+        margin-left:4px;
+      }
 
       .brand-dotcom{
         width:100%;
@@ -247,7 +255,9 @@
         letter-spacing:.26em;
       }
 
-      .tagline-line{max-width:60px}
+      .tagline-line{
+        max-width:60px;
+      }
 
       .intro{
         margin-top:38px;
@@ -260,9 +270,13 @@
         gap:9px;
       }
 
-      .nav-card{min-height:138px}
+      .nav-card{
+        min-height:138px;
+      }
 
-      .content-section{margin:14px 12px 0}
+      .content-section{
+        margin:14px 12px 0;
+      }
     }
   </style>
 </head>
@@ -331,7 +345,7 @@
           <div class="nav-subtitle">72-hour temps<br>and trends</div>
         </a>
 
-        <a class="nav-card" href="#">
+        <a class="nav-card" href="NEWwindFacts.html">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <path d="M3 8h11c3 0 3-4 0-4"></path>
             <path d="M3 12h15c3 0 3 4 0 4"></path>
@@ -341,7 +355,7 @@
           <div class="nav-subtitle">South winds<br>drive the bite</div>
         </a>
 
-        <a class="nav-card" href="#">
+        <a class="nav-card" href="NEWabout.html">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
             <rect x="3" y="12" width="3" height="7"></rect>
             <rect x="8" y="8" width="3" height="11"></rect>
@@ -352,7 +366,7 @@
           <div class="nav-subtitle">Side by side</div>
         </a>
 
-        <a class="nav-card" href="#">
+        <a class="nav-card" href="NEWcontact.html">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
             <rect x="3" y="5" width="18" height="14" rx="1"></rect>
             <path d="M4 7l8 6 8-6"></path>
@@ -365,6 +379,7 @@
 
     </section>
 
+
     <section id="pick-your-pier" class="content-section">
 
       <div class="section-app-bar">
@@ -376,6 +391,7 @@
       </div>
 
       <style>
+
         #pbpick{
           --nd:#0b1c2b;
           --np:#112a3f;
@@ -398,8 +414,16 @@
           margin:0 auto;
         }
 
-        #pbpick *{box-sizing:border-box;margin:0;padding:0}
-        #pbpick a{color:inherit;text-decoration:none}
+        #pbpick *{
+          box-sizing:border-box;
+          margin:0;
+          padding:0;
+        }
+
+        #pbpick a{
+          color:inherit;
+          text-decoration:none;
+        }
 
         #pbpick .pbpick-inner{
           background:linear-gradient(180deg,#12293d,#0e2032);
@@ -480,7 +504,9 @@
           padding:10px 11px;
         }
 
-        #pbpick .pw.hot:hover{background:#142b1e}
+        #pbpick .pw.hot:hover{
+          background:#142b1e;
+        }
 
         #pbpick .prow{
           display:flex;
@@ -512,7 +538,9 @@
           color:var(--ink);
         }
 
-        #pbpick .pw.hot .pnm{font-weight:600}
+        #pbpick .pw.hot .pnm{
+          font-weight:600;
+        }
 
         #pbpick .hb{
           background:var(--gold);
@@ -670,25 +698,66 @@
         }
 
         @media(max-width:420px){
-          #pbpick .pstats{gap:8px}
-          #pbpick .stat{min-width:32px}
-          #pbpick .sv{font-size:.66rem}
+
+          #pbpick .pstats{
+            gap:8px;
+          }
+
+          #pbpick .stat{
+            min-width:32px;
+          }
+
+          #pbpick .sv{
+            font-size:.66rem;
+          }
+
         }
+
       </style>
 
+
       <script>
+
       (function(){
 
         var LIVE_DATA_URL="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json";
 
         var PIER_ORDER=[
-          {key:"port_washington",name:"Port Washington",page:"PierBite-Port-Washington.html"},
-          {key:"sheboygan",name:"Sheboygan",page:"PierBite-Sheboygan.html"},
-          {key:"manitowoc",name:"Manitowoc",page:"PierBite-Manitowoc.html"},
-          {key:"two_rivers",name:"Two Rivers",page:"PierBite-Two-Rivers.html"},
-          {key:"kewaunee",name:"Kewaunee",page:"PierBite-Kewaunee.html"},
-          {key:"algoma",name:"Algoma",page:"PierBite-Algoma.html"},
-          {key:"sturgeon_bay",name:"Sturgeon Bay",page:"PierBite-Sturgeon-Bay.html"}
+          {
+            key:"port_washington",
+            name:"Port Washington",
+            page:"PierBite-Port-Washington.html"
+          },
+          {
+            key:"sheboygan",
+            name:"Sheboygan",
+            page:"PierBite-Sheboygan.html"
+          },
+          {
+            key:"manitowoc",
+            name:"Manitowoc",
+            page:"PierBite-Manitowoc.html"
+          },
+          {
+            key:"two_rivers",
+            name:"Two Rivers",
+            page:"PierBite-Two-Rivers.html"
+          },
+          {
+            key:"kewaunee",
+            name:"Kewaunee",
+            page:"PierBite-Kewaunee.html"
+          },
+          {
+            key:"algoma",
+            name:"Algoma",
+            page:"PierBite-Algoma.html"
+          },
+          {
+            key:"sturgeon_bay",
+            name:"Sturgeon Bay",
+            page:"PierBite-Sturgeon-Bay.html"
+          }
         ];
 
         var TONE={
@@ -713,36 +782,61 @@
 
         function esc(s){
           return String(s).replace(/[&<>]/g,function(c){
-            return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];
+            return{
+              "&":"&amp;",
+              "<":"&lt;",
+              ">":"&gt;"
+            }[c];
           });
         }
 
         function agoText(iso){
-          var m=Math.round((Date.now()-new Date(iso).getTime())/60000);
 
-          if(!isFinite(m)||m<0)return null;
-          if(m<1)return"JUST NOW";
-          if(m<60)return"UPDATED "+m+" MIN AGO";
+          var m=Math.round(
+            (Date.now()-new Date(iso).getTime())/
+            60000
+          );
+
+          if(!isFinite(m)||m<0){
+            return null;
+          }
+
+          if(m<1){
+            return"JUST NOW";
+          }
+
+          if(m<60){
+            return"UPDATED "+m+" MIN AGO";
+          }
 
           var h=Math.round(m/60);
+
           return"UPDATED "+h+(h===1?" HOUR":" HOURS")+" AGO";
         }
 
         function tempStat(wt){
-          if(wt&&wt.water_temp_f!=null)
+
+          if(wt&&wt.water_temp_f!=null){
             return wt.water_temp_f.toFixed(1)+"&#176;F";
+          }
+
           return"&mdash;";
         }
 
         function trendStat(wt){
+
           if(wt&&wt.water_change_72h_f!=null){
+
             var c=wt.water_change_72h_f;
+
             return(c>0?"+":"")+c.toFixed(1)+"&#176;";
           }
+
           return"&mdash;";
         }
 
         function trendColor(wt){
+
           if(
             wt &&
             wt.water_change_72h_f!=null &&
@@ -750,13 +844,20 @@
           ){
             return"var(--fc)";
           }
+
           return"var(--im)";
         }
 
         function render(data){
 
           var piers=data.piers||{};
-          var mwt=(data.model_water_temp&&data.model_water_temp.points)||{};
+
+          var mwt=
+            (
+              data.model_water_temp &&
+              data.model_water_temp.points
+            )||{};
+
           var hot=data.hot_piers_today||[];
 
           var ago=
@@ -772,12 +873,18 @@
           var stale=false;
 
           if(data.generated_at_utc&&data.stale_after_hours){
+
             var ageH=
-              (Date.now()-new Date(data.generated_at_utc).getTime())/
+              (
+                Date.now()-
+                new Date(data.generated_at_utc).getTime()
+              )/
               3600000;
 
-            if(ageH>data.stale_after_hours)
+            if(ageH>data.stale_after_hours){
               stale=true;
+            }
+
           }
 
           var rows=PIER_ORDER.map(function(p){
@@ -785,76 +892,131 @@
             var d=piers[p.key];
 
             if(!d){
-              return'<a class="pw" href="'+p.page+'">'+
-              '<div class="prow">'+
-              '<span class="ldt" style="background:var(--if)"></span>'+
-              '<div class="pmid">'+
-              '<span class="pnm">'+esc(p.name)+'</span>'+
-              '</div>'+
-              '<div class="pend">'+
-              '<div class="psc" style="color:var(--if)">&mdash;</div>'+
-              '</div>'+
-              '</div>'+
-              '</a>';
+
+              return
+                '<a class="pw" href="'+p.page+'">'+
+                '<div class="prow">'+
+                '<span class="ldt" style="background:var(--if)"></span>'+
+                '<div class="pmid">'+
+                '<span class="pnm">'+esc(p.name)+'</span>'+
+                '</div>'+
+                '<div class="pend">'+
+                '<div class="psc" style="color:var(--if)">&mdash;</div>'+
+                '</div>'+
+                '</div>'+
+                '</a>';
+
             }
 
-            var isHot=hot.indexOf(p.key)!==-1;
-            var c=color(d.band&&d.band.tone);
-            var h=d.headline||{};
-            var wt=mwt[p.key]||{};
-            var dot=SRC_DOT[h.water_temp_source]||"var(--if)";
-            var scoreNum=(d.score==null)?0:d.score;
-            var scoreTxt=(d.score==null)?"&mdash;":d.score;
-            var bandTxt=esc((d.band&&d.band.label)||"");
+            var isHot=
+              hot.indexOf(p.key)!==-1;
+
+            var c=
+              color(d.band&&d.band.tone);
+
+            var h=
+              d.headline||{};
+
+            var wt=
+              mwt[p.key]||{};
+
+            var dot=
+              SRC_DOT[h.water_temp_source]||
+              "var(--if)";
+
+            var scoreNum=
+              (d.score==null)?
+              0:
+              d.score;
+
+            var scoreTxt=
+              (d.score==null)?
+              "&mdash;":
+              d.score;
+
+            var bandTxt=
+              esc(
+                (d.band&&d.band.label)||
+                ""
+              );
 
             var hotPill=
               isHot ?
               '<span class="hb">HOT PIER'+
-              (hot.length>1?' &middot; TIED':' TODAY')+
+              (
+                hot.length>1 ?
+                ' &middot; TIED':
+                ' TODAY'
+              )+
               '</span>' :
               '';
 
-            var scoreColor=isHot?"var(--lake)":"var(--ink)";
-            var barColor=isHot?"var(--lake)":c;
+            var scoreColor=
+              isHot ?
+              "var(--lake)":
+              "var(--ink)";
 
-            var tempTxt=tempStat(wt);
-            var trendTxt=trendStat(wt);
-            var trendCol=trendColor(wt);
+            var barColor=
+              isHot ?
+              "var(--lake)":
+              c;
 
-            return'<a class="pw'+
-            (isHot?' hot':'')+
-            '" href="'+
-            p.page+
-            '">'+
-            '<div class="prow">'+
-            '<span class="ldt" style="background:'+dot+'"></span>'+
-            '<div class="pmid">'+
-            '<div class="pnl">'+
-            '<span class="pnm">'+esc(p.name)+'</span>'+
-            hotPill+
-            '</div>'+
-            '</div>'+
-            '<div class="pstats">'+
-            '<div class="stat">'+
-            '<div class="sv">'+tempTxt+'</div>'+
-            '<div class="sl">water</div>'+
-            '</div>'+
-            '<div class="sdiv"></div>'+
-            '<div class="stat">'+
-            '<div class="sv" style="color:'+trendCol+'">'+trendTxt+'</div>'+
-            '<div class="sl">72h</div>'+
-            '</div>'+
-            '<div class="sdiv"></div>'+
-            '<div class="pend">'+
-            '<div class="psc" style="color:'+scoreColor+'">'+scoreTxt+'</div>'+
-            '<div class="pbd" style="color:'+c+'">'+bandTxt+'</div>'+
-            '</div>'+
-            '</div>'+
-            '</div>'+
-            '<div class="sbar">'+
-            '<div class="sfill" style="width:'+scoreNum+'%;background:'+barColor+'"></div>'+
-            '</div>'+
-            '</a>';
+            var tempTxt=
+              tempStat(wt);
+
+            var trendTxt=
+              trendStat(wt);
+
+            var trendCol=
+              trendColor(wt);
+
+            return
+              '<a class="pw'+
+              (isHot?' hot':'')+
+              '" href="'+
+              p.page+
+              '">'+
+
+              '<div class="prow">'+
+
+              '<span class="ldt" style="background:'+dot+'"></span>'+
+
+              '<div class="pmid">'+
+              '<div class="pnl">'+
+              '<span class="pnm">'+esc(p.name)+'</span>'+
+              hotPill+
+              '</div>'+
+              '</div>'+
+
+              '<div class="pstats">'+
+
+              '<div class="stat">'+
+              '<div class="sv">'+tempTxt+'</div>'+
+              '<div class="sl">water</div>'+
+              '</div>'+
+
+              '<div class="sdiv"></div>'+
+
+              '<div class="stat">'+
+              '<div class="sv" style="color:'+trendCol+'">'+trendTxt+'</div>'+
+              '<div class="sl">72h</div>'+
+              '</div>'+
+
+              '<div class="sdiv"></div>'+
+
+              '<div class="pend">'+
+              '<div class="psc" style="color:'+scoreColor+'">'+scoreTxt+'</div>'+
+              '<div class="pbd" style="color:'+c+'">'+bandTxt+'</div>'+
+              '</div>'+
+
+              '</div>'+
+              '</div>'+
+
+              '<div class="sbar">'+
+              '<div class="sfill" style="width:'+scoreNum+'%;background:'+barColor+'"></div>'+
+              '</div>'+
+
+              '</a>';
 
           }).join('');
 
@@ -864,70 +1026,109 @@
             '';
 
           document.querySelector("#pbpick .pbpick-inner").innerHTML=
-          badge+
-          '<div class="pph">'+
-          '<h2>Pick Your Pier</h2>'+
-          '<span class="ht">SOUTH TO NORTH</span>'+
-          '</div>'+
-          '<div class="tn">Scores are labeled live, modeled, forecast, or estimated.</div>'+
-          '<div class="bslbl">Bite Index</div>'+
-          '<div class="pws">'+rows+'</div>'+
-          staleNote+
-          '<div class="lg">'+
-          '<div class="lgh">'+
-          '<span class="lgk">Where the numbers come from</span>'+
-          '<span class="lgq">If we have to guess, we\'ll say so.</span>'+
-          '</div>'+
-          '<div class="lgg">'+
-          '<div class="lgr">'+
-          '<span class="lgd" style="background:var(--good)"></span>'+
-          '<span>Live &mdash; real station reporting now</span>'+
-          '</div>'+
-          '<div class="lgr">'+
-          '<span class="lgd" style="background:var(--mdl)"></span>'+
-          '<span>Modeled &mdash; NOAA nearshore</span>'+
-          '</div>'+
-          '<div class="lgr">'+
-          '<span class="lgd" style="background:var(--gold)"></span>'+
-          '<span>Estimated &mdash; nearest live reading</span>'+
-          '</div>'+
-          '</div>'+
-          '</div>';
+
+            badge+
+
+            '<div class="pph">'+
+            '<h2>Pick Your Pier</h2>'+
+            '<span class="ht">SOUTH TO NORTH</span>'+
+            '</div>'+
+
+            '<div class="tn">Scores are labeled live, modeled, forecast, or estimated.</div>'+
+
+            '<div class="bslbl">Bite Index</div>'+
+
+            '<div class="pws">'+
+            rows+
+            '</div>'+
+
+            staleNote+
+
+            '<div class="lg">'+
+
+            '<div class="lgh">'+
+            '<span class="lgk">Where the numbers come from</span>'+
+            '<span class="lgq">If we have to guess, we\'ll say so.</span>'+
+            '</div>'+
+
+            '<div class="lgg">'+
+
+            '<div class="lgr">'+
+            '<span class="lgd" style="background:var(--good)"></span>'+
+            '<span>Live &mdash; real station reporting now</span>'+
+            '</div>'+
+
+            '<div class="lgr">'+
+            '<span class="lgd" style="background:var(--mdl)"></span>'+
+            '<span>Modeled &mdash; NOAA nearshore</span>'+
+            '</div>'+
+
+            '<div class="lgr">'+
+            '<span class="lgd" style="background:var(--gold)"></span>'+
+            '<span>Estimated &mdash; nearest live reading</span>'+
+            '</div>'+
+
+            '</div>'+
+            '</div>';
+
         }
 
-        fetch(LIVE_DATA_URL,{cache:"no-store"})
-          .then(function(r){
-            return r.json();
-          })
-          .then(render)
-          .catch(function(){
-            document.querySelector("#pbpick .pbpick-inner").innerHTML=
+        fetch(
+          LIVE_DATA_URL,
+          {
+            cache:"no-store"
+          }
+        )
+        .then(function(r){
+          return r.json();
+        })
+        .then(render)
+        .catch(function(){
+
+          document.querySelector("#pbpick .pbpick-inner").innerHTML=
+
             '<div style="padding:20px 0;color:var(--im)">'+
             'Live conditions are temporarily unavailable. '+
             'Please check back shortly.'+
             '</div>';
-          });
+
+        });
 
       })();
+
       </script>
 
     </section>
 
   </main>
 
+
   <script>
+
     if ("serviceWorker" in navigator) {
+
       window.addEventListener("load", function () {
+
         navigator.serviceWorker
-          .register("./PierBite-PWA-Service-Worker.js")
-          .then(function () {
-            console.log("PierBite PWA service worker registered successfully.");
-          })
-          .catch(function (error) {
-            console.error("PierBite PWA service worker registration failed:",error);
-          });
+        .register("./PierBite-PWA-Service-Worker.js")
+
+        .then(function () {
+          console.log(
+            "PierBite PWA service worker registered successfully."
+          );
+        })
+
+        .catch(function (error) {
+          console.error(
+            "PierBite PWA service worker registration failed:",
+            error
+          );
+        });
+
       });
+
     }
+
   </script>
 
 </body>
