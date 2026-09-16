@@ -320,6 +320,15 @@ def read_dataset(
         ds.variables["lon"]
     ).astype(float).ravel()
 
+    # NOAA longitude variables are in degrees_east. Depending on the
+    # dataset/service, west longitudes may be represented either as
+    # negative degrees or as 0..360 degrees. PierBite's map bounds use
+    # -180..180, so normalize safely to that convention.
+    lon = (
+        (lon + 180.0)
+        % 360.0
+    ) - 180.0
+
     lat = _as_array(
         ds.variables["lat"]
     ).astype(float).ravel()
@@ -855,10 +864,39 @@ def display_scale(
 
     if vals.size < 100:
 
+        finite_lon = field.lon[np.isfinite(field.lon)]
+        finite_lat = field.lat[np.isfinite(field.lat)]
+        finite_temp = temp_f[np.isfinite(temp_f)]
+
+        lon_range = (
+            f"{float(np.nanmin(finite_lon)):.3f}.."
+            f"{float(np.nanmax(finite_lon)):.3f}"
+            if finite_lon.size
+            else "none"
+        )
+
+        lat_range = (
+            f"{float(np.nanmin(finite_lat)):.3f}.."
+            f"{float(np.nanmax(finite_lat)):.3f}"
+            if finite_lat.size
+            else "none"
+        )
+
+        temp_range = (
+            f"{float(np.nanmin(finite_temp)):.2f}.."
+            f"{float(np.nanmax(finite_temp)):.2f} F"
+            if finite_temp.size
+            else "none"
+        )
+
         raise RuntimeError(
             f"Only {vals.size} valid "
             "LMHOFS surface-temperature "
-            "nodes in the map box."
+            "nodes in the map box. "
+            f"Dataset ranges after normalization: "
+            f"lon {lon_range}, "
+            f"lat {lat_range}, "
+            f"temp {temp_range}."
         )
 
     actual_min = float(
