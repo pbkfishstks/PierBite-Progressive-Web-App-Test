@@ -32,6 +32,7 @@ body{min-height:100vh}
 
 <!-- PierBite Conditions Map v2 - Box 1 of 2 -->
 <div id="pbcm2">
+
 <div class="pbcm2-top">
 <div class="pbcm2-kicker">Surface temperature</div>
 <h2 class="pbcm2-h">See the temperature fronts</h2>
@@ -45,10 +46,12 @@ body{min-height:100vh}
 
 <div class="pbcm2-card">
 <div id="pbcm2Map"></div>
+
 <div class="pbcm2-note">
 <div class="pbcm2-note-t">NOAA LMHOFS SURFACE TEMPERATURE</div>
 <div class="pbcm2-note-s" id="pbcm2Time">Loading model time&hellip;</div>
 </div>
+
 </div>
 
 <div class="pbcm2-warn" id="pbcm2Warn"></div>
@@ -114,7 +117,15 @@ var CROP_EAST=-86.6;
 var VIEW_WEST=-88.3;
 var VIEW_NORTH=45.1;
 
-var PIER_ORDER=['port_washington','sheboygan','manitowoc','two_rivers','kewaunee','algoma','sturgeon_bay'];
+var PIER_ORDER=[
+'port_washington',
+'sheboygan',
+'manitowoc',
+'two_rivers',
+'kewaunee',
+'algoma',
+'sturgeon_bay'
+];
 
 var PIER_NAME={
 port_washington:'Port Washington',
@@ -133,7 +144,9 @@ S:180,SSW:202.5,SW:225,WSW:247.5,W:270,WNW:292.5,NW:315,NNW:337.5
 
 var map,windMarkers=[];
 
-function $(id){return document.getElementById(id);}
+function $(id){
+return document.getElementById(id);
+}
 
 function chip(id,text,state){
 var el=$(id);
@@ -149,12 +162,20 @@ el.className='pbcm2-warn'+(text?' show':'')+(bad?' bad':'');
 
 function esc(v){
 return String(v==null?'':v).replace(/[&<>"']/g,function(c){
-return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+return{
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[c];
 });
 }
 
 function fmt(v,n,s){
-return(typeof v==='number'&&isFinite(v))?v.toFixed(n)+(s||''):'—';
+return(typeof v==='number'&&isFinite(v))
+?v.toFixed(n)+(s||'')
+:'—';
 }
 
 function ageText(iso){
@@ -166,7 +187,9 @@ if(!isFinite(ms))return'time unavailable';
 
 var m=Math.max(0,Math.round(ms/60000));
 
-return m<60?m+' min ago':Math.round(m/60)+' h ago';
+return m<60
+?m+' min ago'
+:Math.round(m/60)+' h ago';
 }
 
 function readableUTC(iso){
@@ -187,9 +210,12 @@ timeZoneName:'short'
 }
 
 function cropAndAddOverlay(meta){
+
 var b=meta.bounds;
 
-if(!b)throw new Error('Temperature metadata is missing bounds.');
+if(!b){
+throw new Error('Temperature metadata is missing bounds.');
+}
 
 var img=new Image();
 img.crossOrigin='anonymous';
@@ -202,6 +228,7 @@ var frac=Math.max(0.1,Math.min(1,cropSpan/fullSpan));
 var cw=Math.round(img.width*frac);
 
 var canvas=document.createElement('canvas');
+
 canvas.width=cw;
 canvas.height=img.height;
 
@@ -225,10 +252,12 @@ var firstSymbol=null;
 var layers=(map.getStyle()&&map.getStyle().layers)||[];
 
 for(var i=0;i<layers.length;i++){
+
 if(layers[i].type==='symbol'){
 firstSymbol=layers[i].id;
 break;
 }
+
 }
 
 map.addSource('pb-lmhofs-temp',{
@@ -253,19 +282,28 @@ paint:{
 }
 },firstSymbol||undefined);
 
-map.fitBounds(
-[[VIEW_WEST,b.south],[CROP_EAST,VIEW_NORTH]],
-{
-padding:{top:20,bottom:20,left:10,right:10},
-duration:0,
-maxZoom:12
-}
-);
+
+/*
+TEST ONLY:
+The working map used fitBounds here.
+This test keeps all map/data functionality unchanged
+but opens at a closer geographic zoom.
+*/
+map.jumpTo({
+center:[
+-87.55,
+44.15
+],
+zoom:8.15
+});
+
 
 window.dispatchEvent(
 new CustomEvent(
 'pbcm2Legend',
-{detail:meta}
+{
+detail:meta
+}
 )
 );
 
@@ -275,12 +313,19 @@ readableUTC(meta.valid_time_utc)+
 ageText(meta.generated_at_utc);
 
 var ageHours=
-(Date.now()-Date.parse(meta.generated_at_utc))/36e5;
+(
+Date.now()-
+Date.parse(meta.generated_at_utc)
+)/
+36e5;
 
 chip(
 'pbcm2TempChip',
-'NOAA temperature field · '+ageText(meta.generated_at_utc),
-ageHours>9?'warn':''
+'NOAA temperature field · '+
+ageText(meta.generated_at_utc),
+ageHours>9
+?'warn'
+:''
 );
 
 };
@@ -292,53 +337,132 @@ throw new Error('Temperature image failed to load.');
 img.src=
 IMAGE_URL+
 '?v='+
-encodeURIComponent(meta.generated_at_utc||Date.now());
+encodeURIComponent(
+meta.generated_at_utc||
+Date.now()
+);
+
 }
 
 function stationGeoJSON(data){
+
 var features=[];
-var piers=data.piers||{};
-var model=(data.model_water_temp||{}).points||{};
+
+var piers=
+data.piers||
+{};
+
+var model=
+(
+data.model_water_temp||
+{}
+).points||
+{};
 
 PIER_ORDER.forEach(function(key){
 
-var p=piers[key]||{};
-var c=p.coordinates||{};
-var m=model[key]||{};
+var p=
+piers[key]||
+{};
 
-if(typeof c.lat!=='number'||typeof c.lon!=='number')return;
+var c=
+p.coordinates||
+{};
 
-var w=(p.headline&&p.headline.wind)||{};
+var m=
+model[key]||
+{};
+
+if(
+typeof c.lat!=='number'
+||
+typeof c.lon!=='number'
+){
+return;
+}
+
+var w=
+(
+p.headline
+&&
+p.headline.wind
+)
+||
+{};
 
 features.push({
 type:'Feature',
+
 properties:{
 kind:'pier',
-name:PIER_NAME[key]||p.name||key,
-temp:typeof m.water_temp_f==='number'?m.water_temp_f:null,
-score:typeof p.score==='number'?p.score:null,
-windDir:w.dir||'',
-windMph:typeof w.mph==='number'?w.mph:null
+
+name:
+PIER_NAME[key]
+||
+p.name
+||
+key,
+
+temp:
+typeof m.water_temp_f==='number'
+?
+m.water_temp_f
+:
+null,
+
+score:
+typeof p.score==='number'
+?
+p.score
+:
+null,
+
+windDir:
+w.dir||
+'',
+
+windMph:
+typeof w.mph==='number'
+?
+w.mph
+:
+null
 },
+
 geometry:{
 type:'Point',
-coordinates:[c.lon,c.lat]
+
+coordinates:[
+c.lon,
+c.lat
+]
 }
 });
 
 });
 
-var stations=data.stations||{};
+var stations=
+data.stations||
+{};
+
 var seen={};
 
 Object.keys(stations).forEach(function(key){
 
-var s=stations[key];
+var s=
+stations[key];
 
-if(!s||
-!s.available||
-typeof s.lat!=='number'||
-typeof s.lon!=='number')return;
+if(
+!s
+||
+!s.available
+||
+typeof s.lat!=='number'
+||
+typeof s.lon!=='number'
+){
+return;
+}
 
 var ded=
 (s.label||key)+
@@ -347,27 +471,74 @@ s.lat.toFixed(4)+
 '|'+
 s.lon.toFixed(4);
 
-if(seen[ded])return;
+if(seen[ded]){
+return;
+}
 
 seen[ded]=1;
 
-var water=typeof s.water_temp_f==='number';
+var water=
+typeof s.water_temp_f==='number';
 
 features.push({
 type:'Feature',
+
 properties:{
-kind:water?'water':'station',
-name:s.label||key,
-temp:water?s.water_temp_f:null,
-wave:typeof s.wave_ft==='number'?s.wave_ft:null,
-depth:typeof s.water_depth_ft==='number'?s.water_depth_ft:null,
-windDir:s.wind_dir||'',
-windMph:typeof s.wind_mph==='number'?s.wind_mph:null,
-observed:s.observed_at_utc||''
+kind:
+water
+?
+'water'
+:
+'station',
+
+name:
+s.label||
+key,
+
+temp:
+water
+?
+s.water_temp_f
+:
+null,
+
+wave:
+typeof s.wave_ft==='number'
+?
+s.wave_ft
+:
+null,
+
+depth:
+typeof s.water_depth_ft==='number'
+?
+s.water_depth_ft
+:
+null,
+
+windDir:
+s.wind_dir||
+'',
+
+windMph:
+typeof s.wind_mph==='number'
+?
+s.wind_mph
+:
+null,
+
+observed:
+s.observed_at_utc||
+''
 },
+
 geometry:{
 type:'Point',
-coordinates:[s.lon,s.lat]
+
+coordinates:[
+s.lon,
+s.lat
+]
 }
 });
 
@@ -377,80 +548,151 @@ return{
 type:'FeatureCollection',
 features:features
 };
+
 }
 
 function popupHTML(p){
+
 var rows='';
 
-if(p.temp!=null)
+if(p.temp!=null){
+
 rows+=
 '<span class="pbcm2-pop-k">Water temp</span>'+
 '<span class="pbcm2-pop-v">'+
-fmt(Number(p.temp),1,'°F')+
+fmt(
+Number(p.temp),
+1,
+'°F'
+)+
 '</span>';
 
-if(p.score!=null)
+}
+
+if(p.score!=null){
+
 rows+=
 '<span class="pbcm2-pop-k">Bite index</span>'+
 '<span class="pbcm2-pop-v">'+
 esc(p.score)+
 '</span>';
 
-if(p.windDir||p.windMph!=null)
+}
+
+if(
+p.windDir
+||
+p.windMph!=null
+){
+
 rows+=
 '<span class="pbcm2-pop-k">Wind</span>'+
 '<span class="pbcm2-pop-v">'+
-esc(p.windDir||'')+
-(p.windMph!=null?' '+fmt(Number(p.windMph),1,' mph'):'')+
+esc(
+p.windDir||
+''
+)+
+(
+p.windMph!=null
+?
+' '+
+fmt(
+Number(p.windMph),
+1,
+' mph'
+)
+:
+''
+)+
 '</span>';
 
-if(p.wave!=null)
+}
+
+if(p.wave!=null){
+
 rows+=
 '<span class="pbcm2-pop-k">Waves</span>'+
 '<span class="pbcm2-pop-v">'+
-fmt(Number(p.wave),1,' ft')+
+fmt(
+Number(p.wave),
+1,
+' ft'
+)+
 '</span>';
 
-if(p.depth!=null)
+}
+
+if(p.depth!=null){
+
 rows+=
 '<span class="pbcm2-pop-k">Depth here</span>'+
 '<span class="pbcm2-pop-v">'+
-fmt(Number(p.depth),0,' ft')+
+fmt(
+Number(p.depth),
+0,
+' ft'
+)+
 '</span>';
 
-if(p.observed)
+}
+
+if(p.observed){
+
 rows+=
 '<span class="pbcm2-pop-k">Reading</span>'+
 '<span class="pbcm2-pop-v">'+
-esc(ageText(p.observed))+
+esc(
+ageText(
+p.observed
+)
+)+
 '</span>';
+
+}
 
 return(
 '<div class="pbcm2-pop-name">'+
-esc(p.name)+
+esc(
+p.name
+)+
 '</div>'+
 '<div class="pbcm2-pop-sub">'+
 (
 p.kind==='pier'
-?'PierBite pier conditions'
-:p.kind==='water'
-?'Measured water station'
-:'Wind / shore station'
+?
+'PierBite pier conditions'
+:
+p.kind==='water'
+?
+'Measured water station'
+:
+'Wind / shore station'
 )+
 '</div>'+
 '<div class="pbcm2-pop-grid">'+
 rows+
 '</div>'
 );
+
 }
 
 function bindLayer(layer){
 
-map.on('click',layer,function(e){
+map.on(
+'click',
+layer,
+function(e){
 
-if(!e.features||!e.features.length)return;
+if(
+!e.features
+||
+!e.features.length
+){
+return;
+}
 
-var f=e.features[0];
+var f=
+e.features[0];
 
 new maplibregl.Popup({
 closeButton:true,
@@ -460,41 +702,83 @@ maxWidth:'300px'
 f.geometry.coordinates.slice()
 )
 .setHTML(
-popupHTML(f.properties||{})
+popupHTML(
+f.properties||
+{}
+)
 )
 .addTo(map);
 
-});
+}
+);
 
-map.on('mouseenter',layer,function(){
+map.on(
+'mouseenter',
+layer,
+function(){
 map.getCanvas().style.cursor='pointer';
-});
+}
+);
 
-map.on('mouseleave',layer,function(){
+map.on(
+'mouseleave',
+layer,
+function(){
 map.getCanvas().style.cursor='';
-});
+}
+);
 
 }
 
 function summarize(data){
 
-var piers=data.piers||{};
-var stations=data.stations||{};
+var piers=
+data.piers||
+{};
+
+var stations=
+data.stations||
+{};
+
 var total=0;
 var rep=0;
 
 PIER_ORDER.forEach(function(key){
 
-var p=piers[key]||{};
-var c=p.coordinates||{};
+var p=
+piers[key]||
+{};
 
-if(typeof c.lat!=='number'||typeof c.lon!=='number')return;
+var c=
+p.coordinates||
+{};
+
+if(
+typeof c.lat!=='number'
+||
+typeof c.lon!=='number'
+){
+return;
+}
 
 total++;
 
-var w=(p.headline&&p.headline.wind)||{};
+var w=
+(
+p.headline
+&&
+p.headline.wind
+)
+||
+{};
 
-if(typeof w.age_hours==='number'&&w.age_hours<=3)rep++;
+if(
+typeof w.age_hours==='number'
+&&
+w.age_hours<=3
+){
+rep++;
+}
 
 });
 
@@ -502,12 +786,20 @@ var seen={};
 
 Object.keys(stations).forEach(function(key){
 
-var s=stations[key];
+var s=
+stations[key];
 
-if(!s||
-!s.available||
-typeof s.lat!=='number'||
-typeof s.lon!=='number')return;
+if(
+!s
+||
+!s.available
+||
+typeof s.lat!=='number'
+||
+typeof s.lon!=='number'
+){
+return;
+}
 
 var ded=
 (s.label||key)+
@@ -516,7 +808,9 @@ s.lat.toFixed(4)+
 '|'+
 s.lon.toFixed(4);
 
-if(seen[ded])return;
+if(seen[ded]){
+return;
+}
 
 seen[ded]=1;
 total++;
@@ -524,9 +818,21 @@ total++;
 if(s.observed_at_utc){
 
 var h=
-(Date.now()-Date.parse(s.observed_at_utc))/36e5;
+(
+Date.now()-
+Date.parse(
+s.observed_at_utc
+)
+)/
+36e5;
 
-if(isFinite(h)&&h<=3)rep++;
+if(
+isFinite(h)
+&&
+h<=3
+){
+rep++;
+}
 
 }
 
@@ -550,7 +856,8 @@ function addStations(data){
 
 summarize(data);
 
-var fc=stationGeoJSON(data);
+var fc=
+stationGeoJSON(data);
 
 map.addSource(
 'pb-stations',
@@ -564,7 +871,11 @@ map.addLayer({
 id:'pb-piers',
 type:'circle',
 source:'pb-stations',
-filter:['==',['get','kind'],'pier'],
+filter:[
+'==',
+['get','kind'],
+'pier'
+],
 paint:{
 'circle-radius':11,
 'circle-color':'#5fb6f0',
@@ -577,7 +888,11 @@ map.addLayer({
 id:'pb-water',
 type:'circle',
 source:'pb-stations',
-filter:['==',['get','kind'],'water'],
+filter:[
+'==',
+['get','kind'],
+'water'
+],
 paint:{
 'circle-radius':9,
 'circle-color':'#34c878',
@@ -590,7 +905,11 @@ map.addLayer({
 id:'pb-wind-stations',
 type:'circle',
 source:'pb-stations',
-filter:['==',['get','kind'],'station'],
+filter:[
+'==',
+['get','kind'],
+'station'
+],
 paint:{
 'circle-radius':8,
 'circle-color':'#a78bfa',
@@ -607,9 +926,12 @@ addWindMarkers(data);
 
 chip(
 'pbcm2PierChip',
-'PierBite stations · '+fc.features.length+' sources',
+'PierBite stations · '+
+fc.features.length+
+' sources',
 ''
 );
+
 }
 
 function addWindMarkers(data){
@@ -620,31 +942,66 @@ m.remove();
 
 windMarkers=[];
 
-var piers=data.piers||{};
+var piers=
+data.piers||
+{};
 
 PIER_ORDER.forEach(function(key){
 
-var p=piers[key]||{};
-var c=p.coordinates||{};
-var w=(p.headline&&p.headline.wind)||{};
+var p=
+piers[key]||
+{};
+
+var c=
+p.coordinates||
+{};
+
+var w=
+(
+p.headline
+&&
+p.headline.wind
+)
+||
+{};
 
 if(
-typeof c.lat!=='number'||
-typeof c.lon!=='number'||
-!(w.dir in WD)||
-typeof w.mph!=='number'||
+typeof c.lat!=='number'
+||
+typeof c.lon!=='number'
+||
+!(
+w.dir in WD
+)
+||
+typeof w.mph!=='number'
+||
 w.mph<0.3
-)return;
+){
+return;
+}
 
-var el=document.createElement('div');
-el.className='pbcm2-windwrap';
+var el=
+document.createElement('div');
 
-var inner=document.createElement('div');
-inner.className='pbcm2-wind';
+el.className=
+'pbcm2-windwrap';
+
+var inner=
+document.createElement('div');
+
+inner.className=
+'pbcm2-wind';
 
 inner.style.transform=
 'rotate('+
-((WD[w.dir]+90)%360)+
+(
+(
+WD[w.dir]+90
+)
+%
+360
+)+
 'deg)';
 
 var speed=
@@ -658,15 +1015,23 @@ Math.min(
 
 for(var i=0;i<3;i++){
 
-var a=document.createElement('span');
+var a=
+document.createElement('span');
 
-a.className='pbcm2-arrow';
+a.className=
+'pbcm2-arrow';
 
 a.style.animationDuration=
-speed.toFixed(2)+'s';
+speed.toFixed(2)+
+'s';
 
 a.style.animationDelay=
-(-(speed*i/3)).toFixed(2)+'s';
+(
+-(
+speed*i/3
+)
+).toFixed(2)+
+'s';
 
 inner.appendChild(a);
 
@@ -678,11 +1043,15 @@ var marker=
 new maplibregl.Marker({
 element:el,
 anchor:'center',
-offset:[16,0]
+offset:[
+16,
+0
+]
 })
-.setLngLat(
-[c.lon,c.lat]
-)
+.setLngLat([
+c.lon,
+c.lat
+])
 .addTo(map);
 
 windMarkers.push(marker);
@@ -695,7 +1064,13 @@ function loadJSON(url){
 
 return fetch(
 url+
-(url.indexOf('?')>=0?'&':'?')+
+(
+url.indexOf('?')>=0
+?
+'&'
+:
+'?'
+)+
 'x='+
 Date.now(),
 {
@@ -704,12 +1079,15 @@ cache:'no-store'
 )
 .then(function(r){
 
-if(!r.ok)
+if(!r.ok){
+
 throw new Error(
 url+
 ' returned HTTP '+
 r.status
 );
+
+}
 
 return r.json();
 
@@ -719,7 +1097,10 @@ return r.json();
 
 function start(){
 
-if(typeof maplibregl==='undefined'){
+if(
+typeof maplibregl===
+'undefined'
+){
 
 warn(
 'The map library did not load. Check the connection and refresh.',
@@ -742,17 +1123,33 @@ var MAP_STYLE=
 map=
 new maplibregl.Map({
 container:'pbcm2Map',
-style:MAP_STYLE,
-center:[-87.45,44.15],
-zoom:6.8,
 
-minZoom:4.0,
+style:
+MAP_STYLE,
 
-maxZoom:13,
+center:[
+-87.45,
+44.15
+],
+
+zoom:
+6.8,
+
+minZoom:
+4.0,
+
+maxZoom:
+13,
 
 maxBounds:[
-[-88.5,42.9],
-[-86.3,46.1]
+[
+-88.5,
+42.9
+],
+[
+-86.3,
+46.1
+]
 ],
 
 hash:false,
@@ -767,18 +1164,30 @@ showZoom:true
 'top-right'
 );
 
-map.on('load',function(){
+map.on(
+'load',
+function(){
 
 Promise.allSettled([
-loadJSON(META_URL),
-loadJSON(DATA_URL)
+loadJSON(
+META_URL
+),
+loadJSON(
+DATA_URL
+)
 ])
 .then(function(results){
 
-var metaResult=results[0];
-var dataResult=results[1];
+var metaResult=
+results[0];
 
-if(metaResult.status==='fulfilled'){
+var dataResult=
+results[1];
+
+if(
+metaResult.status===
+'fulfilled'
+){
 
 try{
 
@@ -825,7 +1234,10 @@ true
 
 }
 
-if(dataResult.status==='fulfilled'){
+if(
+dataResult.status===
+'fulfilled'
+){
 
 try{
 
@@ -863,7 +1275,8 @@ chip(
 
 });
 
-});
+}
+);
 
 }
 
@@ -871,6 +1284,7 @@ start();
 
 })();
 </script>
+
 
 <!-- PierBite Conditions Map v2 - Box 2 of 2 -->
 <div id="pbcm2b">
@@ -976,42 +1390,64 @@ return(typeof v==='number'&&isFinite(v))
 }
 
 function labelsFor(min,max){
+
 var out=[];
 
-for(var i=0;i<5;i++)
+for(var i=0;i<5;i++){
+
 out.push(
-min+(max-min)*(i/4)
+min+
+(max-min)*
+(i/4)
 );
 
+}
+
 return out;
+
 }
 
 window.addEventListener(
 'pbcm2Stats',
 function(e){
 
-var d=e.detail||{};
+var d=
+e.detail||
+{};
 
 document.getElementById(
 'pbcm2bSources'
 ).textContent=
 d.total!=null
-?d.total
-:'—';
+?
+d.total
+:
+'—';
 
 document.getElementById(
 'pbcm2bReporting'
 ).textContent=
 d.rep!=null
-?d.rep
-:'—';
+?
+d.rep
+:
+'—';
 
 document.getElementById(
 'pbcm2bNotCurrent'
 ).textContent=
-(d.total!=null&&d.rep!=null)
-?(d.total-d.rep)
-:'—';
+(
+d.total!=null
+&&
+d.rep!=null
+)
+?
+(
+d.total-
+d.rep
+)
+:
+'—';
 
 }
 );
@@ -1020,23 +1456,40 @@ window.addEventListener(
 'pbcm2Legend',
 function(e){
 
-var meta=e.detail||{};
+var meta=
+e.detail||
+{};
 
 var lo=
-Number(meta.scale_min_f);
+Number(
+meta.scale_min_f
+);
 
 var hi=
-Number(meta.scale_max_f);
+Number(
+meta.scale_max_f
+);
 
 document.getElementById(
 'pbcm2bRange'
 ).textContent=
-fmt(lo,0,'°F')+
+fmt(
+lo,
+0,
+'°F'
+)+
 ' – '+
-fmt(hi,0,'°F');
+fmt(
+hi,
+0,
+'°F'
+);
 
 var labs=
-labelsFor(lo,hi);
+labelsFor(
+lo,
+hi
+);
 
 var spans=
 document.querySelectorAll(
@@ -1049,9 +1502,15 @@ s.textContent=
 fmt(
 labs[i],
 0,
-(i===0||i===4)
-?'°F'
-:'°'
+(
+i===0
+||
+i===4
+)
+?
+'°F'
+:
+'°'
 );
 
 });
@@ -1065,7 +1524,9 @@ labs[i],
 </div>
 
 <script>
-if('serviceWorker' in navigator){
+if(
+'serviceWorker' in navigator
+){
 
 window.addEventListener(
 'load',
