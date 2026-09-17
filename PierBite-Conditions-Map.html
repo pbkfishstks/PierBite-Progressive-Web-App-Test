@@ -402,16 +402,27 @@ firstSymbol||
 undefined
 );
 
-/* Opening view only. All other functionality remains unchanged. */
-map.jumpTo(
-{
-center:[
--87.55,
-44.15
+/* Restore the proven west-shore-only opening view. */
+map.fitBounds(
+[
+[
+VIEW_WEST,
+b.south
 ],
-
-zoom:
-6.0
+[
+CROP_EAST,
+VIEW_NORTH
+]
+],
+{
+padding:{
+top:20,
+bottom:20,
+left:10,
+right:10
+},
+duration:0,
+maxZoom:12
 }
 );
 
@@ -1432,27 +1443,27 @@ style:
 MAP_STYLE,
 
 center:[
--87.55,
+-87.45,
 44.15
 ],
 
 zoom:
-6.0,
+6.8,
 
 minZoom:
-5.5,
+4.0,
 
 maxZoom:
 13,
 
 maxBounds:[
 [
--91.0,
-40.5
+-88.5,
+42.9
 ],
 [
--83.0,
-48.5
+-86.3,
+46.1
 ]
 ],
 
