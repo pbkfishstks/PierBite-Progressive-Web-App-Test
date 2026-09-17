@@ -93,6 +93,7 @@ min-height:0;
 #pbcm2 .pbcm2-pop-grid{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:9px;font-size:.7rem;}
 #pbcm2 .pbcm2-pop-k{color:#8aa2b6;}
 #pbcm2 .pbcm2-pop-v{font-family:monospace;text-align:right;}
+#pbcm2 .pbcm2-station-marker{display:block;width:18px;height:18px;padding:0;border:2px solid #fff;border-radius:50%;background:#a78bfa;box-shadow:0 1px 4px rgba(0,0,0,.75);cursor:pointer;}
 #pbcm2 .pbcm2-windwrap{width:56px;height:24px;pointer-events:none;}
 #pbcm2 .pbcm2-wind{width:100%;height:100%;position:relative;}
 #pbcm2 .pbcm2-arrow{position:absolute;left:4px;top:7px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:9px solid #fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.9));opacity:0;animation:pbcm2Wind 2.5s linear infinite;}
@@ -161,6 +162,7 @@ NNW:337.5
 
 var map;
 var windMarkers=[];
+var stationMarkers=[];
 var allSourcesViewApplied=false;
 
 function $(id){
@@ -1179,65 +1181,6 @@ paint:{
 }
 );
 
-map.addLayer(
-{
-id:'pb-wind-stations',
-type:'circle',
-source:'pb-stations',
-filter:[
-'all',
-[
-'==',
-['get','kind'],
-'station'
-],
-[
-'!=',
-['get','sheboyganOverlap'],
-'yes'
-]
-],
-paint:{
-'circle-radius':8,
-'circle-color':'#a78bfa',
-'circle-stroke-color':'#ffffff',
-'circle-stroke-width':1.6
-}
-}
-);
-
-map.addLayer(
-{
-id:'pb-wind-stations-sheboygan',
-type:'circle',
-source:'pb-stations',
-filter:[
-'all',
-[
-'==',
-['get','kind'],
-'station'
-],
-[
-'==',
-['get','sheboyganOverlap'],
-'yes'
-]
-],
-paint:{
-'circle-radius':8,
-'circle-color':'#a78bfa',
-'circle-stroke-color':'#ffffff',
-'circle-stroke-width':1.6,
-'circle-translate':[
-18,
-0
-],
-'circle-translate-anchor':'viewport'
-}
-}
-);
-
 bindLayer(
 'pb-piers'
 );
@@ -1246,12 +1189,8 @@ bindLayer(
 'pb-water'
 );
 
-bindLayer(
-'pb-wind-stations'
-);
-
-bindLayer(
-'pb-wind-stations-sheboygan'
+addLandStationMarkers(
+fc
 );
 
 addWindMarkers(
@@ -1268,6 +1207,126 @@ chip(
 fc.features.length+
 ' sources',
 ''
+);
+
+}
+
+function addLandStationMarkers(fc){
+
+stationMarkers.forEach(
+function(marker){
+
+marker.remove();
+
+}
+);
+
+stationMarkers=[];
+
+(
+fc.features||
+[]
+).forEach(
+function(feature){
+
+var p=
+feature.properties||
+{};
+
+var c=
+(
+feature.geometry||
+{}
+).coordinates||
+[];
+
+if(
+p.kind!=='station'
+||
+typeof c[0]!=='number'
+||
+typeof c[1]!=='number'
+){
+
+return;
+
+}
+
+var el=
+document.createElement(
+'button'
+);
+
+el.type=
+'button';
+
+el.className=
+'pbcm2-station-marker';
+
+el.setAttribute(
+'aria-label',
+(p.name||'Wind and shore station')+
+' details'
+);
+
+el.addEventListener(
+'click',
+function(event){
+
+event.stopPropagation();
+
+new maplibregl.Popup(
+{
+closeButton:true,
+maxWidth:'300px'
+}
+)
+.setLngLat(
+c.slice()
+)
+.setHTML(
+popupHTML(
+p
+)
+)
+.addTo(
+map
+);
+
+}
+);
+
+var marker=
+new maplibregl.Marker(
+{
+element:el,
+anchor:'center',
+offset:
+p.sheboyganOverlap==='yes'
+?
+[
+18,
+0
+]
+:
+[
+0,
+0
+]
+}
+)
+.setLngLat(
+c.slice()
+)
+.addTo(
+map
+);
+
+stationMarkers.push(
+marker
+);
+
+}
 );
 
 }
