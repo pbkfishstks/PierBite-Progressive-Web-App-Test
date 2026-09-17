@@ -185,7 +185,7 @@ var wave=(h.wave_ft==null)?'&mdash;':(h.wave_ft.toFixed(1)+'<span style="font-si
 var pr=(h.pressure_hpa==null)?'&mdash;':(h.pressure_hpa.toFixed(0)+'<span style="font-size:.62rem;color:var(--if)"> hPa</span>');
 var prSub=(h.pressure_hpa==null)?'Not reported by any station we trust here':'Live station reading';
 document.getElementById("pbtra").innerHTML=
-'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="index.html#pick-your-pier">ALL PIERS</a></div>'+
+'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="PierBite-Pick-Your-Pier.html">ALL PIERS</a></div>'+
 '<div class="ey">Lake Michigan Pier Report</div>'+
 '<h1>Two Rivers</h1>'+
 '<div class="up">Updated '+(stamp?E(stamp):'recently')+'</div>'+
@@ -211,10 +211,6 @@ cell('Pressure',pr,h.pressure_hpa==null?null:'LIVE',prSub)+
 document.getElementById("pbtra").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
 });
 })();</script>
-
-
-
-
 
 <!-- PIERBITE pbtrb | 2026-09-13 16:30 UTC | v5 | SPLIT: Sky/Moon/Forecast collapsible removed from this box per Paul's explicit request - now lives in its own separate box (pbtrbsky, delivered alongside this file). This box is now WIND-ONLY: the 72-hour wind ribbon, read-out sentence, and colour ramp legend. Same pier-specific split already applied to Sturgeon Bay, Algoma, and Kewaunee this session; not applied to remaining piers unless Paul asks for each. HKEY="trw" preserved verbatim. UPWELLING_COMPONENT table preserved unchanged (verbatim from fetch_data.py, D315 - frozen band, not re-derived). -->
 <div id="pbtrb"></div>
@@ -315,7 +311,6 @@ document.getElementById("pbtrb").innerHTML=
 document.getElementById("pbtrb").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
 });
 })();</script>
-
 
 <!-- PIERBITE pbtrbsky | 2026-09-13 16:30 UTC | v1 | NEW BOX - split out of pbtrb Pier B per Paul's explicit request (same treatment as Sturgeon Bay, Algoma, Kewaunee this session). Two Rivers' own coordinates (44.1499/-87.5698) and zone key (ZKEY="trz", PKEY="two_rivers") preserved verbatim. Collapsible, collapsed by default, same toggle pattern as every other pier. Fetches data.json independently (self-sufficient). -->
 <div id="pbtrbsky"></div>
@@ -442,9 +437,6 @@ document.getElementById("pbtrbsky").innerHTML='<div class="ld">Live conditions a
 });
 })();</script>
 
-
-
-
 <!-- PIERBITE pb-tr-clean | 2026-09-11 13:17 UTC | v2 | TEMPLATE PARITY — converted from always-open to the same collapsible-toggle pattern Sheboygan uses (pb-sheb-clean v3). Recolored to master palette (panel #112a3f, border #1f405b, muted #a3bcd1, faint #8aa2b6, link blue #5fb6f0) and 16px card radius (was 14px). Content (Veteran's Park & Boat Launch, Seagull Marina) and badge wording unchanged. Toggle IDs are pier-specific (pbtrCleanTog/Wrap/Arr) per the collapsible-ID collision rule (D423). -->
 <div id="pb-tr-clean">
 <button class="tog" id="pbtrCleanTog" type="button">
@@ -493,9 +485,6 @@ var wrap=document.getElementById("pbtrCleanWrap");
 var arr=document.getElementById("pbtrCleanArr");
 if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
 })();</script>
-
-
-
 
 <!-- PIERBITE PHOTO GALLERY | Two Rivers | Live Carrd box ID: pbphtr | 2026-09-12 18:40 UTC | v4 (caption-overlay fix)
 WHAT THIS BOX IS: the "Photo Gallery" box on the Two Rivers pier page. It shows visitor-submitted photos as a grid of thumbnails; clicking a thumbnail opens a full-screen popup ("lightbox") view of that photo.
@@ -589,10 +578,6 @@ loadPhotos();
 });
 })();</script>
 
-
-
-
-
 <!-- PIERBITE pbsap-tworivers | 2026-09-11 13:17 UTC | v5 | STRUCTURAL FIX — renamed box ID from generic "pbsap" to "pbsap-tworivers" because the plain "pbsap" name is shared by every pier's copy of this box on the single long page, causing later/un-updated copies to override this one's styling (same fix as Sheboygan's pbsap-sheboygan v6 and Manitowoc's pbsap-manitowoc). Also recolored to master palette (panel #112a3f, border #1f405b, muted #a3bcd1) and card radius corrected 10px→16px. -->
 <div id="pbsap-tworivers">
 <div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
@@ -603,9 +588,6 @@ loadPhotos();
 #pbsap-tworivers .card b{color:var(--ink);}
 #pbsap-tworivers a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;}
 </style>
-
-
-
 
 <!-- PIERBITE pbwebcam-tworivers | 2026-09-13 | v2 | Rebuilt to match Submit a Photo
 card style exactly (pbsap-portwashington v1 used as the reference file, per
