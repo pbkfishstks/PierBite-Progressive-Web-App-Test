@@ -1096,15 +1096,55 @@ id:'pb-piers',
 type:'circle',
 source:'pb-stations',
 filter:[
+'all',
+[
 '==',
 ['get','kind'],
 'pier'
+],
+[
+'!=',
+['get','name'],
+'Sheboygan'
+]
 ],
 paint:{
 'circle-radius':11,
 'circle-color':'#5fb6f0',
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':2
+}
+}
+);
+
+map.addLayer(
+{
+id:'pb-sheboygan-pier',
+type:'circle',
+source:'pb-stations',
+filter:[
+'all',
+[
+'==',
+['get','kind'],
+'pier'
+],
+[
+'==',
+['get','name'],
+'Sheboygan'
+]
+],
+paint:{
+'circle-radius':11,
+'circle-color':'#5fb6f0',
+'circle-stroke-color':'#ffffff',
+'circle-stroke-width':2,
+'circle-translate':[
+26,
+0
+],
+'circle-translate-anchor':'viewport'
 }
 }
 );
@@ -1149,6 +1189,10 @@ paint:{
 
 bindLayer(
 'pb-piers'
+);
+
+bindLayer(
+'pb-sheboygan-pier'
 );
 
 bindLayer(
@@ -1403,12 +1447,12 @@ style:
 MAP_STYLE,
 
 center:[
--87.45,
+-87.55,
 44.15
 ],
 
 zoom:
-6.8,
+9.2,
 
 minZoom:
 4.0,
@@ -1571,7 +1615,6 @@ start();
 
 })();
 </script>
-
 
 <!-- PierBite Conditions Map v2 - Box 2 of 2 -->
 <div id="pbcm2b">
