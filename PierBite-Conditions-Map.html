@@ -63,7 +63,13 @@ body{min-height:100vh}
 #pbcm2 .pbcm2-chip.warn i{background:var(--gold);}
 #pbcm2 .pbcm2-chip.bad i{background:#ec5547;}
 #pbcm2 .pbcm2-card{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#04101c;}
-#pbcm2Map{width:100%;height:min(88vh,980px);min-height:560px;}
+
+#pbcm2Map{
+width:100%;
+height:min(72vh,760px);
+min-height:500px;
+}
+
 #pbcm2 .pbcm2-note{position:absolute;left:10px;top:10px;z-index:5;max-width:250px;background:rgba(6,21,34,.88);border:1px solid rgba(163,188,209,.28);border-radius:9px;padding:8px 10px;pointer-events:none;}
 #pbcm2 .pbcm2-note-t{font:800 .65rem/1.2 Arial;color:#fff;}
 #pbcm2 .pbcm2-note-s{font:500 .55rem/1.35 monospace;color:#bdd0df;margin-top:3px;}
@@ -98,6 +104,7 @@ var PIER_ORDER=['port_washington','sheboygan','manitowoc','two_rivers','kewaunee
 var PIER_NAME={port_washington:'Port Washington',sheboygan:'Sheboygan',manitowoc:'Manitowoc',two_rivers:'Two Rivers',kewaunee:'Kewaunee',algoma:'Algoma',sturgeon_bay:'Sturgeon Bay'};
 var WD={N:0,NNE:22.5,NE:45,ENE:67.5,E:90,ESE:112.5,SE:135,SSE:157.5,S:180,SSW:202.5,SW:225,WSW:247.5,W:270,WNW:292.5,NW:315,NNW:337.5};
 var map,windMarkers=[];
+
 function $(id){return document.getElementById(id);}
 function chip(id,text,state){var el=$(id);el.className='pbcm2-chip'+(state?' '+state:'');el.querySelector('span').textContent=text;}
 function warn(text,bad){var el=$('pbcm2Warn');el.textContent=text||'';el.className='pbcm2-warn'+(text?' show':'')+(bad?' bad':'');}
@@ -105,132 +112,519 @@ function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){retur
 function fmt(v,n,s){return(typeof v==='number'&&isFinite(v))?v.toFixed(n)+(s||''):'—';}
 function ageText(iso){if(!iso)return'time unavailable';var ms=Date.now()-Date.parse(iso);if(!isFinite(ms))return'time unavailable';var m=Math.max(0,Math.round(ms/60000));return m<60?m+' min ago':Math.round(m/60)+' h ago';}
 function readableUTC(iso){if(!iso)return'Model time unavailable';var d=new Date(iso);if(!isFinite(d.getTime()))return'Model time unavailable';return'Valid '+d.toLocaleString([],{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'UTC',timeZoneName:'short'});}
+
 function cropAndAddOverlay(meta){
 var b=meta.bounds;if(!b)throw new Error('Temperature metadata is missing bounds.');
 var img=new Image();img.crossOrigin='anonymous';
+
 img.onload=function(){
-var fullSpan=b.east-b.west;var cropSpan=CROP_EAST-b.west;var frac=Math.max(0.1,Math.min(1,cropSpan/fullSpan));
+var fullSpan=b.east-b.west;
+var cropSpan=CROP_EAST-b.west;
+var frac=Math.max(0.1,Math.min(1,cropSpan/fullSpan));
 var cw=Math.round(img.width*frac);
-var canvas=document.createElement('canvas');canvas.width=cw;canvas.height=img.height;
-var ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,cw,img.height,0,0,cw,img.height);
+
+var canvas=document.createElement('canvas');
+canvas.width=cw;
+canvas.height=img.height;
+
+var ctx=canvas.getContext('2d');
+ctx.drawImage(img,0,0,cw,img.height,0,0,cw,img.height);
+
 var dataUrl=canvas.toDataURL('image/png');
-var firstSymbol=null;var layers=(map.getStyle()&&map.getStyle().layers)||[];
-for(var i=0;i<layers.length;i++){if(layers[i].type==='symbol'){firstSymbol=layers[i].id;break;}}
-map.addSource('pb-lmhofs-temp',{type:'image',url:dataUrl,coordinates:[[b.west,b.north],[CROP_EAST,b.north],[CROP_EAST,b.south],[b.west,b.south]]});
-map.addLayer({id:'pb-lmhofs-temp-layer',type:'raster',source:'pb-lmhofs-temp',paint:{'raster-opacity':0.82,'raster-resampling':'linear','raster-fade-duration':0}},firstSymbol||undefined);
-map.fitBounds([[VIEW_WEST,b.south],[CROP_EAST,VIEW_NORTH]],{padding:{top:20,bottom:20,left:10,right:10},duration:0,maxZoom:12});
+
+var firstSymbol=null;
+var layers=(map.getStyle()&&map.getStyle().layers)||[];
+
+for(var i=0;i<layers.length;i++){
+if(layers[i].type==='symbol'){
+firstSymbol=layers[i].id;
+break;
+}
+}
+
+map.addSource('pb-lmhofs-temp',{
+type:'image',
+url:dataUrl,
+coordinates:[
+[b.west,b.north],
+[CROP_EAST,b.north],
+[CROP_EAST,b.south],
+[b.west,b.south]
+]
+});
+
+map.addLayer({
+id:'pb-lmhofs-temp-layer',
+type:'raster',
+source:'pb-lmhofs-temp',
+paint:{
+'raster-opacity':0.82,
+'raster-resampling':'linear',
+'raster-fade-duration':0
+}
+},firstSymbol||undefined);
+
+map.fitBounds(
+[[VIEW_WEST,b.south],[CROP_EAST,VIEW_NORTH]],
+{
+padding:{top:20,bottom:20,left:10,right:10},
+duration:0,
+maxZoom:12
+}
+);
+
 window.dispatchEvent(new CustomEvent('pbcm2Legend',{detail:meta}));
-$('pbcm2Time').textContent=readableUTC(meta.valid_time_utc)+' · built '+ageText(meta.generated_at_utc);
+
+$('pbcm2Time').textContent=
+readableUTC(meta.valid_time_utc)+' · built '+ageText(meta.generated_at_utc);
+
 var ageHours=(Date.now()-Date.parse(meta.generated_at_utc))/36e5;
-chip('pbcm2TempChip','NOAA temperature field · '+ageText(meta.generated_at_utc),ageHours>9?'warn':'');
+
+chip(
+'pbcm2TempChip',
+'NOAA temperature field · '+ageText(meta.generated_at_utc),
+ageHours>9?'warn':''
+);
 };
-img.onerror=function(){throw new Error('Temperature image failed to load.');};
+
+img.onerror=function(){
+throw new Error('Temperature image failed to load.');
+};
+
 img.src=IMAGE_URL+'?v='+encodeURIComponent(meta.generated_at_utc||Date.now());
 }
+
 function stationGeoJSON(data){
-var features=[];var piers=data.piers||{};var model=(data.model_water_temp||{}).points||{};
+var features=[];
+var piers=data.piers||{};
+var model=(data.model_water_temp||{}).points||{};
+
 PIER_ORDER.forEach(function(key){
-var p=piers[key]||{};var c=p.coordinates||{};var m=model[key]||{};
+var p=piers[key]||{};
+var c=p.coordinates||{};
+var m=model[key]||{};
+
 if(typeof c.lat!=='number'||typeof c.lon!=='number')return;
+
 var w=(p.headline&&p.headline.wind)||{};
-features.push({type:'Feature',properties:{kind:'pier',name:PIER_NAME[key]||p.name||key,temp:typeof m.water_temp_f==='number'?m.water_temp_f:null,score:typeof p.score==='number'?p.score:null,windDir:w.dir||'',windMph:typeof w.mph==='number'?w.mph:null},geometry:{type:'Point',coordinates:[c.lon,c.lat]}});
-});
-var stations=data.stations||{};var seen={};
-Object.keys(stations).forEach(function(key){
-var s=stations[key];if(!s||!s.available||typeof s.lat!=='number'||typeof s.lon!=='number')return;
-var ded=(s.label||key)+'|'+s.lat.toFixed(4)+'|'+s.lon.toFixed(4);if(seen[ded])return;seen[ded]=1;
-var water=typeof s.water_temp_f==='number';
-features.push({type:'Feature',properties:{kind:water?'water':'station',name:s.label||key,temp:water?s.water_temp_f:null,wave:typeof s.wave_ft==='number'?s.wave_ft:null,depth:typeof s.water_depth_ft==='number'?s.water_depth_ft:null,windDir:s.wind_dir||'',windMph:typeof s.wind_mph==='number'?s.wind_mph:null,observed:s.observed_at_utc||''},geometry:{type:'Point',coordinates:[s.lon,s.lat]}});
-});
-return{type:'FeatureCollection',features:features};
+
+features.push({
+type:'Feature',
+properties:{
+kind:'pier',
+name:PIER_NAME[key]||p.name||key,
+temp:typeof m.water_temp_f==='number'?m.water_temp_f:null,
+score:typeof p.score==='number'?p.score:null,
+windDir:w.dir||'',
+windMph:typeof w.mph==='number'?w.mph:null
+},
+geometry:{
+type:'Point',
+coordinates:[c.lon,c.lat]
 }
+});
+});
+
+var stations=data.stations||{};
+var seen={};
+
+Object.keys(stations).forEach(function(key){
+var s=stations[key];
+
+if(!s||!s.available||typeof s.lat!=='number'||typeof s.lon!=='number')return;
+
+var ded=(s.label||key)+'|'+s.lat.toFixed(4)+'|'+s.lon.toFixed(4);
+
+if(seen[ded])return;
+seen[ded]=1;
+
+var water=typeof s.water_temp_f==='number';
+
+features.push({
+type:'Feature',
+properties:{
+kind:water?'water':'station',
+name:s.label||key,
+temp:water?s.water_temp_f:null,
+wave:typeof s.wave_ft==='number'?s.wave_ft:null,
+depth:typeof s.water_depth_ft==='number'?s.water_depth_ft:null,
+windDir:s.wind_dir||'',
+windMph:typeof s.wind_mph==='number'?s.wind_mph:null,
+observed:s.observed_at_utc||''
+},
+geometry:{
+type:'Point',
+coordinates:[s.lon,s.lat]
+}
+});
+});
+
+return{
+type:'FeatureCollection',
+features:features
+};
+}
+
 function popupHTML(p){
 var rows='';
-if(p.temp!=null)rows+='<span class="pbcm2-pop-k">Water temp</span><span class="pbcm2-pop-v">'+fmt(Number(p.temp),1,'°F')+'</span>';
-if(p.score!=null)rows+='<span class="pbcm2-pop-k">Bite index</span><span class="pbcm2-pop-v">'+esc(p.score)+'</span>';
-if(p.windDir||p.windMph!=null)rows+='<span class="pbcm2-pop-k">Wind</span><span class="pbcm2-pop-v">'+esc(p.windDir||'')+(p.windMph!=null?' '+fmt(Number(p.windMph),1,' mph'):'')+'</span>';
-if(p.wave!=null)rows+='<span class="pbcm2-pop-k">Waves</span><span class="pbcm2-pop-v">'+fmt(Number(p.wave),1,' ft')+'</span>';
-if(p.depth!=null)rows+='<span class="pbcm2-pop-k">Depth here</span><span class="pbcm2-pop-v">'+fmt(Number(p.depth),0,' ft')+'</span>';
-if(p.observed)rows+='<span class="pbcm2-pop-k">Reading</span><span class="pbcm2-pop-v">'+esc(ageText(p.observed))+'</span>';
-return'<div class="pbcm2-pop-name">'+esc(p.name)+'</div><div class="pbcm2-pop-sub">'+(p.kind==='pier'?'PierBite pier conditions':p.kind==='water'?'Measured water station':'Wind / shore station')+'</div><div class="pbcm2-pop-grid">'+rows+'</div>';
+
+if(p.temp!=null)
+rows+='<span class="pbcm2-pop-k">Water temp</span><span class="pbcm2-pop-v">'+fmt(Number(p.temp),1,'°F')+'</span>';
+
+if(p.score!=null)
+rows+='<span class="pbcm2-pop-k">Bite index</span><span class="pbcm2-pop-v">'+esc(p.score)+'</span>';
+
+if(p.windDir||p.windMph!=null)
+rows+='<span class="pbcm2-pop-k">Wind</span><span class="pbcm2-pop-v">'+esc(p.windDir||'')+(p.windMph!=null?' '+fmt(Number(p.windMph),1,' mph'):'')+'</span>';
+
+if(p.wave!=null)
+rows+='<span class="pbcm2-pop-k">Waves</span><span class="pbcm2-pop-v">'+fmt(Number(p.wave),1,' ft')+'</span>';
+
+if(p.depth!=null)
+rows+='<span class="pbcm2-pop-k">Depth here</span><span class="pbcm2-pop-v">'+fmt(Number(p.depth),0,' ft')+'</span>';
+
+if(p.observed)
+rows+='<span class="pbcm2-pop-k">Reading</span><span class="pbcm2-pop-v">'+esc(ageText(p.observed))+'</span>';
+
+return'<div class="pbcm2-pop-name">'+esc(p.name)+'</div>'+
+'<div class="pbcm2-pop-sub">'+
+(p.kind==='pier'?'PierBite pier conditions':p.kind==='water'?'Measured water station':'Wind / shore station')+
+'</div>'+
+'<div class="pbcm2-pop-grid">'+rows+'</div>';
 }
+
 function bindLayer(layer){
-map.on('click',layer,function(e){if(!e.features||!e.features.length)return;var f=e.features[0];new maplibregl.Popup({closeButton:true,maxWidth:'300px'}).setLngLat(f.geometry.coordinates.slice()).setHTML(popupHTML(f.properties||{})).addTo(map);});
-map.on('mouseenter',layer,function(){map.getCanvas().style.cursor='pointer';});
-map.on('mouseleave',layer,function(){map.getCanvas().style.cursor='';});
+map.on('click',layer,function(e){
+if(!e.features||!e.features.length)return;
+
+var f=e.features[0];
+
+new maplibregl.Popup({
+closeButton:true,
+maxWidth:'300px'
+})
+.setLngLat(f.geometry.coordinates.slice())
+.setHTML(popupHTML(f.properties||{}))
+.addTo(map);
+});
+
+map.on('mouseenter',layer,function(){
+map.getCanvas().style.cursor='pointer';
+});
+
+map.on('mouseleave',layer,function(){
+map.getCanvas().style.cursor='';
+});
 }
+
 function summarize(data){
-var piers=data.piers||{},stations=data.stations||{},total=0,rep=0;
-PIER_ORDER.forEach(function(key){var p=piers[key]||{};var c=p.coordinates||{};if(typeof c.lat!=='number'||typeof c.lon!=='number')return;total++;var w=(p.headline&&p.headline.wind)||{};if(typeof w.age_hours==='number'&&w.age_hours<=3)rep++;});
+var piers=data.piers||{};
+var stations=data.stations||{};
+var total=0;
+var rep=0;
+
+PIER_ORDER.forEach(function(key){
+var p=piers[key]||{};
+var c=p.coordinates||{};
+
+if(typeof c.lat!=='number'||typeof c.lon!=='number')return;
+
+total++;
+
+var w=(p.headline&&p.headline.wind)||{};
+
+if(typeof w.age_hours==='number'&&w.age_hours<=3)rep++;
+});
+
 var seen={};
-Object.keys(stations).forEach(function(key){var s=stations[key];if(!s||!s.available||typeof s.lat!=='number'||typeof s.lon!=='number')return;var ded=(s.label||key)+'|'+s.lat.toFixed(4)+'|'+s.lon.toFixed(4);if(seen[ded])return;seen[ded]=1;total++;if(s.observed_at_utc){var h=(Date.now()-Date.parse(s.observed_at_utc))/36e5;if(isFinite(h)&&h<=3)rep++;}});
-window.dispatchEvent(new CustomEvent('pbcm2Stats',{detail:{total:total,rep:rep}}));
+
+Object.keys(stations).forEach(function(key){
+var s=stations[key];
+
+if(!s||!s.available||typeof s.lat!=='number'||typeof s.lon!=='number')return;
+
+var ded=(s.label||key)+'|'+s.lat.toFixed(4)+'|'+s.lon.toFixed(4);
+
+if(seen[ded])return;
+
+seen[ded]=1;
+total++;
+
+if(s.observed_at_utc){
+var h=(Date.now()-Date.parse(s.observed_at_utc))/36e5;
+if(isFinite(h)&&h<=3)rep++;
 }
+});
+
+window.dispatchEvent(
+new CustomEvent(
+'pbcm2Stats',
+{
+detail:{
+total:total,
+rep:rep
+}
+}
+)
+);
+}
+
 function addStations(data){
 summarize(data);
+
 var fc=stationGeoJSON(data);
-map.addSource('pb-stations',{type:'geojson',data:fc});
-map.addLayer({id:'pb-piers',type:'circle',source:'pb-stations',filter:['==',['get','kind'],'pier'],paint:{'circle-radius':11,'circle-color':'#5fb6f0','circle-stroke-color':'#ffffff','circle-stroke-width':2}});
-map.addLayer({id:'pb-water',type:'circle',source:'pb-stations',filter:['==',['get','kind'],'water'],paint:{'circle-radius':9,'circle-color':'#34c878','circle-stroke-color':'#ffffff','circle-stroke-width':1.8}});
-map.addLayer({id:'pb-wind-stations',type:'circle',source:'pb-stations',filter:['==',['get','kind'],'station'],paint:{'circle-radius':8,'circle-color':'#a78bfa','circle-stroke-color':'#ffffff','circle-stroke-width':1.6}});
-bindLayer('pb-piers');bindLayer('pb-water');bindLayer('pb-wind-stations');
-addWindMarkers(data);
-chip('pbcm2PierChip','PierBite stations · '+fc.features.length+' sources','');
+
+map.addSource('pb-stations',{
+type:'geojson',
+data:fc
+});
+
+map.addLayer({
+id:'pb-piers',
+type:'circle',
+source:'pb-stations',
+filter:['==',['get','kind'],'pier'],
+paint:{
+'circle-radius':11,
+'circle-color':'#5fb6f0',
+'circle-stroke-color':'#ffffff',
+'circle-stroke-width':2
 }
+});
+
+map.addLayer({
+id:'pb-water',
+type:'circle',
+source:'pb-stations',
+filter:['==',['get','kind'],'water'],
+paint:{
+'circle-radius':9,
+'circle-color':'#34c878',
+'circle-stroke-color':'#ffffff',
+'circle-stroke-width':1.8
+}
+});
+
+map.addLayer({
+id:'pb-wind-stations',
+type:'circle',
+source:'pb-stations',
+filter:['==',['get','kind'],'station'],
+paint:{
+'circle-radius':8,
+'circle-color':'#a78bfa',
+'circle-stroke-color':'#ffffff',
+'circle-stroke-width':1.6
+}
+});
+
+bindLayer('pb-piers');
+bindLayer('pb-water');
+bindLayer('pb-wind-stations');
+
+addWindMarkers(data);
+
+chip(
+'pbcm2PierChip',
+'PierBite stations · '+fc.features.length+' sources',
+''
+);
+}
+
 function addWindMarkers(data){
-windMarkers.forEach(function(m){m.remove();});windMarkers=[];
+windMarkers.forEach(function(m){
+m.remove();
+});
+
+windMarkers=[];
+
 var piers=data.piers||{};
+
 PIER_ORDER.forEach(function(key){
-var p=piers[key]||{};var c=p.coordinates||{};var w=(p.headline&&p.headline.wind)||{};
-if(typeof c.lat!=='number'||typeof c.lon!=='number'||!(w.dir in WD)||typeof w.mph!=='number'||w.mph<0.3)return;
-var el=document.createElement('div');el.className='pbcm2-windwrap';
-var inner=document.createElement('div');inner.className='pbcm2-wind';
+var p=piers[key]||{};
+var c=p.coordinates||{};
+var w=(p.headline&&p.headline.wind)||{};
+
+if(
+typeof c.lat!=='number'||
+typeof c.lon!=='number'||
+!(w.dir in WD)||
+typeof w.mph!=='number'||
+w.mph<0.3
+)return;
+
+var el=document.createElement('div');
+el.className='pbcm2-windwrap';
+
+var inner=document.createElement('div');
+inner.className='pbcm2-wind';
+
 inner.style.transform='rotate('+((WD[w.dir]+90)%360)+'deg)';
+
 var speed=Math.max(1.4,Math.min(4.2,4.2-w.mph*.12));
-for(var i=0;i<3;i++){var a=document.createElement('span');a.className='pbcm2-arrow';a.style.animationDuration=speed.toFixed(2)+'s';a.style.animationDelay=(-(speed*i/3)).toFixed(2)+'s';inner.appendChild(a);}
+
+for(var i=0;i<3;i++){
+var a=document.createElement('span');
+a.className='pbcm2-arrow';
+a.style.animationDuration=speed.toFixed(2)+'s';
+a.style.animationDelay=(-(speed*i/3)).toFixed(2)+'s';
+inner.appendChild(a);
+}
+
 el.appendChild(inner);
-var marker=new maplibregl.Marker({element:el,anchor:'center',offset:[16,0]}).setLngLat([c.lon,c.lat]).addTo(map);
+
+var marker=
+new maplibregl.Marker({
+element:el,
+anchor:'center',
+offset:[16,0]
+})
+.setLngLat([c.lon,c.lat])
+.addTo(map);
+
 windMarkers.push(marker);
 });
 }
-function loadJSON(url){return fetch(url+(url.indexOf('?')>=0?'&':'?')+'x='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(url+' returned HTTP '+r.status);return r.json();});}
+
+function loadJSON(url){
+return fetch(
+url+(url.indexOf('?')>=0?'&':'?')+'x='+Date.now(),
+{cache:'no-store'}
+)
+.then(function(r){
+if(!r.ok)
+throw new Error(url+' returned HTTP '+r.status);
+
+return r.json();
+});
+}
+
 function start(){
-if(typeof maplibregl==='undefined'){warn('The map library did not load. Check the connection and refresh.',true);chip('pbcm2TempChip','Map library failed to load','bad');return;}
+if(typeof maplibregl==='undefined'){
+warn('The map library did not load. Check the connection and refresh.',true);
+chip('pbcm2TempChip','Map library failed to load','bad');
+return;
+}
+
 var MAP_STYLE='https://tiles.openfreemap.org/styles/liberty';
-map=new maplibregl.Map({container:'pbcm2Map',style:MAP_STYLE,center:[-87.45,44.15],zoom:6.8,minZoom:5.4,maxZoom:13,maxBounds:[[-88.5,42.9],[-86.3,46.1]],hash:false,attributionControl:true});
-map.addControl(new maplibregl.NavigationControl({showCompass:true,showZoom:true}),'top-right');
+
+map=new maplibregl.Map({
+container:'pbcm2Map',
+style:MAP_STYLE,
+center:[-87.45,44.15],
+zoom:6.8,
+minZoom:5.4,
+maxZoom:13,
+maxBounds:[[-88.5,42.9],[-86.3,46.1]],
+hash:false,
+attributionControl:true
+});
+
+map.addControl(
+new maplibregl.NavigationControl({
+showCompass:true,
+showZoom:true
+}),
+'top-right'
+);
+
 map.on('load',function(){
-Promise.allSettled([loadJSON(META_URL),loadJSON(DATA_URL)]).then(function(results){
-var metaResult=results[0],dataResult=results[1];
-if(metaResult.status==='fulfilled'){try{cropAndAddOverlay(metaResult.value);}catch(err){console.error(err);chip('pbcm2TempChip','Temperature layer could not be drawn','bad');warn('The NOAA temperature product loaded but the map could not draw it: '+err.message,true);}}
-else{console.error(metaResult.reason);chip('pbcm2TempChip','NOAA temperature overlay not generated yet','bad');warn('The NOAA LMHOFS temperature overlay is not available yet.',true);}
-if(dataResult.status==='fulfilled'){try{addStations(dataResult.value);}catch(err2){console.error(err2);chip('pbcm2PierChip','PierBite stations could not be drawn','bad');}}
-else{console.error(dataResult.reason);chip('pbcm2PierChip','PierBite live station data unavailable','bad');}
+
+Promise.allSettled([
+loadJSON(META_URL),
+loadJSON(DATA_URL)
+])
+.then(function(results){
+
+var metaResult=results[0];
+var dataResult=results[1];
+
+if(metaResult.status==='fulfilled'){
+try{
+cropAndAddOverlay(metaResult.value);
+}
+catch(err){
+console.error(err);
+chip('pbcm2TempChip','Temperature layer could not be drawn','bad');
+warn(
+'The NOAA temperature product loaded but the map could not draw it: '+err.message,
+true
+);
+}
+}
+else{
+console.error(metaResult.reason);
+chip('pbcm2TempChip','NOAA temperature overlay not generated yet','bad');
+warn('The NOAA LMHOFS temperature overlay is not available yet.',true);
+}
+
+if(dataResult.status==='fulfilled'){
+try{
+addStations(dataResult.value);
+}
+catch(err2){
+console.error(err2);
+chip('pbcm2PierChip','PierBite stations could not be drawn','bad');
+}
+}
+else{
+console.error(dataResult.reason);
+chip('pbcm2PierChip','PierBite live station data unavailable','bad');
+}
+
 });
 });
 }
+
 start();
 })();
 </script>
 
 
-<!-- PierBite Conditions Map v2 - Box 2 of 2 (legend) - 2026-09-17 - Claude - Element ID: pbcm2b - place directly below pbcm2a -->
+<!-- PierBite Conditions Map v2 - Box 2 of 2 (legend) - 2026-09-17 - Claude - Element ID: pbcm2b -->
 <div id="pbcm2b">
+
 <div class="pbcm2b-stats">
-<div class="pbcm2b-stat"><div class="pbcm2b-stat-n" id="pbcm2bSources">&mdash;</div><div class="pbcm2b-stat-l">SOURCES</div></div>
-<div class="pbcm2b-stat"><div class="pbcm2b-stat-n" id="pbcm2bReporting">&mdash;</div><div class="pbcm2b-stat-l">REPORTING</div></div>
-<div class="pbcm2b-stat"><div class="pbcm2b-stat-n pbcm2b-stat-warn" id="pbcm2bNotCurrent">&mdash;</div><div class="pbcm2b-stat-l">NOT CURRENT</div></div>
+<div class="pbcm2b-stat">
+<div class="pbcm2b-stat-n" id="pbcm2bSources">&mdash;</div>
+<div class="pbcm2b-stat-l">SOURCES</div>
 </div>
+
+<div class="pbcm2b-stat">
+<div class="pbcm2b-stat-n" id="pbcm2bReporting">&mdash;</div>
+<div class="pbcm2b-stat-l">REPORTING</div>
+</div>
+
+<div class="pbcm2b-stat">
+<div class="pbcm2b-stat-n pbcm2b-stat-warn" id="pbcm2bNotCurrent">&mdash;</div>
+<div class="pbcm2b-stat-l">NOT CURRENT</div>
+</div>
+</div>
+
 <div class="pbcm2b-legend">
-<div class="pbcm2b-legend-top"><div class="pbcm2b-legend-title">West-shore temperature range</div><div class="pbcm2b-legend-range" id="pbcm2bRange">&mdash;</div></div>
+
+<div class="pbcm2b-legend-top">
+<div class="pbcm2b-legend-title">West-shore temperature range</div>
+<div class="pbcm2b-legend-range" id="pbcm2bRange">&mdash;</div>
+</div>
+
 <div class="pbcm2b-bar"></div>
-<div class="pbcm2b-labels" id="pbcm2bLabels"><span>&mdash;</span><span>&mdash;</span><span>&mdash;</span><span>&mdash;</span><span>&mdash;</span></div>
+
+<div class="pbcm2b-labels" id="pbcm2bLabels">
+<span>&mdash;</span>
+<span>&mdash;</span>
+<span>&mdash;</span>
+<span>&mdash;</span>
+<span>&mdash;</span>
+</div>
+
 <div class="pbcm2b-keys">
 <span class="pbcm2b-key"><i class="pbcm2b-dot" style="background:#5fb6f0"></i>pier</span>
 <span class="pbcm2b-key"><i class="pbcm2b-dot" style="background:#34c878"></i>water station</span>
 <span class="pbcm2b-key"><i class="pbcm2b-dot" style="background:#a78bfa"></i>wind/shore station</span>
 <span class="pbcm2b-key"><span class="pbcm2b-chev">&rsaquo;&rsaquo;&rsaquo;</span>wind direction</span>
 </div>
+
 </div>
 </div>
 
@@ -256,22 +650,57 @@ start();
 <script>
 (function(){
 'use strict';
-function fmt(v,n,s){return(typeof v==='number'&&isFinite(v))?v.toFixed(n)+(s||''):'—';}
-function labelsFor(min,max){var out=[];for(var i=0;i<5;i++)out.push(min+(max-min)*(i/4));return out;}
+
+function fmt(v,n,s){
+return(typeof v==='number'&&isFinite(v))
+?v.toFixed(n)+(s||'')
+:'—';
+}
+
+function labelsFor(min,max){
+var out=[];
+for(var i=0;i<5;i++)
+out.push(min+(max-min)*(i/4));
+return out;
+}
+
 window.addEventListener('pbcm2Stats',function(e){
 var d=e.detail||{};
-document.getElementById('pbcm2bSources').textContent=d.total!=null?d.total:'—';
-document.getElementById('pbcm2bReporting').textContent=d.rep!=null?d.rep:'—';
-document.getElementById('pbcm2bNotCurrent').textContent=(d.total!=null&&d.rep!=null)?(d.total-d.rep):'—';
+
+document.getElementById('pbcm2bSources').textContent=
+d.total!=null?d.total:'—';
+
+document.getElementById('pbcm2bReporting').textContent=
+d.rep!=null?d.rep:'—';
+
+document.getElementById('pbcm2bNotCurrent').textContent=
+(d.total!=null&&d.rep!=null)
+?(d.total-d.rep)
+:'—';
 });
+
 window.addEventListener('pbcm2Legend',function(e){
 var meta=e.detail||{};
-var lo=Number(meta.scale_min_f),hi=Number(meta.scale_max_f);
-document.getElementById('pbcm2bRange').textContent=fmt(lo,0,'°F')+' – '+fmt(hi,0,'°F');
+
+var lo=Number(meta.scale_min_f);
+var hi=Number(meta.scale_max_f);
+
+document.getElementById('pbcm2bRange').textContent=
+fmt(lo,0,'°F')+' – '+fmt(hi,0,'°F');
+
 var labs=labelsFor(lo,hi);
 var spans=document.querySelectorAll('#pbcm2bLabels span');
-spans.forEach(function(s,i){s.textContent=fmt(labs[i],0,(i===0||i===4)?'°F':'°');});
+
+spans.forEach(function(s,i){
+s.textContent=
+fmt(
+labs[i],
+0,
+(i===0||i===4)?'°F':'°'
+);
 });
+});
+
 })();
 </script>
 
@@ -280,9 +709,13 @@ spans.forEach(function(s,i){s.textContent=fmt(labs[i],0,(i===0||i===4)?'°F':'°
 <script>
 if('serviceWorker' in navigator){
 window.addEventListener('load',function(){
-navigator.serviceWorker.register('./PierBite-PWA-Service-Worker.js')
+navigator.serviceWorker
+.register('./PierBite-PWA-Service-Worker.js')
 .catch(function(error){
-console.error('PierBite PWA service worker registration failed:',error);
+console.error(
+'PierBite PWA service worker registration failed:',
+error
+);
 });
 });
 }
