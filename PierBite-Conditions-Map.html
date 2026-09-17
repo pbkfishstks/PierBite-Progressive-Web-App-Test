@@ -45,6 +45,7 @@ body{min-height:100vh}
 </div>
 
 <div class="pbcm2-card">
+
 <div id="pbcm2Map"></div>
 
 <div class="pbcm2-note">
@@ -55,6 +56,7 @@ body{min-height:100vh}
 </div>
 
 <div class="pbcm2-warn" id="pbcm2Warn"></div>
+
 </div>
 
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
@@ -107,6 +109,7 @@ min-height:500px;
 
 <script>
 (function(){
+
 'use strict';
 
 var DATA_URL='https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json';
@@ -138,11 +141,26 @@ sturgeon_bay:'Sturgeon Bay'
 };
 
 var WD={
-N:0,NNE:22.5,NE:45,ENE:67.5,E:90,ESE:112.5,SE:135,SSE:157.5,
-S:180,SSW:202.5,SW:225,WSW:247.5,W:270,WNW:292.5,NW:315,NNW:337.5
+N:0,
+NNE:22.5,
+NE:45,
+ENE:67.5,
+E:90,
+ESE:112.5,
+SE:135,
+SSE:157.5,
+S:180,
+SSW:202.5,
+SW:225,
+WSW:247.5,
+W:270,
+WNW:292.5,
+NW:315,
+NNW:337.5
 };
 
-var map,windMarkers=[];
+var map;
+var windMarkers=[];
 
 function $(id){
 return document.getElementById(id);
@@ -179,60 +197,114 @@ return(typeof v==='number'&&isFinite(v))
 }
 
 function ageText(iso){
-if(!iso)return'time unavailable';
 
-var ms=Date.now()-Date.parse(iso);
+if(!iso){
+return'time unavailable';
+}
 
-if(!isFinite(ms))return'time unavailable';
+var ms=
+Date.now()-
+Date.parse(iso);
 
-var m=Math.max(0,Math.round(ms/60000));
+if(!isFinite(ms)){
+return'time unavailable';
+}
+
+var m=
+Math.max(
+0,
+Math.round(
+ms/60000
+)
+);
 
 return m<60
 ?m+' min ago'
 :Math.round(m/60)+' h ago';
+
 }
 
 function readableUTC(iso){
-if(!iso)return'Model time unavailable';
 
-var d=new Date(iso);
+if(!iso){
+return'Model time unavailable';
+}
 
-if(!isFinite(d.getTime()))return'Model time unavailable';
+var d=
+new Date(iso);
 
-return'Valid '+d.toLocaleString([],{
+if(!isFinite(d.getTime())){
+return'Model time unavailable';
+}
+
+return'Valid '+
+d.toLocaleString(
+[],
+{
 month:'short',
 day:'numeric',
 hour:'numeric',
 minute:'2-digit',
 timeZone:'UTC',
 timeZoneName:'short'
-});
+}
+);
+
 }
 
 function cropAndAddOverlay(meta){
 
-var b=meta.bounds;
+var b=
+meta.bounds;
 
 if(!b){
 throw new Error('Temperature metadata is missing bounds.');
 }
 
-var img=new Image();
-img.crossOrigin='anonymous';
+var img=
+new Image();
 
-img.onload=function(){
+img.crossOrigin=
+'anonymous';
 
-var fullSpan=b.east-b.west;
-var cropSpan=CROP_EAST-b.west;
-var frac=Math.max(0.1,Math.min(1,cropSpan/fullSpan));
-var cw=Math.round(img.width*frac);
+img.onload=
+function(){
 
-var canvas=document.createElement('canvas');
+var fullSpan=
+b.east-b.west;
 
-canvas.width=cw;
-canvas.height=img.height;
+var cropSpan=
+CROP_EAST-b.west;
 
-var ctx=canvas.getContext('2d');
+var frac=
+Math.max(
+0.1,
+Math.min(
+1,
+cropSpan/fullSpan
+)
+);
+
+var cw=
+Math.round(
+img.width*frac
+);
+
+var canvas=
+document.createElement(
+'canvas'
+);
+
+canvas.width=
+cw;
+
+canvas.height=
+img.height;
+
+var ctx=
+canvas.getContext(
+'2d'
+);
 
 ctx.drawImage(
 img,
@@ -246,57 +318,102 @@ cw,
 img.height
 );
 
-var dataUrl=canvas.toDataURL('image/png');
+var dataUrl=
+canvas.toDataURL(
+'image/png'
+);
 
-var firstSymbol=null;
-var layers=(map.getStyle()&&map.getStyle().layers)||[];
+var firstSymbol=
+null;
 
-for(var i=0;i<layers.length;i++){
+var layers=
+(
+map.getStyle()
+&&
+map.getStyle().layers
+)
+||
+[];
 
-if(layers[i].type==='symbol'){
-firstSymbol=layers[i].id;
+for(
+var i=0;
+i<layers.length;
+i++
+){
+
+if(
+layers[i].type===
+'symbol'
+){
+
+firstSymbol=
+layers[i].id;
+
 break;
-}
 
 }
 
-map.addSource('pb-lmhofs-temp',{
+}
+
+map.addSource(
+'pb-lmhofs-temp',
+{
 type:'image',
-url:dataUrl,
-coordinates:[
-[b.west,b.north],
-[CROP_EAST,b.north],
-[CROP_EAST,b.south],
-[b.west,b.south]
-]
-});
 
-map.addLayer({
+url:
+dataUrl,
+
+coordinates:[
+[
+b.west,
+b.north
+],
+[
+CROP_EAST,
+b.north
+],
+[
+CROP_EAST,
+b.south
+],
+[
+b.west,
+b.south
+]
+]
+}
+);
+
+map.addLayer(
+{
 id:'pb-lmhofs-temp-layer',
+
 type:'raster',
+
 source:'pb-lmhofs-temp',
+
 paint:{
 'raster-opacity':0.82,
 'raster-resampling':'linear',
 'raster-fade-duration':0
 }
-},firstSymbol||undefined);
+},
+firstSymbol||
+undefined
+);
 
-
-/*
-TEST ONLY:
-The working map used fitBounds here.
-This test keeps all map/data functionality unchanged
-but opens at a closer geographic zoom.
-*/
-map.jumpTo({
+/* Opening view only. All other functionality remains unchanged. */
+map.jumpTo(
+{
 center:[
 -87.55,
 44.15
 ],
-zoom:8.15
-});
 
+zoom:
+9.2
+}
+);
 
 window.dispatchEvent(
 new CustomEvent(
@@ -308,30 +425,46 @@ detail:meta
 );
 
 $('pbcm2Time').textContent=
-readableUTC(meta.valid_time_utc)+
+readableUTC(
+meta.valid_time_utc
+)
++
 ' · built '+
-ageText(meta.generated_at_utc);
+ageText(
+meta.generated_at_utc
+);
 
 var ageHours=
 (
 Date.now()-
-Date.parse(meta.generated_at_utc)
+Date.parse(
+meta.generated_at_utc
+)
 )/
 36e5;
 
 chip(
 'pbcm2TempChip',
 'NOAA temperature field · '+
-ageText(meta.generated_at_utc),
+ageText(
+meta.generated_at_utc
+),
 ageHours>9
-?'warn'
-:''
+?
+'warn'
+:
+''
 );
 
 };
 
-img.onerror=function(){
-throw new Error('Temperature image failed to load.');
+img.onerror=
+function(){
+
+throw new Error(
+'Temperature image failed to load.'
+);
+
 };
 
 img.src=
@@ -359,7 +492,8 @@ data.model_water_temp||
 ).points||
 {};
 
-PIER_ORDER.forEach(function(key){
+PIER_ORDER.forEach(
+function(key){
 
 var p=
 piers[key]||
@@ -378,7 +512,9 @@ typeof c.lat!=='number'
 ||
 typeof c.lon!=='number'
 ){
+
 return;
+
 }
 
 var w=
@@ -390,7 +526,8 @@ p.headline.wind
 ||
 {};
 
-features.push({
+features.push(
+{
 type:'Feature',
 
 properties:{
@@ -437,9 +574,11 @@ c.lon,
 c.lat
 ]
 }
-});
+}
+);
 
-});
+}
+);
 
 var stations=
 data.stations||
@@ -447,7 +586,11 @@ data.stations||
 
 var seen={};
 
-Object.keys(stations).forEach(function(key){
+Object.keys(
+stations
+)
+.forEach(
+function(key){
 
 var s=
 stations[key];
@@ -461,26 +604,38 @@ typeof s.lat!=='number'
 ||
 typeof s.lon!=='number'
 ){
+
 return;
+
 }
 
 var ded=
-(s.label||key)+
-'|'+
-s.lat.toFixed(4)+
-'|'+
+(s.label||key)
++
+'|'
++
+s.lat.toFixed(4)
++
+'|'
++
 s.lon.toFixed(4);
 
-if(seen[ded]){
+if(
+seen[ded]
+){
+
 return;
+
 }
 
 seen[ded]=1;
 
 var water=
-typeof s.water_temp_f==='number';
+typeof s.water_temp_f===
+'number';
 
-features.push({
+features.push(
+{
 type:'Feature',
 
 properties:{
@@ -540,9 +695,11 @@ s.lon,
 s.lat
 ]
 }
-});
+}
+);
 
-});
+}
+);
 
 return{
 type:'FeatureCollection',
@@ -555,13 +712,17 @@ function popupHTML(p){
 
 var rows='';
 
-if(p.temp!=null){
+if(
+p.temp!=null
+){
 
 rows+=
 '<span class="pbcm2-pop-k">Water temp</span>'+
 '<span class="pbcm2-pop-v">'+
 fmt(
-Number(p.temp),
+Number(
+p.temp
+),
 1,
 '°F'
 )+
@@ -569,12 +730,16 @@ Number(p.temp),
 
 }
 
-if(p.score!=null){
+if(
+p.score!=null
+){
 
 rows+=
 '<span class="pbcm2-pop-k">Bite index</span>'+
 '<span class="pbcm2-pop-v">'+
-esc(p.score)+
+esc(
+p.score
+)+
 '</span>';
 
 }
@@ -597,7 +762,9 @@ p.windMph!=null
 ?
 ' '+
 fmt(
-Number(p.windMph),
+Number(
+p.windMph
+),
 1,
 ' mph'
 )
@@ -608,13 +775,17 @@ Number(p.windMph),
 
 }
 
-if(p.wave!=null){
+if(
+p.wave!=null
+){
 
 rows+=
 '<span class="pbcm2-pop-k">Waves</span>'+
 '<span class="pbcm2-pop-v">'+
 fmt(
-Number(p.wave),
+Number(
+p.wave
+),
 1,
 ' ft'
 )+
@@ -622,13 +793,17 @@ Number(p.wave),
 
 }
 
-if(p.depth!=null){
+if(
+p.depth!=null
+){
 
 rows+=
 '<span class="pbcm2-pop-k">Depth here</span>'+
 '<span class="pbcm2-pop-v">'+
 fmt(
-Number(p.depth),
+Number(
+p.depth
+),
 0,
 ' ft'
 )+
@@ -636,7 +811,9 @@ Number(p.depth),
 
 }
 
-if(p.observed){
+if(
+p.observed
+){
 
 rows+=
 '<span class="pbcm2-pop-k">Reading</span>'+
@@ -688,16 +865,20 @@ if(
 ||
 !e.features.length
 ){
+
 return;
+
 }
 
 var f=
 e.features[0];
 
-new maplibregl.Popup({
+new maplibregl.Popup(
+{
 closeButton:true,
 maxWidth:'300px'
-})
+}
+)
 .setLngLat(
 f.geometry.coordinates.slice()
 )
@@ -707,7 +888,9 @@ f.properties||
 {}
 )
 )
-.addTo(map);
+.addTo(
+map
+);
 
 }
 );
@@ -716,7 +899,12 @@ map.on(
 'mouseenter',
 layer,
 function(){
-map.getCanvas().style.cursor='pointer';
+
+map
+.getCanvas()
+.style.cursor=
+'pointer';
+
 }
 );
 
@@ -724,7 +912,12 @@ map.on(
 'mouseleave',
 layer,
 function(){
-map.getCanvas().style.cursor='';
+
+map
+.getCanvas()
+.style.cursor=
+'';
+
 }
 );
 
@@ -743,7 +936,8 @@ data.stations||
 var total=0;
 var rep=0;
 
-PIER_ORDER.forEach(function(key){
+PIER_ORDER.forEach(
+function(key){
 
 var p=
 piers[key]||
@@ -758,7 +952,9 @@ typeof c.lat!=='number'
 ||
 typeof c.lon!=='number'
 ){
+
 return;
+
 }
 
 total++;
@@ -777,14 +973,21 @@ typeof w.age_hours==='number'
 &&
 w.age_hours<=3
 ){
+
 rep++;
+
 }
 
-});
+}
+);
 
 var seen={};
 
-Object.keys(stations).forEach(function(key){
+Object.keys(
+stations
+)
+.forEach(
+function(key){
 
 var s=
 stations[key];
@@ -798,24 +1001,37 @@ typeof s.lat!=='number'
 ||
 typeof s.lon!=='number'
 ){
+
 return;
+
 }
 
 var ded=
-(s.label||key)+
-'|'+
-s.lat.toFixed(4)+
-'|'+
+(s.label||key)
++
+'|'
++
+s.lat.toFixed(4)
++
+'|'
++
 s.lon.toFixed(4);
 
-if(seen[ded]){
+if(
+seen[ded]
+){
+
 return;
+
 }
 
 seen[ded]=1;
+
 total++;
 
-if(s.observed_at_utc){
+if(
+s.observed_at_utc
+){
 
 var h=
 (
@@ -831,12 +1047,15 @@ isFinite(h)
 &&
 h<=3
 ){
+
 rep++;
-}
 
 }
 
-});
+}
+
+}
+);
 
 window.dispatchEvent(
 new CustomEvent(
@@ -854,10 +1073,14 @@ rep:rep
 
 function addStations(data){
 
-summarize(data);
+summarize(
+data
+);
 
 var fc=
-stationGeoJSON(data);
+stationGeoJSON(
+data
+);
 
 map.addSource(
 'pb-stations',
@@ -867,7 +1090,8 @@ data:fc
 }
 );
 
-map.addLayer({
+map.addLayer(
+{
 id:'pb-piers',
 type:'circle',
 source:'pb-stations',
@@ -882,9 +1106,11 @@ paint:{
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':2
 }
-});
+}
+);
 
-map.addLayer({
+map.addLayer(
+{
 id:'pb-water',
 type:'circle',
 source:'pb-stations',
@@ -899,9 +1125,11 @@ paint:{
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':1.8
 }
-});
+}
+);
 
-map.addLayer({
+map.addLayer(
+{
 id:'pb-wind-stations',
 type:'circle',
 source:'pb-stations',
@@ -916,13 +1144,24 @@ paint:{
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':1.6
 }
-});
+}
+);
 
-bindLayer('pb-piers');
-bindLayer('pb-water');
-bindLayer('pb-wind-stations');
+bindLayer(
+'pb-piers'
+);
 
-addWindMarkers(data);
+bindLayer(
+'pb-water'
+);
+
+bindLayer(
+'pb-wind-stations'
+);
+
+addWindMarkers(
+data
+);
 
 chip(
 'pbcm2PierChip',
@@ -936,9 +1175,13 @@ fc.features.length+
 
 function addWindMarkers(data){
 
-windMarkers.forEach(function(m){
+windMarkers.forEach(
+function(m){
+
 m.remove();
-});
+
+}
+);
 
 windMarkers=[];
 
@@ -946,7 +1189,8 @@ var piers=
 data.piers||
 {};
 
-PIER_ORDER.forEach(function(key){
+PIER_ORDER.forEach(
+function(key){
 
 var p=
 piers[key]||
@@ -978,17 +1222,23 @@ typeof w.mph!=='number'
 ||
 w.mph<0.3
 ){
+
 return;
+
 }
 
 var el=
-document.createElement('div');
+document.createElement(
+'div'
+);
 
 el.className=
 'pbcm2-windwrap';
 
 var inner=
-document.createElement('div');
+document.createElement(
+'div'
+);
 
 inner.className=
 'pbcm2-wind';
@@ -1009,14 +1259,21 @@ Math.max(
 1.4,
 Math.min(
 4.2,
-4.2-w.mph*.12
+4.2-
+w.mph*.12
 )
 );
 
-for(var i=0;i<3;i++){
+for(
+var i=0;
+i<3;
+i++
+){
 
 var a=
-document.createElement('span');
+document.createElement(
+'span'
+);
 
 a.className=
 'pbcm2-arrow';
@@ -1033,30 +1290,43 @@ speed*i/3
 ).toFixed(2)+
 's';
 
-inner.appendChild(a);
+inner.appendChild(
+a
+);
 
 }
 
-el.appendChild(inner);
+el.appendChild(
+inner
+);
 
 var marker=
-new maplibregl.Marker({
+new maplibregl.Marker(
+{
 element:el,
 anchor:'center',
 offset:[
 16,
 0
 ]
-})
-.setLngLat([
+}
+)
+.setLngLat(
+[
 c.lon,
 c.lat
-])
-.addTo(map);
+]
+)
+.addTo(
+map
+);
 
-windMarkers.push(marker);
+windMarkers.push(
+marker
+);
 
-});
+}
+);
 
 }
 
@@ -1077,9 +1347,12 @@ Date.now(),
 cache:'no-store'
 }
 )
-.then(function(r){
+.then(
+function(r){
 
-if(!r.ok){
+if(
+!r.ok
+){
 
 throw new Error(
 url+
@@ -1091,7 +1364,8 @@ r.status
 
 return r.json();
 
-});
+}
+);
 
 }
 
@@ -1121,7 +1395,8 @@ var MAP_STYLE=
 'https://tiles.openfreemap.org/styles/liberty';
 
 map=
-new maplibregl.Map({
+new maplibregl.Map(
+{
 container:'pbcm2Map',
 
 style:
@@ -1153,14 +1428,18 @@ maxBounds:[
 ],
 
 hash:false,
+
 attributionControl:true
-});
+}
+);
 
 map.addControl(
-new maplibregl.NavigationControl({
+new maplibregl.NavigationControl(
+{
 showCompass:true,
 showZoom:true
-}),
+}
+),
 'top-right'
 );
 
@@ -1168,15 +1447,18 @@ map.on(
 'load',
 function(){
 
-Promise.allSettled([
+Promise.allSettled(
+[
 loadJSON(
 META_URL
 ),
 loadJSON(
 DATA_URL
 )
-])
-.then(function(results){
+]
+)
+.then(
+function(results){
 
 var metaResult=
 results[0];
@@ -1198,7 +1480,9 @@ metaResult.value
 }
 catch(err){
 
-console.error(err);
+console.error(
+err
+);
 
 chip(
 'pbcm2TempChip',
@@ -1248,7 +1532,9 @@ dataResult.value
 }
 catch(err2){
 
-console.error(err2);
+console.error(
+err2
+);
 
 chip(
 'pbcm2PierChip',
@@ -1273,7 +1559,8 @@ chip(
 
 }
 
-});
+}
+);
 
 }
 );
@@ -1393,7 +1680,11 @@ function labelsFor(min,max){
 
 var out=[];
 
-for(var i=0;i<5;i++){
+for(
+var i=0;
+i<5;
+i++
+){
 
 out.push(
 min+
@@ -1496,7 +1787,8 @@ document.querySelectorAll(
 '#pbcm2bLabels span'
 );
 
-spans.forEach(function(s,i){
+spans.forEach(
+function(s,i){
 
 s.textContent=
 fmt(
@@ -1513,7 +1805,8 @@ i===4
 '°'
 );
 
-});
+}
+);
 
 }
 );
@@ -1537,14 +1830,16 @@ navigator
 .register(
 './PierBite-PWA-Service-Worker.js'
 )
-.catch(function(error){
+.catch(
+function(error){
 
 console.error(
 'PierBite PWA service worker registration failed:',
 error
 );
 
-});
+}
+);
 
 }
 );
