@@ -411,7 +411,7 @@ center:[
 ],
 
 zoom:
-9.2
+6.0
 }
 );
 
@@ -584,6 +584,13 @@ var stations=
 data.stations||
 {};
 
+var sheboyganPier=
+(
+piers.sheboygan||
+{}
+).coordinates||
+{};
+
 var seen={};
 
 Object.keys(
@@ -633,6 +640,28 @@ seen[ded]=1;
 var water=
 typeof s.water_temp_f===
 'number';
+
+/* Keep the blue Sheboygan pier dot and omit only the overlapping
+   purple wind/shore station dot from the displayed map. */
+if(
+!water
+&&
+typeof sheboyganPier.lat==='number'
+&&
+typeof sheboyganPier.lon==='number'
+&&
+Math.abs(
+s.lat-sheboyganPier.lat
+)<0.02
+&&
+Math.abs(
+s.lon-sheboyganPier.lon
+)<0.02
+){
+
+return;
+
+}
 
 features.push(
 {
@@ -1096,55 +1125,15 @@ id:'pb-piers',
 type:'circle',
 source:'pb-stations',
 filter:[
-'all',
-[
 '==',
 ['get','kind'],
 'pier'
-],
-[
-'!=',
-['get','name'],
-'Sheboygan'
-]
 ],
 paint:{
 'circle-radius':11,
 'circle-color':'#5fb6f0',
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':2
-}
-}
-);
-
-map.addLayer(
-{
-id:'pb-sheboygan-pier',
-type:'circle',
-source:'pb-stations',
-filter:[
-'all',
-[
-'==',
-['get','kind'],
-'pier'
-],
-[
-'==',
-['get','name'],
-'Sheboygan'
-]
-],
-paint:{
-'circle-radius':11,
-'circle-color':'#5fb6f0',
-'circle-stroke-color':'#ffffff',
-'circle-stroke-width':2,
-'circle-translate':[
-26,
-0
-],
-'circle-translate-anchor':'viewport'
 }
 }
 );
@@ -1189,10 +1178,6 @@ paint:{
 
 bindLayer(
 'pb-piers'
-);
-
-bindLayer(
-'pb-sheboygan-pier'
 );
 
 bindLayer(
@@ -1452,22 +1437,22 @@ center:[
 ],
 
 zoom:
-9.2,
+6.0,
 
 minZoom:
-4.0,
+5.5,
 
 maxZoom:
 13,
 
 maxBounds:[
 [
--88.5,
-42.9
+-91.0,
+40.5
 ],
 [
--86.3,
-46.1
+-83.0,
+48.5
 ]
 ],
 
