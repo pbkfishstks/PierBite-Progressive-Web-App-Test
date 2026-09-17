@@ -121,6 +121,12 @@ var CROP_EAST=-86.6;
 var VIEW_WEST=-88.3;
 var VIEW_NORTH=45.1;
 
+/* Verified GLOS obs_dataset_id 598 coordinates. */
+var NESHOTAH_STATION={
+lat:44.151258,
+lon:-87.554115
+};
+
 var PIER_ORDER=[
 'port_washington',
 'sheboygan',
@@ -584,7 +590,16 @@ typeof w.mph==='number'
 ?
 w.mph
 :
-null
+null,
+
+current:
+typeof w.age_hours==='number'
+&&
+w.age_hours<=3
+?
+1
+:
+0
 },
 
 geometry:{
@@ -605,13 +620,6 @@ var stations=
 data.stations||
 {};
 
-var sheboyganPier=
-(
-piers.sheboygan||
-{}
-).coordinates||
-{};
-
 var seen={};
 
 Object.keys(
@@ -622,6 +630,16 @@ function(key){
 
 var s=
 stations[key];
+
+/* This west-shore map intentionally excludes the North Michigan
+   buoy near Washington Island. Neshotah is added below instead. */
+if(
+key==='45002'
+){
+
+return;
+
+}
 
 if(
 !s
@@ -661,24 +679,6 @@ seen[ded]=1;
 var water=
 typeof s.water_temp_f===
 'number';
-
-/* Preserve the station's real coordinates and data. This flag is
-   used only to move its visible purple dot beside the blue pier. */
-var sheboyganOverlap=
-!water
-&&
-typeof sheboyganPier.lat==='number'
-&&
-typeof sheboyganPier.lon==='number'
-&&
-Math.abs(
-s.lat-sheboyganPier.lat
-)<0.02
-&&
-Math.abs(
-s.lon-sheboyganPier.lon
-)<0.02
-;
 
 features.push(
 {
@@ -728,12 +728,28 @@ s.wind_mph
 :
 null,
 
-sheboyganOverlap:
-sheboyganOverlap
+landOffsetX:
+!water
+&&
+key==='SGNW3'
 ?
-'yes'
+-18
 :
-'no',
+0,
+
+current:
+s.observed_at_utc
+&&
+(
+Date.now()-
+Date.parse(
+s.observed_at_utc
+)
+)/36e5<=3
+?
+1
+:
+0,
 
 observed:
 s.observed_at_utc||
@@ -753,6 +769,77 @@ s.lat
 
 }
 );
+
+/* Neshotah is the verified Two Rivers wind source but is carried
+   inside the pier headline rather than data.stations. Add that real
+   source explicitly at its verified GLOS coordinates. */
+var twoRivers=
+piers.two_rivers||
+{};
+
+var twoRiversHeadline=
+twoRivers.headline||
+{};
+
+var neshotahWind=
+twoRiversHeadline.wind||
+{};
+
+if(
+typeof neshotahWind.mph==='number'
+&&
+neshotahWind.dir
+){
+
+features.push(
+{
+type:'Feature',
+
+properties:{
+kind:'station',
+
+name:
+twoRiversHeadline.wind_station_label||
+'Neshotah Park Met Station',
+
+temp:null,
+wave:null,
+depth:null,
+
+windDir:
+neshotahWind.dir,
+
+windMph:
+neshotahWind.mph,
+
+landOffsetX:-18,
+
+current:
+typeof neshotahWind.age_hours==='number'
+&&
+neshotahWind.age_hours<=3
+?
+1
+:
+0,
+
+observed:
+neshotahWind.observed_at_utc||
+''
+},
+
+geometry:{
+type:'Point',
+
+coordinates:[
+NESHOTAH_STATION.lon,
+NESHOTAH_STATION.lat
+]
+}
+}
+);
+
+}
 
 return{
 type:'FeatureCollection',
@@ -976,134 +1063,30 @@ map
 
 }
 
-function summarize(data){
+function summarizeFeatures(fc){
 
-var piers=
-data.piers||
-{};
+var features=
+fc.features||
+[];
 
-var stations=
-data.stations||
-{};
+var total=
+features.length;
 
-var total=0;
 var rep=0;
 
-PIER_ORDER.forEach(
-function(key){
-
-var p=
-piers[key]||
-{};
-
-var c=
-p.coordinates||
-{};
+features.forEach(
+function(feature){
 
 if(
-typeof c.lat!=='number'
-||
-typeof c.lon!=='number'
-){
-
-return;
-
-}
-
-total++;
-
-var w=
+Number(
 (
-p.headline
-&&
-p.headline.wind
-)
-||
-{};
-
-if(
-typeof w.age_hours==='number'
-&&
-w.age_hours<=3
+feature.properties||
+{}
+).current
+)===1
 ){
 
 rep++;
-
-}
-
-}
-);
-
-var seen={};
-
-Object.keys(
-stations
-)
-.forEach(
-function(key){
-
-var s=
-stations[key];
-
-if(
-!s
-||
-!s.available
-||
-typeof s.lat!=='number'
-||
-typeof s.lon!=='number'
-){
-
-return;
-
-}
-
-var ded=
-(s.label||key)
-+
-'|'
-+
-s.lat.toFixed(4)
-+
-'|'
-+
-s.lon.toFixed(4);
-
-if(
-seen[ded]
-){
-
-return;
-
-}
-
-seen[ded]=1;
-
-total++;
-
-if(
-s.observed_at_utc
-){
-
-var h=
-(
-Date.now()-
-Date.parse(
-s.observed_at_utc
-)
-)/
-36e5;
-
-if(
-isFinite(h)
-&&
-h<=3
-){
-
-rep++;
-
-}
 
 }
 
@@ -1126,13 +1109,13 @@ rep:rep
 
 function addStations(data){
 
-summarize(
-data
-);
-
 var fc=
 stationGeoJSON(
 data
+);
+
+summarizeFeatures(
+fc
 );
 
 map.addSource(
@@ -1302,15 +1285,11 @@ new maplibregl.Marker(
 element:el,
 anchor:'center',
 offset:
-p.sheboyganOverlap==='yes'
-?
 [
-18,
+Number(
+p.landOffsetX||
 0
-]
-:
-[
-0,
+),
 0
 ]
 }
