@@ -72,12 +72,12 @@ body{min-height:100vh}
 #pbcm2 .pbcm2-chip i{width:7px;height:7px;border-radius:50%;background:#34c878;display:block;}
 #pbcm2 .pbcm2-chip.warn i{background:var(--gold);}
 #pbcm2 .pbcm2-chip.bad i{background:#ec5547;}
-#pbcm2 .pbcm2-card{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#04101c;}
+#pbcm2 .pbcm2-card{position:relative;max-width:560px;margin:0 auto;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#04101c;}
 
 #pbcm2Map{
 width:100%;
-height:min(72vh,760px);
-min-height:500px;
+height:440px;
+min-height:0;
 }
 
 #pbcm2 .pbcm2-note{position:absolute;left:10px;top:10px;z-index:5;max-width:250px;background:rgba(6,21,34,.88);border:1px solid rgba(163,188,209,.28);border-radius:9px;padding:8px 10px;pointer-events:none;}
@@ -161,6 +161,7 @@ NNW:337.5
 
 var map;
 var windMarkers=[];
+var sevenPierViewApplied=false;
 
 function $(id){
 return document.getElementById(id);
@@ -402,7 +403,12 @@ firstSymbol||
 undefined
 );
 
-/* Restore the proven west-shore-only opening view. */
+/* Use the proven west-shore view only as a fallback when the
+   seven live pier coordinates were not available. */
+if(
+!sevenPierViewApplied
+){
+
 map.fitBounds(
 [
 [
@@ -425,6 +431,8 @@ duration:0,
 maxZoom:12
 }
 );
+
+}
 
 window.dispatchEvent(
 new CustomEvent(
@@ -1203,12 +1211,101 @@ addWindMarkers(
 data
 );
 
+fitSevenPiers(
+data
+);
+
 chip(
 'pbcm2PierChip',
 'PierBite stations · '+
 fc.features.length+
 ' sources',
 ''
+);
+
+}
+
+function fitSevenPiers(data){
+
+var piers=
+data.piers||
+{};
+
+var bounds=
+new maplibregl.LngLatBounds();
+
+var count=0;
+
+PIER_ORDER.forEach(
+function(key){
+
+var p=
+piers[key]||
+{};
+
+var c=
+p.coordinates||
+{};
+
+if(
+typeof c.lat!=='number'
+||
+typeof c.lon!=='number'
+){
+
+return;
+
+}
+
+bounds.extend(
+[
+c.lon,
+c.lat
+]
+);
+
+count++;
+
+}
+);
+
+if(
+count!==PIER_ORDER.length
+){
+
+return;
+
+}
+
+sevenPierViewApplied=true;
+
+var compact=
+window.matchMedia(
+'(max-width:600px)'
+).matches;
+
+map.fitBounds(
+bounds,
+{
+padding:
+compact
+?
+{
+top:44,
+bottom:44,
+left:34,
+right:76
+}
+:
+{
+top:46,
+bottom:46,
+left:58,
+right:150
+},
+duration:0,
+maxZoom:9
+}
 );
 
 }
@@ -1611,6 +1708,7 @@ start();
 
 })();
 </script>
+
 
 <!-- PierBite Conditions Map v2 - Box 2 of 2 -->
 <div id="pbcm2b">
