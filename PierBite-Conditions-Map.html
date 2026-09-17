@@ -161,7 +161,7 @@ NNW:337.5
 
 var map;
 var windMarkers=[];
-var sevenPierViewApplied=false;
+var allSourcesViewApplied=false;
 
 function $(id){
 return document.getElementById(id);
@@ -404,9 +404,9 @@ undefined
 );
 
 /* Use the proven west-shore view only as a fallback when the
-   seven live pier coordinates were not available. */
+   live source coordinates were not available. */
 if(
-!sevenPierViewApplied
+!allSourcesViewApplied
 ){
 
 map.fitBounds(
@@ -660,9 +660,9 @@ var water=
 typeof s.water_temp_f===
 'number';
 
-/* Keep the blue Sheboygan pier dot and omit only the overlapping
-   purple wind/shore station dot from the displayed map. */
-if(
+/* Preserve the station's real coordinates and data. This flag is
+   used only to move its visible purple dot beside the blue pier. */
+var sheboyganOverlap=
 !water
 &&
 typeof sheboyganPier.lat==='number'
@@ -676,11 +676,7 @@ s.lat-sheboyganPier.lat
 Math.abs(
 s.lon-sheboyganPier.lon
 )<0.02
-){
-
-return;
-
-}
+;
 
 features.push(
 {
@@ -729,6 +725,13 @@ typeof s.wind_mph==='number'
 s.wind_mph
 :
 null,
+
+sheboyganOverlap:
+sheboyganOverlap
+?
+'yes'
+:
+'no',
 
 observed:
 s.observed_at_utc||
@@ -1182,15 +1185,55 @@ id:'pb-wind-stations',
 type:'circle',
 source:'pb-stations',
 filter:[
+'all',
+[
 '==',
 ['get','kind'],
 'station'
+],
+[
+'!=',
+['get','sheboyganOverlap'],
+'yes'
+]
 ],
 paint:{
 'circle-radius':8,
 'circle-color':'#a78bfa',
 'circle-stroke-color':'#ffffff',
 'circle-stroke-width':1.6
+}
+}
+);
+
+map.addLayer(
+{
+id:'pb-wind-stations-sheboygan',
+type:'circle',
+source:'pb-stations',
+filter:[
+'all',
+[
+'==',
+['get','kind'],
+'station'
+],
+[
+'==',
+['get','sheboyganOverlap'],
+'yes'
+]
+],
+paint:{
+'circle-radius':8,
+'circle-color':'#a78bfa',
+'circle-stroke-color':'#ffffff',
+'circle-stroke-width':1.6,
+'circle-translate':[
+18,
+0
+],
+'circle-translate-anchor':'viewport'
 }
 }
 );
@@ -1207,12 +1250,16 @@ bindLayer(
 'pb-wind-stations'
 );
 
+bindLayer(
+'pb-wind-stations-sheboygan'
+);
+
 addWindMarkers(
 data
 );
 
-fitSevenPiers(
-data
+fitDisplayedSources(
+fc
 );
 
 chip(
@@ -1225,32 +1272,30 @@ fc.features.length+
 
 }
 
-function fitSevenPiers(data){
-
-var piers=
-data.piers||
-{};
+function fitDisplayedSources(fc){
 
 var bounds=
 new maplibregl.LngLatBounds();
 
 var count=0;
 
-PIER_ORDER.forEach(
-function(key){
-
-var p=
-piers[key]||
-{};
+(
+fc.features||
+[]
+).forEach(
+function(feature){
 
 var c=
-p.coordinates||
-{};
+(
+feature.geometry||
+{}
+).coordinates||
+[];
 
 if(
-typeof c.lat!=='number'
+typeof c[0]!=='number'
 ||
-typeof c.lon!=='number'
+typeof c[1]!=='number'
 ){
 
 return;
@@ -1259,8 +1304,8 @@ return;
 
 bounds.extend(
 [
-c.lon,
-c.lat
+c[0],
+c[1]
 ]
 );
 
@@ -1269,15 +1314,13 @@ count++;
 }
 );
 
-if(
-count!==PIER_ORDER.length
-){
+if(!count){
 
 return;
 
 }
 
-sevenPierViewApplied=true;
+allSourcesViewApplied=true;
 
 var compact=
 window.matchMedia(
