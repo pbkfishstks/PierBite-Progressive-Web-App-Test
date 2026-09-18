@@ -130,7 +130,7 @@
         margin-bottom:4px;
       }
 
-      #pbpick .pph h2{
+      #pbpick .pph h1{
         font-family:"Barlow Semi Condensed","Inter",sans-serif;
         font-size:1.15rem;
         font-weight:700;
@@ -217,6 +217,7 @@
         align-items:center;
         gap:7px;
         flex-wrap:wrap;
+      }
       }
 
       #pbpick .pnm{
@@ -458,6 +459,7 @@
         if(
           wt &&
           wt.water_change_72h_f!=null &&
+          wt.water_change_72h_f!=null &&
           wt.water_change_72h_f<=-5
         ){
           return"var(--fc)";
@@ -578,7 +580,7 @@
         document.querySelector("#pbpick .pbpick-inner").innerHTML=
         badge+
         '<div class="pph">'+
-        '<h2>Pick Your Pier</h2>'+
+        '<h1>Pick Your Pier</h1>'+
         '<span class="ht">SOUTH TO NORTH</span>'+
         '</div>'+
         '<div class="tn">Scores are labeled live, modeled, forecast, or estimated.</div>'+
