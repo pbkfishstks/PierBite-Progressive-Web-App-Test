@@ -513,7 +513,7 @@ if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");ar
 <div class="pbphmn-lb" id="pbphmn-lb">
 <div class="pbphmn-lbx" id="pbphmn-x">&times;</div>
 <div class="pbphmn-lbw">
-<img class="pbphmn-lbi" id="pbphmn-img" src=""/>
+<img class="pbphmn-lbi" id="pbphmn-img" alt=""/>
 <div class="pbphmn-lbc" id="pbphmn-cap"></div>
 </div>
 </div>
@@ -574,11 +574,12 @@ var lbCap=document.getElementById("pbphmn-cap");
 function openLb(i){
 var p=list[i];
 lbImg.src=p.url;
+lbImg.alt=p.caption||PIER_NAME+" fishing photo";
 if(p.caption){lbCap.textContent=p.caption;lbCap.classList.add("show");}
 else{lbCap.textContent="";lbCap.classList.remove("show");}
 lb.classList.add("open");
 }
-function closeLb(){lb.classList.remove("open");lbImg.src="";}
+function closeLb(){lb.classList.remove("open");lbImg.removeAttribute("src");lbImg.alt="";}
 thumbs.forEach(function(t){t.addEventListener("click",function(){openLb(parseInt(t.getAttribute("data-i"),10));});});
 document.getElementById("pbphmn-x").addEventListener("click",closeLb);
 lb.addEventListener("click",function(e){if(e.target===lb)closeLb();});
