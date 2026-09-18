@@ -179,7 +179,7 @@ var wave=(h.wave_ft==null)?'&mdash;':(h.wave_ft.toFixed(1)+'<span style="font-si
 var pr=(h.pressure_hpa==null)?'&mdash;':(h.pressure_hpa.toFixed(0)+'<span style="font-size:.62rem;color:var(--if)"> hPa</span>');
 var prSub=(h.pressure_hpa==null)?'Not reported by any station we trust here':'Live station reading';
 document.getElementById("pbmta").innerHTML=
-'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="index.html#pick-your-pier">ALL PIERS</a></div>'+
+'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="PierBite-Pick-Your-Pier.html">ALL PIERS</a></div>'+
 '<div class="ey">Lake Michigan Pier Report</div>'+
 '<h1>Manitowoc</h1>'+
 '<div class="up">Updated '+(stamp?E(stamp):'recently')+'</div>'+
@@ -205,7 +205,6 @@ cell('Pressure',pr,h.pressure_hpa==null?null:'LIVE',prSub)+
 document.getElementById("pbmta").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
 });
 })();</script>
-
 
 <!-- PIERBITE pbmtb | 2026-09-13 16:38 UTC | v6 | SPLIT: Sky/Moon/Forecast collapsible removed from this box per Paul's explicit request - now lives in its own separate box (pbmtbsky, delivered alongside this file). This box is now WIND-ONLY: the 72-hour wind ribbon, read-out sentence, and colour ramp legend. Same pier-specific split already applied to Sturgeon Bay, Algoma, Kewaunee, and Two Rivers this session; not applied to remaining piers unless Paul asks for each. HKEY="mtw" preserved verbatim. UPWELLING_COMPONENT table preserved unchanged (verbatim from fetch_data.py, D315 - frozen band, not re-derived). -->
 <div id="pbmtb"></div>
@@ -332,7 +331,6 @@ document.getElementById("pbmtb").innerHTML='<div class="ld">Live conditions are 
 });
 })();</script>
 
-
 <!-- PIERBITE pbmtbsky | 2026-09-13 16:38 UTC | v1 | NEW BOX - split out of pbmtb Pier B per Paul's explicit request (same treatment as Sturgeon Bay, Algoma, Kewaunee, Two Rivers this session). Manitowoc's own coordinates (44.0914/-87.6438) and zone key (ZKEY="mtz", PKEY="manitowoc") preserved verbatim. Collapsible, collapsed by default, same toggle pattern as every other pier. Fetches data.json independently (self-sufficient). -->
 <div id="pbmtbsky"></div>
 <style>#pbmtbsky{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
@@ -458,11 +456,6 @@ document.getElementById("pbmtbsky").innerHTML='<div class="ld">Live conditions a
 });
 })();</script>
 
-
-
-
-
-
 <!-- PIERBITE pb-mtw-clean | 2026-09-11 12:55 UTC | v2 | CONSOLIDATION PASS — restructured into a collapsible toggle box to match Sheboygan's pb-sheb-clean pattern (was previously always-open). Recolored to the master palette and 16px card radius. Content (Manitowoc Marina, public access) unchanged. -->
 <div id="pb-mtw-clean">
 <button class="tog" id="pbmtwCleanTog" type="button">
@@ -506,8 +499,6 @@ var wrap=document.getElementById("pbmtwCleanWrap");
 var arr=document.getElementById("pbmtwCleanArr");
 if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
 })();</script>
-
-
 
 <!-- PIERBITE pbphmn | 2026-09-12 | v5 | FONT SIZE INCREASE -- same caption-overlay fix as v4, text made larger (.8rem to 1.05rem) for readability, per Paul's request. Wrapping for long captions was already built in and is unaffected. ORIGINAL v4 NOTE — v3 put the caption text under each thumbnail, which Paul did not want (it was not the prior behavior and wasn't the fix he asked for). Reverted thumbnails to plain photo squares, no caption text. Instead, moved the caption onto the enlarged (lightbox) view: it now sits as a shaded overlay strip on the BOTTOM EDGE of the photo itself (not as a separate block below it). Root cause of "you wouldn't see anything" in the old lightbox: the caption WAS being set (lbCap.textContent), but it sat as a separate flex item stacked below the image, and a tall photo could already fill nearly the full screen height, pushing the caption text off the visible area. Overlaying the caption directly on the image guarantees it's always visible regardless of photo height. If a photo has no caption, no overlay strip is shown at all. -->
 <div id="pbphmn">
@@ -602,8 +593,6 @@ loadPhotos();
 });
 })();</script>
 
-
-
 <!-- PIERBITE pbsap-manitowoc | 2026-09-11 12:55 UTC | v5 | STRUCTURAL FIX — renamed box ID from generic "pbsap" to "pbsap-manitowoc", same fix already applied to Sheboygan (D416/D417): the plain "pbsap" name is shared by every pier's copy of this box on the single long page, so whichever copy sits later in the DOM silently overrides the others' styling. Recolored to the master palette and 16px card radius at the same time. -->
 <div id="pbsap-manitowoc">
 <div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
@@ -614,9 +603,6 @@ loadPhotos();
 #pbsap-manitowoc .card b{color:var(--ink);}
 #pbsap-manitowoc a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;}
 </style>
-
-
-
 
 <!-- PIERBITE pbwebcam-manitowoc | 2026-09-13 | v2 | Rebuilt to match Submit a
 Photo card style exactly (pbsap-portwashington v1 used as the reference
