@@ -150,7 +150,7 @@ var wave=(h.wave_ft==null)?'&mdash;':(h.wave_ft.toFixed(1)+'<span style="font-si
 var pr=(h.pressure_hpa==null)?'&mdash;':(h.pressure_hpa.toFixed(0)+'<span style="font-size:.62rem;color:var(--if)"> hPa</span>');
 var prSub=(h.pressure_hpa==null)?'Not reported by any station we trust here':'Live station reading';
 document.getElementById("pbkwa").innerHTML=
-'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="index.html#pick-your-pier">ALL PIERS</a></div>'+
+'<div class="bb"><div class="bn">Pier<i>Bite</i><u>.com</u></div><a class="bl" href="PierBite-Pick-Your-Pier.html">ALL PIERS</a></div>'+
 '<div class="ey">Lake Michigan Pier Report</div>'+
 '<h1>Kewaunee</h1>'+
 '<div class="up">Updated '+(stamp?E(stamp):'recently')+'</div>'+
@@ -177,12 +177,7 @@ document.getElementById("pbkwa").innerHTML='<div class="ld">Live conditions are 
 });
 })();</script>
 
-
-
-
-
-
-<!-- PIERBITE pbkwb | 2026-09-13 16:20 UTC | v5 | SPLIT: Sky/Moon/Forecast collapsible removed from this box per Paul's explicit request - now lives in its own separate box (pbkwbsky, delivered alongside this file). This box is now WIND-ONLY: the 72-hour wind ribbon, read-out sentence, and colour ramp legend. Same pier-specific split already applied to Sturgeon Bay and Algoma this session; not applied to remaining piers unless Paul asks for each. HKEY="kww" preserved verbatim (Kewaunee's own station). UPWELLING_COMPONENT table preserved unchanged (MD5 a797f11665c6badf903959aa12b5b139). -->
+<!-- PIERBITE pbkwb | WIND-ONLY -->
 <div id="pbkwb"></div>
 <style>#pbkwb{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--good:#34c878;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
 #pbkwb *{box-sizing:border-box;margin:0;padding:0}
@@ -282,11 +277,7 @@ document.getElementById("pbkwb").innerHTML='<div class="ld">Live conditions are 
 });
 })();</script>
 
-
-
-
-
-<!-- PIERBITE pbkwbsky | 2026-09-13 16:20 UTC | v1 | NEW BOX - split out of pbkwb Pier B per Paul's explicit request (same treatment as Sturgeon Bay and Algoma this session). Kewaunee's own coordinates (44.4589/-87.5094) and zone key (ZKEY="kwz", PKEY="kewaunee") preserved verbatim. Collapsible, collapsed by default, same toggle pattern as every other pier. Fetches data.json independently (self-sufficient). -->
+<!-- PIERBITE pbkwbsky | SKY/MOON/FORECAST -->
 <div id="pbkwbsky"></div>
 <style>#pbkwbsky{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
 #pbkwbsky *{box-sizing:border-box;margin:0;padding:0}
@@ -411,11 +402,6 @@ document.getElementById("pbkwbsky").innerHTML='<div class="ld">Live conditions a
 });
 })();</script>
 
-
-
-
-
-<!-- PIERBITE pb-kw-clean | 2026-09-11 16:15 UTC | v2 | TEMPLATE-PARITY REBUILD (Kewaunee, 4th pier). Converted from always-open panel to collapsible toggle, same pattern as pb-sheb-clean v3. Recolored from the old non-master values (--im:#8fa9c1, --if:#5d788f) to the master palette (--im:#a3bcd1, --if:#8aa2b6). Content (City of Kewaunee Marina, Public badge, note text) unchanged from v1. -->
 <div id="pb-kw-clean">
 <button class="tog" id="pbkwCleanTog" type="button">
 <span>&#9670; Fish Cleaning Stations</span>
@@ -459,11 +445,6 @@ var arr=document.getElementById("pbkwCleanArr");
 if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
 })();</script>
 
-
-
-<!-- PIERBITE PHOTO GALLERY | Kewaunee | Live Carrd box ID: pbphkw | 2026-09-12 18:40 UTC | v4 (caption-overlay fix)
-WHAT THIS BOX IS: the "Photo Gallery" box on the Kewaunee pier page. It shows visitor-submitted photos as a grid of thumbnails; clicking a thumbnail opens a full-screen popup ("lightbox") view of that photo.
-WHAT CHANGED IN THIS FILE: captions were being saved correctly but were rendering in a spot that could get pushed off-screen on tall photos, so they were invisible. Fixed by overlaying the caption as a semi-transparent strip on the bottom edge of the enlarged photo itself (inside the same box as the image), instead of stacking it as a separate block below the image. If a photo has no caption, no strip shows at all -- same as before. This is the same confirmed fix already applied and tested live on the Manitowoc photo gallery box (pbphmn v4). Thumbnails are unchanged: plain photo squares, no caption text under them. CORRECTION: the caption text color was set to var(--ink), a value only defined on the main gallery box -- but the lightbox popup is a separate, sibling box that can't see it, so the color silently fell back to black (invisible on the dark caption strip). Fixed to a literal color value. -->
 <div id="pbphkw">
 <button class="pbphkw-tog" id="pbphkwTog" type="button">
 <span>&#9670; Kewaunee Photo Gallery</span>
@@ -553,10 +534,6 @@ loadPhotos();
 });
 })();</script>
 
-
-
-
-<!-- PIERBITE pbsap-kewaunee | 2026-09-11 16:15 UTC | v5 | STRUCTURAL FIX — renamed box ID from generic "pbsap" to "pbsap-kewaunee" because the plain "pbsap" name is shared by every pier's copy of this box on the single long page (D416/D417). Recolored from the old non-master values (--navy-panel:#0e1c2b, --navy-line:#1e3448) to the master palette (--navy-panel:#112a3f, --navy-line:#1f405b) and card radius 10px→16px. -->
 <div id="pbsap-kewaunee">
 <div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
 </div>
@@ -567,17 +544,6 @@ loadPhotos();
 #pbsap-kewaunee a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;}
 </style>
 
-
-
-<!-- PIERBITE pbwebcam-kewaunee | 2026-09-13 | v2 | Rebuilt to match Submit a Photo
-card style exactly (pbsap-portwashington v1 used as the reference file, per
-Paul's request). Same single-row card, same gold pill link. Link-out only,
-opens in a new tab, same as every other pier's webcam box.
-
-Kewaunee-specific note: Paul originally supplied Yacht Works' "About Our
-Kewaunee Location" page, which has no live camera on it. The actual live
-camera page on Yacht Works' own site was located and used instead:
-yachtworks.com/pages/webcam-live-kewaunee. -->
 <div id="pbwebcam-kewaunee">
 <div class="card"><span>Check current conditions at the pier &mdash; <b>watch the Kewaunee Harbor Cam live</b>.</span><a href="https://www.yachtworks.com/pages/webcam-live-kewaunee" target="_blank" rel="noopener">Watch Live</a></div>
 </div>
