@@ -176,11 +176,7 @@ document.getElementById("pbsba").innerHTML='<div class="ld">Live conditions are 
 });
 })();</script>
 
-
-
-
-
-<!-- PIERBITE pbsbb | 2026-09-13 16:03 UTC | v5 | SPLIT: Sky/Moon/Forecast collapsible removed from this box per Paul's explicit request - it now lives in its own separate box (pbsbbsky, delivered alongside this file). This box is now WIND-ONLY: the 72-hour wind ribbon, read-out sentence, and colour ramp legend. This makes Sturgeon Bay's Pier B structurally different from every other pier's Pier B (all five others still have Sky/Moon/Forecast merged in, per the original template-parity workflow) - confirmed intentional, Sturgeon-Bay-specific, not to be applied to other piers unless Paul asks. HKEY="KSUE" preserved verbatim (re-verified live 2026-09-11: real local station, not borrowed). UPWELLING_COMPONENT table preserved unchanged, not re-derived. -->
+<!-- PIERBITE pbsbb | WIND-ONLY -->
 <div id="pbsbb"></div>
 <style>#pbsbb{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--good:#34c878;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
 #pbsbb *{box-sizing:border-box;margin:0;padding:0}
@@ -280,12 +276,7 @@ document.getElementById("pbsbb").innerHTML='<div class="ld">Live conditions are 
 });
 })();</script>
 
-
-
-
-
-
-<!-- PIERBITE pbsbbsky | 2026-09-13 16:03 UTC | v1 | NEW BOX - split out of pbsbb Pier B per Paul's explicit request. Sturgeon Bay's own coordinates (44.7944/-87.3131, same values previously used inside pbsbb) and zone key (ZKEY="algz", re-verified live 2026-09-11 as genuinely covering Sturgeon Bay - "Sturgeon Bay to Two Rivers WI" - not a leftover from Algoma). Collapsible, collapsed by default, same toggle pattern as every other pier's collapsible boxes. This box fetches data.json independently (self-sufficient, same pattern used site-wide) rather than depending on pbsbb having run first. -->
+<!-- PIERBITE pbsbbsky | SKY/MOON/FORECAST -->
 <div id="pbsbbsky"></div>
 <style>#pbsbbsky{--p0:#0b1c2b;--p1:#112a3f;--p2:#1f405b;--ink:#eef5fb;--im:#a3bcd1;--if:#8aa2b6;--lake:#8fd43c;--gold:#f5b53f;--lb:#5fb6f0;--fd:"Barlow Semi Condensed",sans-serif;--fb:"Inter",-apple-system,sans-serif;--fm:"JetBrains Mono",monospace;font-family:var(--fb);color:var(--ink);max-width:960px;margin:0 auto}
 #pbsbbsky *{box-sizing:border-box;margin:0;padding:0}
@@ -410,9 +401,6 @@ document.getElementById("pbsbbsky").innerHTML='<div class="ld">Live conditions a
 });
 })();</script>
 
-
-
-<!-- PIERBITE pb-stb-clean | 2026-09-11 22:06 UTC | v2 | TEMPLATE-PARITY REBUILD - converted from always-open panel to collapsible toggle (matches pb-sheb-clean v3 pattern), recolored from old non-master values (--im:#8fa9c1, --if:#5d788f) to master palette (--im:#a3bcd1, --if:#8aa2b6). Content and links unchanged from v1. -->
 <div id="pb-stb-clean">
 <button class="tog" id="pbstbCleanTog" type="button">
 <span>&#9670; Fish Cleaning Stations</span>
@@ -462,15 +450,6 @@ var arr=document.getElementById("pbstbCleanArr");
 if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
 })();</script>
 
-
-
-
-
-
-
-<!-- PIERBITE PHOTO GALLERY | Sturgeon Bay | Live Carrd box ID: pbphsb | 2026-09-12 18:40 UTC | v4 (caption-overlay fix)
-WHAT THIS BOX IS: the "Photo Gallery" box on the Sturgeon Bay pier page. It shows visitor-submitted photos as a grid of thumbnails; clicking a thumbnail opens a full-screen popup ("lightbox") view of that photo.
-WHAT CHANGED IN THIS FILE: captions were being saved correctly but were rendering in a spot that could get pushed off-screen on tall photos, so they were invisible. Fixed by overlaying the caption as a semi-transparent strip on the bottom edge of the enlarged photo itself (inside the same box as the image), instead of stacking it as a separate block below the image. If a photo has no caption, no strip shows at all -- same as before. This is the same confirmed fix already applied and tested live on the Manitowoc photo gallery box (pbphmn v4). Thumbnails are unchanged: plain photo squares, no caption text under them. CORRECTION: the caption text color was set to var(--ink), a value only defined on the main gallery box -- but the lightbox popup is a separate, sibling box that can't see it, so the color silently fell back to black (invisible on the dark caption strip). Fixed to a literal color value. -->
 <div id="pbphsb">
 <button class="pbphsb-tog" id="pbphsbTog" type="button">
 <span>&#9670; Sturgeon Bay Photo Gallery</span>
@@ -484,7 +463,7 @@ WHAT CHANGED IN THIS FILE: captions were being saved correctly but were renderin
 <div class="pbphsb-lbx" id="pbphsb-x">&times;</div>
 <div class="pbphsb-lbw">
 <div class="pbphsb-lbf">
-<img class="pbphsb-lbi" id="pbphsb-img" src=""/>
+<img class="pbphsb-lbi" id="pbphsb-img" alt=""/>
 <div class="pbphsb-lbc" id="pbphsb-cap"></div>
 </div>
 </div>
@@ -544,8 +523,8 @@ var thumbs=inner.querySelectorAll(".th");
 var lb=document.getElementById("pbphsb-lb");
 var lbImg=document.getElementById("pbphsb-img");
 var lbCap=document.getElementById("pbphsb-cap");
-function openLb(i){var p=list[i];lbImg.src=p.url;if(p.caption){lbCap.textContent=p.caption;lbCap.classList.add("show");}else{lbCap.textContent="";lbCap.classList.remove("show");}lb.classList.add("open");}
-function closeLb(){lb.classList.remove("open");lbImg.src="";}
+function openLb(i){var p=list[i];lbImg.src=p.url;lbImg.alt=p.caption||PIER_NAME+" fishing photo";if(p.caption){lbCap.textContent=p.caption;lbCap.classList.add("show");}else{lbCap.textContent="";lbCap.classList.remove("show");}lb.classList.add("open");}
+function closeLb(){lb.classList.remove("open");lbImg.removeAttribute("src");lbImg.alt="";}
 thumbs.forEach(function(t){t.addEventListener("click",function(){openLb(parseInt(t.getAttribute("data-i"),10));});});
 document.getElementById("pbphsb-x").addEventListener("click",closeLb);
 lb.addEventListener("click",function(e){if(e.target===lb)closeLb();});
@@ -560,9 +539,6 @@ loadPhotos();
 });
 })();</script>
 
-
-
-<!-- PIERBITE pbsap-sturgeonbay | 2026-09-11 22:06 UTC | v2 | STRUCTURAL FIX - renamed box ID from generic "pbsap" to "pbsap-sturgeonbay" because the plain "pbsap" name is shared by every pier's copy of this box on the single long page, causing later/un-updated copies to override this one's styling (same fix already applied to every other pier). Colors recolored to master palette (was --navy-panel:#0e1c2b/--navy-line:#1e3448), card radius 10px->16px. -->
 <div id="pbsap-sturgeonbay">
 <div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
 </div>
