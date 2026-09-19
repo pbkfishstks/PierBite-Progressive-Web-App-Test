@@ -383,7 +383,7 @@ if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
 (f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
 var fcHtml=per.length?per.map(function(x){return '<div class="fp"><div class="fn">'+E(x.n||'')+'</div><div>'+E(x.t)+'</div></div>';}).join(''):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
 document.getElementById("pbagbsky").innerHTML=
-'<button class="tog" id="pbagbskyTog" type="button">'+
+'<button class="tog" id="pbagbskyTog" type="button" aria-expanded="false" aria-controls="pbagbskyWrap">'+
 '<span>\u25c6 Sky, Moon &amp; Forecast</span>'+
 '<span class="tog-arrow" id="pbagbskyArr">\u25be</span>'+
 '</button>'+
@@ -394,8 +394,9 @@ moonHtml+
 document.getElementById('pbagbskyTog').addEventListener('click',function(){
 var w=document.getElementById('pbagbskyWrap');
 var a=document.getElementById('pbagbskyArr');
-w.classList.toggle('open');
-a.classList.toggle('open');
+var isOpen=w.classList.toggle('open');
+a.classList.toggle('open',isOpen);
+this.setAttribute('aria-expanded',String(isOpen));
 });
 }).catch(function(){
 document.getElementById("pbagbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
@@ -404,7 +405,7 @@ document.getElementById("pbagbsky").innerHTML='<div class="ld">Live conditions a
 
 <!-- PIERBITE pb-alg-clean | Fish Cleaning Stations -->
 <div id="pb-alg-clean">
-<button class="tog" id="pbalgCleanTog" type="button">
+<button class="tog" id="pbalgCleanTog" type="button" aria-expanded="false" aria-controls="pbalgCleanWrap">
 <span>&#9670; Fish Cleaning Stations</span>
 <span class="tog-arrow" id="pbalgCleanArr">&#9662;</span>
 </button>
@@ -443,12 +444,12 @@ document.getElementById("pbagbsky").innerHTML='<div class="ld">Live conditions a
 var btn=document.getElementById("pbalgCleanTog");
 var wrap=document.getElementById("pbalgCleanWrap");
 var arr=document.getElementById("pbalgCleanArr");
-if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
+if(btn){btn.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",String(isOpen));});}
 })();</script>
 
 <!-- PIERBITE PHOTO GALLERY | Algoma -->
 <div id="pbphag">
-<button class="pbphag-tog" id="pbphagTog" type="button">
+<button class="pbphag-tog" id="pbphagTog" type="button" aria-expanded="false" aria-controls="pbphagWrap">
 <span>&#9670; Algoma Photo Gallery</span>
 <span class="pbphag-arr" id="pbphagArr">&#9662;</span>
 </button>
@@ -530,9 +531,10 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();})
 document.querySelector("#pbphag .pbphag-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';
 });}
 tog.addEventListener("click",function(){
-wrap.classList.toggle("open");
-arr.classList.toggle("open");
-loadPhotos();
+var isOpen=wrap.classList.toggle("open");
+arr.classList.toggle("open",isOpen);
+tog.setAttribute("aria-expanded",String(isOpen));
+if(isOpen)loadPhotos();
 });
 })();</script>
 
