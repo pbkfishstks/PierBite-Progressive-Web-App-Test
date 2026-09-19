@@ -382,7 +382,7 @@ if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
 (f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
 var fcHtml=per.length?per.map(function(x){return '<div class="fp"><div class="fn">'+E(x.n||'')+'</div><div>'+E(x.t)+'</div></div>';}).join(''):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
 document.getElementById("pbsbbsky").innerHTML=
-'<button class="tog" id="pbsbbskyTog" type="button">'+
+'<button class="tog" id="pbsbbskyTog" type="button" aria-expanded="false" aria-controls="pbsbbskyWrap">'+
 '<span>\u25c6 Sky, Moon &amp; Forecast</span>'+
 '<span class="tog-arrow" id="pbsbbskyArr">\u25be</span>'+
 '</button>'+
@@ -393,8 +393,9 @@ moonHtml+
 document.getElementById('pbsbbskyTog').addEventListener('click',function(){
 var w=document.getElementById('pbsbbskyWrap');
 var a=document.getElementById('pbsbbskyArr');
-w.classList.toggle('open');
-a.classList.toggle('open');
+var isOpen=w.classList.toggle('open');
+a.classList.toggle('open',isOpen);
+this.setAttribute('aria-expanded',String(isOpen));
 });
 }).catch(function(){
 document.getElementById("pbsbbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
@@ -402,7 +403,7 @@ document.getElementById("pbsbbsky").innerHTML='<div class="ld">Live conditions a
 })();</script>
 
 <div id="pb-stb-clean">
-<button class="tog" id="pbstbCleanTog" type="button">
+<button class="tog" id="pbstbCleanTog" type="button" aria-expanded="false" aria-controls="pbstbCleanWrap">
 <span>&#9670; Fish Cleaning Stations</span>
 <span class="tog-arrow" id="pbstbCleanArr">&#9662;</span>
 </button>
@@ -447,11 +448,11 @@ document.getElementById("pbsbbsky").innerHTML='<div class="ld">Live conditions a
 var btn=document.getElementById("pbstbCleanTog");
 var wrap=document.getElementById("pbstbCleanWrap");
 var arr=document.getElementById("pbstbCleanArr");
-if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
+if(btn){btn.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",String(isOpen));});}
 })();</script>
 
 <div id="pbphsb">
-<button class="pbphsb-tog" id="pbphsbTog" type="button">
+<button class="pbphsb-tog" id="pbphsbTog" type="button" aria-expanded="false" aria-controls="pbphsbWrap">
 <span>&#9670; Sturgeon Bay Photo Gallery</span>
 <span class="pbphsb-arr" id="pbphsbArr">&#9662;</span>
 </button>
@@ -533,9 +534,10 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();})
 document.querySelector("#pbphsb .pbphsb-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';
 });}
 tog.addEventListener("click",function(){
-wrap.classList.toggle("open");
-arr.classList.toggle("open");
-loadPhotos();
+var isOpen=wrap.classList.toggle("open");
+arr.classList.toggle("open",isOpen);
+tog.setAttribute("aria-expanded",String(isOpen));
+if(isOpen)loadPhotos();
 });
 })();</script>
 
