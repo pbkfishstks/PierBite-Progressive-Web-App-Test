@@ -246,14 +246,14 @@ var z=(data.zones||{})[ZKEY]||{},f=z.forecast||{},per=[];
 if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
 (f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
 var fcHtml=per.length?per.map(function(x){return'<div class="fp"><div class="fn">'+E(x.n||"")+"</div><div>"+E(x.t)+"</div></div>";}).join(""):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
-document.getElementById("pbpwbsky").innerHTML='<button class="tog" id="pbpwbskyTog" type="button"><span>&#9670; Sky, Moon &amp; Forecast</span><span class="tog-arrow" id="pbpwbskyArr">&#9662;</span></button><div class="fc-wrap" id="pbpwbskyWrap">'+moonHtml+'<div class="card"><div class="fn" style="margin-bottom:8px">NOAA Marine Forecast &mdash; '+E(z.label||"Nearshore waters")+'</div><div class="fc">'+fcHtml+"</div></div></div>";
-document.getElementById("pbpwbskyTog").addEventListener("click",function(){document.getElementById("pbpwbskyWrap").classList.toggle("open");document.getElementById("pbpwbskyArr").classList.toggle("open");});
+document.getElementById("pbpwbsky").innerHTML='<button class="tog" id="pbpwbskyTog" type="button" aria-expanded="false" aria-controls="pbpwbskyWrap"><span>&#9670; Sky, Moon &amp; Forecast</span><span class="tog-arrow" id="pbpwbskyArr">&#9662;</span></button><div class="fc-wrap" id="pbpwbskyWrap">'+moonHtml+'<div class="card"><div class="fn" style="margin-bottom:8px">NOAA Marine Forecast &mdash; '+E(z.label||"Nearshore waters")+'</div><div class="fc">'+fcHtml+"</div></div></div>";
+document.getElementById("pbpwbskyTog").addEventListener("click",function(){var isOpen=document.getElementById("pbpwbskyWrap").classList.toggle("open");document.getElementById("pbpwbskyArr").classList.toggle("open",isOpen);this.setAttribute("aria-expanded",String(isOpen));});
 }).catch(function(){document.getElementById("pbpwbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';});
 })();
 </script>
 
 <div id="pb-pw-clean">
-<button class="tog" id="pbpwCleanTog" type="button">
+<button class="tog" id="pbpwCleanTog" type="button" aria-expanded="false" aria-controls="pbpwCleanWrap">
 <span>&#9670; Fish Cleaning Stations</span>
 <span class="tog-arrow" id="pbpwCleanArr">&#9662;</span>
 </button>
@@ -292,11 +292,11 @@ document.getElementById("pbpwbskyTog").addEventListener("click",function(){docum
 #pb-pw-clean .note{color:var(--im);font-size:.76rem;text-align:center;margin-top:12px}
 </style>
 <script>
-(function(){var btn=document.getElementById("pbpwCleanTog"),wrap=document.getElementById("pbpwCleanWrap"),arr=document.getElementById("pbpwCleanArr");if(btn)btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});})();
+(function(){var btn=document.getElementById("pbpwCleanTog"),wrap=document.getElementById("pbpwCleanWrap"),arr=document.getElementById("pbpwCleanArr");if(btn)btn.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",String(isOpen));});})();
 </script>
 
 <div id="pbphpw">
-<button class="pbphpw-tog" id="pbphpwTog" type="button">
+<button class="pbphpw-tog" id="pbphpwTog" type="button" aria-expanded="false" aria-controls="pbphpwWrap">
 <span>&#9670; Port Washington Photo Gallery</span>
 <span class="pbphpw-arr" id="pbphpwArr">&#9662;</span>
 </button>
@@ -382,7 +382,7 @@ lb.addEventListener("click",function(e){if(e.target===lb)closeLb();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();});
 }).catch(function(){document.querySelector("#pbphpw .pbphpw-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';});
 }
-tog.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");loadPhotos();});
+tog.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);tog.setAttribute("aria-expanded",String(isOpen));if(isOpen)loadPhotos();});
 })();
 </script>
 
