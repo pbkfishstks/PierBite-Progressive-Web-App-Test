@@ -437,7 +437,7 @@ if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
 (f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
 var fcHtml=per.length?per.map(function(x){return '<div class="fp"><div class="fn">'+E(x.n||'')+'</div><div>'+E(x.t)+'</div></div>';}).join(''):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
 document.getElementById("pbmtbsky").innerHTML=
-'<button class="tog" id="pbmtbskyTog" type="button">'+
+'<button class="tog" id="pbmtbskyTog" type="button" aria-expanded="false" aria-controls="pbmtbskyWrap">'+
 '<span>\u25c6 Sky, Moon &amp; Forecast</span>'+
 '<span class="tog-arrow" id="pbmtbskyArr">\u25be</span>'+
 '</button>'+
@@ -448,8 +448,9 @@ moonHtml+
 document.getElementById('pbmtbskyTog').addEventListener('click',function(){
 var w=document.getElementById('pbmtbskyWrap');
 var a=document.getElementById('pbmtbskyArr');
-w.classList.toggle('open');
-a.classList.toggle('open');
+var isOpen=w.classList.toggle('open');
+a.classList.toggle('open',isOpen);
+this.setAttribute('aria-expanded',String(isOpen));
 });
 }).catch(function(){
 document.getElementById("pbmtbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';
@@ -458,7 +459,7 @@ document.getElementById("pbmtbsky").innerHTML='<div class="ld">Live conditions a
 
 <!-- PIERBITE pb-mtw-clean | 2026-09-11 12:55 UTC | v2 | CONSOLIDATION PASS — restructured into a collapsible toggle box to match Sheboygan's pb-sheb-clean pattern (was previously always-open). Recolored to the master palette and 16px card radius. Content (Manitowoc Marina, public access) unchanged. -->
 <div id="pb-mtw-clean">
-<button class="tog" id="pbmtwCleanTog" type="button">
+<button class="tog" id="pbmtwCleanTog" type="button" aria-expanded="false" aria-controls="pbmtwCleanWrap">
 <span>&#9670; Fish Cleaning Stations</span>
 <span class="tog-arrow" id="pbmtwCleanArr">&#9662;</span>
 </button>
@@ -497,12 +498,12 @@ document.getElementById("pbmtbsky").innerHTML='<div class="ld">Live conditions a
 var btn=document.getElementById("pbmtwCleanTog");
 var wrap=document.getElementById("pbmtwCleanWrap");
 var arr=document.getElementById("pbmtwCleanArr");
-if(btn){btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});}
+if(btn){btn.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",String(isOpen));});}
 })();</script>
 
 <!-- PIERBITE pbphmn | 2026-09-12 | v5 | FONT SIZE INCREASE -- same caption-overlay fix as v4, text made larger (.8rem to 1.05rem) for readability, per Paul's request. Wrapping for long captions was already built in and is unaffected. ORIGINAL v4 NOTE — v3 put the caption text under each thumbnail, which Paul did not want (it was not the prior behavior and wasn't the fix he asked for). Reverted thumbnails to plain photo squares, no caption text. Instead, moved the caption onto the enlarged (lightbox) view: it now sits as a shaded overlay strip on the BOTTOM EDGE of the photo itself (not as a separate block below it). Root cause of "you wouldn't see anything" in the old lightbox: the caption WAS being set (lbCap.textContent), but it sat as a separate flex item stacked below the image, and a tall photo could already fill nearly the full screen height, pushing the caption text off the visible area. Overlaying the caption directly on the image guarantees it's always visible regardless of photo height. If a photo has no caption, no overlay strip is shown at all. -->
 <div id="pbphmn">
-<button class="pbphmn-tog" id="pbphmnTog" type="button">
+<button class="pbphmn-tog" id="pbphmnTog" type="button" aria-expanded="false" aria-controls="pbphmnWrap">
 <span>&#9670; Manitowoc Photo Gallery</span>
 <span class="pbphmn-arr" id="pbphmnArr">&#9662;</span>
 </button>
@@ -588,9 +589,10 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();})
 document.querySelector("#pbphmn .pbphmn-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';
 });}
 tog.addEventListener("click",function(){
-wrap.classList.toggle("open");
-arr.classList.toggle("open");
-loadPhotos();
+var isOpen=wrap.classList.toggle("open");
+arr.classList.toggle("open",isOpen);
+tog.setAttribute("aria-expanded",String(isOpen));
+if(isOpen)loadPhotos();
 });
 })();</script>
 
