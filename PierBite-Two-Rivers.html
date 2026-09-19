@@ -237,7 +237,7 @@ function moonAlt(date){var lw=RAD*-MLON,phi=RAD*MLAT,d=toDays(date),c=moonCoords
 function moonRiseSet(date){var t=new Date(date);t.setHours(0,0,0,0);var hc=.133*RAD,rise=null,set=null,prev=moonAlt(t)-hc;for(var i=1;i<=24;i++){var t2=new Date(t.getTime()+i*36e5),alt=moonAlt(t2)-hc;if(prev<0&&alt>=0&&!rise)rise=new Date(t.getTime()+(i-1+-prev/(alt-prev))*36e5);if(prev>=0&&alt<0&&!set)set=new Date(t.getTime()+(i-1+prev/(prev-alt))*36e5);prev=alt;}return{rise:rise,set:set};}
 function moonPhase(date){var lp=2551443,ref=Date.UTC(2000,0,6,18,14,0)/1e3,phase=((date.getTime()/1e3-ref)%lp+lp)%lp,frac=phase/lp,illum=(1-Math.cos(2*Math.PI*frac))/2,name;if(frac<.03||frac>.97)name="New Moon";else if(frac<.22)name="Waxing Crescent";else if(frac<.28)name="First Quarter";else if(frac<.47)name="Waxing Gibbous";else if(frac<.53)name="Full Moon";else if(frac<.72)name="Waning Gibbous";else if(frac<.78)name="Last Quarter";else name="Waning Crescent";return{frac:frac,illum:illum,name:name};}
 function fmtT(d){if(!d)return"\u2014";var h=d.getHours(),m=d.getMinutes(),ap=h>=12?"PM":"AM",h12=h%12;if(h12===0)h12=12;return h12+":"+(m<10?"0":"")+m+" "+ap;}
-function moonSVG(phase){var r=16,cx=17,cy=17,theta=phase*2*Math.PI,rx=r*Math.abs(Math.cos(theta)),waxing=phase<.5,s1=waxing?1:0,cosNeg=Math.cos(theta)<0,s2=waxing?cosNeg?1:0:cosNeg?0:1,d="M "+cx+" "+(cy-r)+" A "+r+" "+r+" 0 0 "+s1+" "+cx+" "+(cy+r)+" A "+rx.toFixed(2)+" "+r+" 0 0 "+s2+" "+cx+" "+(cy-r)+" Z";return'<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#22334a" stroke="#4a9fd4" stroke-width="0.5" opacity="0.9"></circle><path d="'+d+'" fill="#e8eef4"></path></svg>';}
+function moonSVG(phase){var r=16,cx=17,cy=17,theta=phase*2*Math.PI,rx=r*Math.abs(Math.cos(theta)),waxing=phase<.5,s1=waxing?1:0,cosNeg=Math.cos(theta)<0,s2=waxing?cosNeg?1:0:cosNegcosNeg?0:1,d="M "+cx+" "+(cy-r)+" A "+r+" "+r+" 0 0 "+s1+" "+cx+" "+(cy+r)+" A "+rx.toFixed(2)+" "+r+" 0 0 "+s2+" "+cx+" "+(cy-r)+" Z";return'<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#22334a" stroke="#4a9fd4" stroke-width="0.5" opacity="0.9"></circle><path d="'+d+'" fill="#e8eef4"></path></svg>';}
 var now=new Date(),sun=sunTimes(now),moonRS=moonRiseSet(now),mp=moonPhase(now);
 var moonHtml='<div class="moon-grid"><div class="moon-cell"><div class="k">Sunrise</div><div class="v">'+fmtT(sun.sunrise)+'</div></div><div class="moon-cell"><div class="k">Sunset</div><div class="v">'+fmtT(sun.sunset)+'</div></div><div class="moon-cell"><div class="k">Moonrise</div><div class="v">'+fmtT(moonRS.rise)+'</div></div><div class="moon-cell"><div class="k">Moonset</div><div class="v">'+fmtT(moonRS.set)+'</div></div><div class="moon-icon">'+moonSVG(mp.frac)+'<div class="moon-name">'+mp.name+'</div><div class="moon-pct">'+Math.round(mp.illum*100)+'% lit</div></div></div>';
 window.__PB=window.__PB||fetch(U,{cache:"no-store"}).then(function(r){return r.json();});
@@ -246,14 +246,14 @@ var z=(data.zones||{})[ZKEY]||{},f=z.forecast||{},per=[];
 if(f.available&&f.detailed_text)per.push({n:f.period_name,t:f.detailed_text});
 (f.upcoming||[]).slice(0,3).forEach(function(u){if(u.detailed_text)per.push({n:u.period_name,t:u.detailed_text});});
 var fcHtml=per.length?per.map(function(x){return'<div class="fp"><div class="fn">'+E(x.n||"")+"</div><div>"+E(x.t)+"</div></div>";}).join(""):'<div class="fp">The marine forecast is temporarily unavailable.</div>';
-document.getElementById("pbtrbsky").innerHTML='<button class="tog" id="pbtrbskyTog" type="button"><span>\u25c6 Sky, Moon &amp; Forecast</span><span class="tog-arrow" id="pbtrbskyArr">\u25be</span></button><div class="fc-wrap" id="pbtrbskyWrap">'+moonHtml+'<div class="card"><div class="fn" style="margin-bottom:8px">NOAA Marine Forecast \u2014 '+E(z.label||"Nearshore waters")+'</div><div class="fc">'+fcHtml+"</div></div></div>";
-document.getElementById("pbtrbskyTog").addEventListener("click",function(){document.getElementById("pbtrbskyWrap").classList.toggle("open");document.getElementById("pbtrbskyArr").classList.toggle("open");});
+document.getElementById("pbtrbsky").innerHTML='<button class="tog" id="pbtrbskyTog" type="button" aria-expanded="false" aria-controls="pbtrbskyWrap"><span>\u25c6 Sky, Moon &amp; Forecast</span><span class="tog-arrow" id="pbtrbskyArr">\u25be</span></button><div class="fc-wrap" id="pbtrbskyWrap">'+moonHtml+'<div class="card"><div class="fn" style="margin-bottom:8px">NOAA Marine Forecast \u2014 '+E(z.label||"Nearshore waters")+'</div><div class="fc">'+fcHtml+"</div></div></div>";
+document.getElementById("pbtrbskyTog").addEventListener("click",function(){var isOpen=document.getElementById("pbtrbskyWrap").classList.toggle("open");document.getElementById("pbtrbskyArr").classList.toggle("open",isOpen);this.setAttribute("aria-expanded",String(isOpen));});
 }).catch(function(){document.getElementById("pbtrbsky").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';});
 })();
 </script>
 
 <div id="pb-tr-clean">
-<button class="tog" id="pbtrCleanTog" type="button">
+<button class="tog" id="pbtrCleanTog" type="button" aria-expanded="false" aria-controls="pbtrCleanWrap">
 <span>&#9670; Fish Cleaning Stations</span>
 <span class="tog-arrow" id="pbtrCleanArr">&#9662;</span>
 </button>
@@ -294,11 +294,11 @@ document.getElementById("pbtrbskyTog").addEventListener("click",function(){docum
 #pb-tr-clean .note{color:var(--im);font-size:.76rem;text-align:center;margin-top:12px}
 </style>
 <script>
-(function(){var btn=document.getElementById("pbtrCleanTog"),wrap=document.getElementById("pbtrCleanWrap"),arr=document.getElementById("pbtrCleanArr");if(btn)btn.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");});})();
+(function(){var btn=document.getElementById("pbtrCleanTog"),wrap=document.getElementById("pbtrCleanWrap"),arr=document.getElementById("pbtrCleanArr");if(btn)btn.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);btn.setAttribute("aria-expanded",String(isOpen));});})();
 </script>
 
 <div id="pbphtr">
-<button class="pbphtr-tog" id="pbphtrTog" type="button">
+<button class="pbphtr-tog" id="pbphtrTog" type="button" aria-expanded="false" aria-controls="pbphtrWrap">
 <span>&#9670; Two Rivers Photo Gallery</span>
 <span class="pbphtr-arr" id="pbphtrArr">&#9662;</span>
 </button>
@@ -384,7 +384,7 @@ lb.addEventListener("click",function(e){if(e.target===lb)closeLb();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();});
 }).catch(function(){document.querySelector("#pbphtr .pbphtr-inner").innerHTML='<div class="empty">Photos are temporarily unavailable.</div>';});
 }
-tog.addEventListener("click",function(){wrap.classList.toggle("open");arr.classList.toggle("open");loadPhotos();});
+tog.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);tog.setAttribute("aria-expanded",String(isOpen));if(isOpen)loadPhotos();});
 })();
 </script>
 
