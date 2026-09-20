@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- PIERBITE PWA APP FINAL FILE PASS | 2026-09-20 13:44 UTC | Matches the verified PierBite.com wind-provenance and fixed-window display. Map untouched. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -141,8 +142,9 @@ cell("Water temp",wt,h.water_temp_source,wtSub)+cell("Wind",wv+wvu,w.source,wind
 #pbpwb .gl{position:absolute;left:34px;right:0;border-top:1px dashed rgba(31,64,91,.7)}
 #pbpwb .bx{flex:1;min-width:0;display:flex;align-items:flex-end;height:100%;position:relative;z-index:1}
 #pbpwb .bx i{display:block;width:100%;border-radius:1px 1px 0 0}
+#pbpwb .bx.est i{opacity:.5;outline:1px dashed rgba(138,162,182,.75);outline-offset:-1px}
 #pbpwb .days{display:flex;padding-left:34px;margin-top:5px;font-family:var(--fm);font-size:.56rem;color:var(--if);letter-spacing:.08em}
-#pbpwb .days span{flex:1;text-align:center}
+#pbpwb .days{justify-content:space-between}#pbpwb .days span{flex:none;text-align:center}
 #pbpwb .read{margin-top:13px;padding-top:13px;border-top:1px solid var(--p2);font-size:.8rem;color:var(--im);line-height:1.6}
 #pbpwb .read b{color:var(--gold);font-weight:600}
 #pbpwb .ramp{margin-top:9px}
@@ -158,6 +160,7 @@ cell("Water temp",wt,h.water_temp_source,wtSub)+cell("Wind",wv+wvu,w.source,wind
 <script>
 (function(){
 var U="https://raw.githubusercontent.com/pbkfishstks/Live-buoy-and-weather-data-for-PierBite.com/main/data.json",HKEY="pww";
+var PKEY="port_washington";
 var FAVOURABLE={S:1,SSW:1,SW:1,WSW:1,W:1},AXIS=[0,10,20,30];
 var UPWELLING_COMPONENT={S:1,SSW:1,SW:1,WSW:1,W:1,WNW:.541,NW:0,NNW:-.541,N:-1,NNE:-1,NE:-1,ENE:-1,E:-1,ESE:-.541,SE:0,SSE:.541};
 function upwellingComponent(dir){var v=UPWELLING_COMPONENT[dir];return v===undefined?0:v;}
@@ -168,25 +171,32 @@ function E(s){return String(s==null?"":s).replace(/[&<>]/g,function(c){return{"&
 function gapBar(ha){return'<div class="bx" title="No reading, '+E(ha)+'h ago"><i style="height:8%;background:repeating-linear-gradient(45deg,#3a5060 0,#3a5060 3px,#16283a 3px,#16283a 6px)"></i></div>';}
 window.__PB=window.__PB||fetch(U,{cache:"no-store"}).then(function(r){return r.json();});
 window.__PB.then(function(data){
-var st=(data.station_history||{})[HKEY]||{},hrs=st.hourly||[],ribbon="",days="",read="",keyRow="";
+var pv=(((data.piers||{})[PKEY]||{}).headline||{}).wind_provenance||null;
+var key=(pv&&pv.station_key)||HKEY;
+var st=(data.station_history||{})[key]||{},hrs=st.hourly||[],ribbon="",days="",read="",keyRow="",borrowLine="";
 if(hrs.length){
-var byHour={},oldest=-1,newest=1e9,i;
-for(i=0;i<hrs.length;i++){var ha=hrs[i].hours_ago;byHour[ha]=hrs[i];if(ha>oldest)oldest=ha;if(ha<newest)newest=ha;}
+var byHour={},oldest=72,newest=0,i;
+for(i=0;i<hrs.length;i++){var ha=hrs[i].hours_ago;byHour[ha]=hrs[i];}
+var lag=lagHours(st),real=1e9;
+for(var k=0;k<hrs.length;k++){if(hrs[k].hours_ago<real)real=hrs[k].hours_ago;}
+var late=(lag!==null&&lag<STALE_HOURS);
 var fav=0,peak=0,missing=0;
-for(var hh=oldest;hh>=newest;hh--){var rec=byHour[hh];if(rec){if(FAVOURABLE[rec.dir])fav++;if((rec.mph||0)>peak)peak=rec.mph;}else missing++;}
+for(var hh=oldest;hh>=newest;hh--){var rec=byHour[hh];if(rec){if(FAVOURABLE[rec.dir])fav++;if((rec.mph||0)>peak)peak=rec.mph;}else if(!(late&&hh<real))missing++;}
 var top=Math.max(20,Math.ceil(peak/10)*10),barsHtml="";
-for(var hh2=oldest;hh2>=newest;hh2--){var rec2=byHour[hh2];if(!rec2){barsHtml+=gapBar(hh2);continue;}var mph=rec2.mph||0,pct=Math.max(3,Math.round(mph/top*100)),col=windColor(upwellingComponent(rec2.dir));barsHtml+='<div class="bx" title="'+E(rec2.dir||"")+" "+mph+" mph, "+E(rec2.hours_ago)+'h ago"><i style="height:'+pct+"%;background:"+col+'"></i></div>';}
+for(var hh2=oldest;hh2>=newest;hh2--){var rec2=byHour[hh2];if(!rec2){barsHtml+=gapBar(hh2);continue;}var mph=rec2.mph||0,pct=Math.max(3,Math.round(mph/top*100)),col=windColor(upwellingComponent(rec2.dir));barsHtml+='<div class="bx'+(pv&&pv.is_borrowed?' est':'')+'" title="'+E(rec2.dir||"")+" "+mph+" mph, "+E(rec2.hours_ago)+'h ago"><i style="height:'+pct+"%;background:"+col+'"></i></div>';}
 var grid=AXIS.filter(function(v){return v<=top;}).map(function(v){return'<div class="gl" style="bottom:'+(v/top*100)+'%"></div>';}).join("")+'<div class="ax">'+AXIS.filter(function(v){return v<=top;}).map(function(v){return'<span style="bottom:'+(v/top*100)+'%">'+v+"</span>";}).join("")+"</div>";
 ribbon=grid+barsHtml;
-var lag=lagHours(st),nowLabel=lag===null?"LATEST":lag<STALE_HOURS?"NOW":Math.round(lag)+"H AGO";
+var nowLabel="NOW";
 days='<div class="days"><span>3 DAYS AGO</span><span>2 DAYS AGO</span><span>YESTERDAY</span><span>'+nowLabel+"</span></div>";
 var totalSlots=oldest-newest+1;
 var missingLine=missing?'<div style="font-size:.72rem;color:var(--im);margin-top:6px;">'+missing+(missing===1?" hour":" hours")+' missing &mdash; the station did not report</div>':"";
 var staleLine=lag!==null&&lag>=STALE_HOURS?'<div style="font-family:var(--fm);font-size:.68rem;color:var(--gold);margin-top:6px;">&#9888; Latest reading '+Math.round(lag)+(Math.round(lag)===1?" hour":" hours")+' ago &mdash; not current</div>':"";
+if(pv&&pv.is_borrowed){var oa=pv.own_station_age_hours;
+borrowLine='<div style="font-size:.74rem;color:var(--im);margin-top:8px;line-height:1.5;"><b style="color:var(--gold);font-weight:600;">Estimated.</b> Wind measured at '+E(pv.borrowed_from)+(pv.station_distance_mi!=null?', '+Number(pv.station_distance_mi).toFixed(1)+' miles away':'')+'. '+((pv.own_station_available&&oa!=null)?'This pier&rsquo;s own sensor last reported '+Math.round(oa)+(Math.round(oa)===1?' hour':' hours')+' ago.':'This pier has no working wind sensor of its own.')+'</div>';}
 read='<div class="read"><b>'+fav+" of the last "+totalSlots+" hours</b> had wind from the favourable south-to-west band."+missingLine+staleLine+"</div>";
 keyRow='<div class="ramp"><div class="ramp-bar"></div><div class="ramp-labels"><span class="rl-w">South &ndash; West</span><span class="rl-c">Neutral</span><span class="rl-e">North &ndash; East</span></div><div class="ramp-note">Bar height is wind speed, measured hourly. Colour is direction, weighted by PierBite&rsquo;s wind model &mdash; see the Wind / Upwelling factor on the score card above for what this pattern can mean.</div></div>';
 }else read='<div class="read">Hourly wind history is not available from this station right now.</div>';
-document.getElementById("pbpwb").innerHTML='<div class="sec"><div class="ey">The wind story</div><h2>Last 72 Hours of Wind</h2><div class="sd">Every hour, measured &mdash; not averaged, not forecast. Colour shows how favourable each hour was under PierBite&rsquo;s wind model &mdash; south through west is tied for most favourable, not west alone.</div><div class="card"><div class="rib">'+ribbon+"</div>"+days+read+keyRow+"</div></div>";
+document.getElementById("pbpwb").innerHTML='<div class="sec"><div class="ey">The wind story</div><h2>Last 72 Hours of Wind</h2><div class="sd">Every hour, measured &mdash; not averaged, not forecast. Colour shows how favourable each hour was under PierBite&rsquo;s wind model &mdash; south through west is tied for most favourable, not west alone.</div><div class="card"><div class="rib">'+ribbon+"</div>"+days+borrowLine+read+keyRow+"</div></div>";
 }).catch(function(){document.getElementById("pbpwb").innerHTML='<div class="ld">Live conditions are temporarily unavailable. Please check back shortly.</div>';});
 })();
 </script>

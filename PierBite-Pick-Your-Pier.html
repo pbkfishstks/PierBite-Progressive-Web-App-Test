@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- PIERBITE PWA APP FINAL FILE PASS | 2026-09-20 13:44 UTC | Adds the approved automatic borrowed-wind notice and repairs one unmatched style brace. Map untouched. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -219,7 +220,6 @@
         gap:7px;
         flex-wrap:wrap;
       }
-      }
 
       #pbpick .pnm{
         font-size:.85rem;
@@ -236,6 +236,15 @@
         letter-spacing:.06em;
         padding:2px 7px;
         border-radius:10px;
+        white-space:nowrap;
+      }
+
+      #pbpick .wb{
+        color:var(--gold);
+        font-family:monospace;
+        font-size:.48rem;
+        font-weight:600;
+        letter-spacing:.06em;
         white-space:nowrap;
       }
 
@@ -529,6 +538,12 @@
             '</span>' :
             '';
 
+          var windProvenance=h.wind_provenance||{};
+          var windNotice=
+            windProvenance.is_borrowed ?
+            '<span class="wb">ESTIMATED WIND</span>' :
+            '';
+
           var scoreColor=isHot?"var(--lake)":"var(--ink)";
           var barColor=isHot?"var(--lake)":c;
 
@@ -547,6 +562,7 @@
           '<div class="pnl">'+
           '<span class="pnm">'+esc(p.name)+'</span>'+
           hotPill+
+          windNotice+
           '</div>'+
           '</div>'+
           '<div class="pstats">'+

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
+<!-- PIERBITE PWA APP FINAL FILE PASS | 2026-09-20 13:44 UTC | Matches the verified PierBite.com Compare Piers wind-provenance and fixed-window display; adds final page description. Map untouched. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Water Temp / Wind | PierBite</title>
+<meta name="description" content="Compare water temperatures, 72-hour wind patterns and data sources for seven Lake Michigan fishing piers on Wisconsin's west shore.">
 <meta name="theme-color" content="#061522">
 
 <link rel="manifest" href="PierBite-Web-App-Manifest.webmanifest">
@@ -175,6 +177,7 @@ W:1
 };
 
 var STALE_HOURS=3;
+var WINDOW_HOURS=72;
 
 var HATCH=
 "repeating-linear-gradient(45deg,#3a5060 0,#3a5060 2px,#16283a 2px,#16283a 4px)";
@@ -226,7 +229,7 @@ HATCH+
 
 }
 
-function buildRibbon(hourly){
+function buildRibbon(hourly,hist,borrowed){
 
 if(!hourly || !hourly.length){
 
@@ -238,8 +241,8 @@ missing:0
 }
 
 var byHour={};
-var oldest=-1;
-var newest=1e9;
+var oldest=WINDOW_HOURS;
+var newest=0;
 
 for(var i=0;i<hourly.length;i++){
 
@@ -247,15 +250,11 @@ var ha=hourly[i].hours_ago;
 
 byHour[ha]=hourly[i];
 
-if(ha>oldest){
-oldest=ha;
 }
 
-if(ha<newest){
-newest=ha;
-}
-
-}
+var lag=lagHours(hist),real=1e9;
+for(var k=0;k<hourly.length;k++){if(hourly[k].hours_ago<real)real=hourly[k].hours_ago;}
+var late=(lag!==null&&lag<STALE_HOURS);
 
 var slots=[];
 var missing=0;
@@ -271,7 +270,7 @@ slots.push(rec);
 }else{
 
 slots.push(null);
-missing++;
+if(!(late&&hh<real))missing++;
 
 }
 
@@ -310,6 +309,11 @@ s.mph+
 h.toFixed(0)+
 "px;background:"+
 windColor(w)+
+(
+borrowed
+? ";opacity:.5;outline:1px dashed rgba(138,162,182,.75);outline-offset:-1px"
+: ""
+)+
 ";border-radius:1px;\"></div>";
 
 }
@@ -365,7 +369,7 @@ verdict="Very little westerly wind.";
 
 return west+
 " of the last "+
-hourly.length+
+(WINDOW_HOURS+1)+
 " hours had wind out of the west. "+
 verdict;
 
@@ -452,6 +456,8 @@ var h=
 pier.headline||
 {};
 
+var pv=h.wind_provenance||null;
+
 var sourceKey=
 h.water_temp_source||
 "UNKNOWN";
@@ -480,7 +486,7 @@ distance.toFixed(2)+
 " mi";
 
 var windKey=
-WIND_KEY[pierKey];
+(pv&&pv.station_key)||WIND_KEY[pierKey];
 
 var hist=
 stationHistory[windKey];
@@ -518,7 +524,7 @@ hist.available
 var rib=
 avail
 ?
-buildRibbon(hist.hourly)
+buildRibbon(hist.hourly,hist,!!(pv&&pv.is_borrowed))
 :
 {
 bars:"<div style=\"font-size:11px;color:#5d788f;\">No wind history available.</div>",
@@ -558,6 +564,7 @@ gapLine(rib.missing)+
 staleLine(hist)+
 
 "<div style=\"font-size:9px;color:#5d788f;margin-top:3px;font-family:'JetBrains Mono',monospace;\">"+
+(pv&&pv.is_borrowed?'<span style="color:#f5b53f;">ESTIMATED</span> &middot; ':'')+
 windLabel+
 (
 windDistText
@@ -629,6 +636,9 @@ HATCH+
 ";margin-right:5px;vertical-align:middle;\"></span>"+
 "No reading"+
 "</span>";
+
+html+=
+'<span><span style="display:inline-block;width:5px;height:9px;background:#2c4a63;opacity:.5;outline:1px dashed rgba(138,162,182,.75);outline-offset:-1px;margin-right:5px;vertical-align:middle;"></span>Estimated wind</span>';
 
 document.getElementById(
 "cp-legend"
