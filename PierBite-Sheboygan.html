@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PIERBITE PWA APP FINAL FILE PASS | 2026-09-20 13:44 UTC | Matches the verified PierBite.com wind-provenance and fixed-window display; adds final page description. Map untouched. -->
+<!-- PIERBITE PWA APP PARITY UPDATE | 2026-09-20 20:13 UTC | Shows newest gallery photos first and removes the duplicate per-pier upload box. Wind logic preserved; map untouched. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@
 html{scroll-behavior:smooth;background:#061522}
 body{margin:0;background:#061522;color:#eef5fb}
 .pierbite-pier-page{max-width:1000px;margin:0 auto;padding:24px 20px 48px}
-#pbsha,#pbshb,#pbshbsky,#pb-sheb-clean,#pbphsh,#pbsap-sheboygan,#pbwebcam-sheboygan{margin-bottom:12px!important}
+#pbsha,#pbshb,#pbshbsky,#pb-sheb-clean,#pbphsh,#pbwebcam-sheboygan{margin-bottom:12px!important}
 @media(max-width:650px){.pierbite-pier-page{padding:12px 10px 30px}}
 </style>
 </head>
@@ -367,7 +367,7 @@ if(loaded)return;
 loaded=true;
 var inner=document.querySelector("#pbphsh .pbphsh-inner");
 fetch(PHOTOS_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(data){
-var list=data&&data[PIER_KEY]||[],body;
+var list=(data&&data[PIER_KEY]||[]).slice().reverse(),body;
 if(!list.length)body='<div class="empty">No photos yet for '+esc(PIER_NAME)+" &mdash; check back soon.</div>";
 else body='<div class="grid">'+list.map(function(p,i){return'<div class="th" data-i="'+i+'"><img src="'+esc(p.url)+'" alt="'+esc(p.caption||PIER_NAME+" photo")+'" loading="lazy"></div>';}).join("")+"</div>";
 inner.innerHTML='<span class="kck">Photo Gallery</span><h2>'+esc(PIER_NAME)+' Photos</h2><p class="sub">Recent shots from the pier</p>'+body;
@@ -397,20 +397,6 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")closeLb();})
 tog.addEventListener("click",function(){var isOpen=wrap.classList.toggle("open");arr.classList.toggle("open",isOpen);tog.setAttribute("aria-expanded",String(isOpen));if(isOpen)loadPhotos();});
 })();
 </script>
-
-<div id="pbsap-sheboygan">
-<div class="card">
-<span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span>
-<a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a>
-</div>
-</div>
-<style>
-#pbsap-sheboygan{--navy-panel:#112a3f;--navy-line:#1f405b;--im:#a3bcd1;--ink:#eef5fb;--gold:#f5b53f;--fs:"Inter",sans-serif;font-family:var(--fs);max-width:960px;margin:0 auto}
-#pbsap-sheboygan *{box-sizing:border-box;margin:0;padding:0}
-#pbsap-sheboygan .card{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:var(--navy-panel);border:1px solid var(--navy-line);font-size:.8rem;line-height:1.4;color:var(--im)}
-#pbsap-sheboygan .card b{color:var(--ink)}
-#pbsap-sheboygan a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap}
-</style>
 
 <div id="pbwebcam-sheboygan">
 <div class="card">

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- PIERBITE PWA APP PARITY UPDATE | 2026-09-21 | Adds the single Submit a Photo entry, Get the App entry, and matching home wording. Map and service worker untouched. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -126,7 +127,8 @@
       max-width:860px;
       margin:28px auto 0;
       display:grid;
-      grid-template-columns:repeat(6,1fr);
+      grid-template-columns:repeat(4,1fr);
+      grid-auto-rows:1fr;
       gap:10px;
     }
 
@@ -172,6 +174,22 @@
       margin-top:8px;
     }
 
+    .nav-about-line{
+      display:block;
+    }
+
+    .nav-about-pier{
+      color:var(--white);
+    }
+
+    .nav-about-bite{
+      color:var(--lime);
+    }
+
+    .nav-about-dotcom{
+      color:#89a6c2;
+    }
+
     .pb-copyright{
       max-width:1320px;
       margin:24px auto 0;
@@ -179,13 +197,6 @@
       font-size:.7rem;
       letter-spacing:.04em;
       text-align:left;
-    }
-
-    @media(max-width:1000px){
-      .nav-grid{
-        grid-template-columns:repeat(3,1fr);
-        max-width:620px;
-      }
     }
 
     @media(max-width:650px){
@@ -333,7 +344,11 @@
             <rect x="13" y="4" width="3" height="15"></rect>
             <rect x="18" y="10" width="3" height="9"></rect>
           </svg>
-          <div class="nav-title">About<br>PierBite.com</div>
+          <div class="nav-title" aria-label="About PierBite.com">
+            <span class="nav-about-line">About</span>
+            <span class="nav-about-line"><span class="nav-about-pier">Pier</span><span class="nav-about-bite">Bite</span></span>
+            <span class="nav-about-line nav-about-dotcom">.com</span>
+          </div>
           <div class="nav-subtitle">Side by side</div>
         </a>
 
@@ -343,7 +358,27 @@
             <path d="M4 7l8 6 8-6"></path>
           </svg>
           <div class="nav-title">Get in<br>touch</div>
-          <div class="nav-subtitle">Photos and tips</div>
+          <div class="nav-subtitle">Tips and questions</div>
+        </a>
+
+        <a class="nav-card" href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="3" y="6" width="18" height="14" rx="2"></rect>
+            <path d="M8 6l1.5-2h5L16 6"></path>
+            <circle cx="12" cy="13" r="3.5"></circle>
+          </svg>
+          <div class="nav-title">Submit a<br>Photo</div>
+          <div class="nav-subtitle">Share your catch</div>
+        </a>
+
+        <a class="nav-card" href="PierBite-Install.html">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="6" y="2" width="12" height="20" rx="2"></rect>
+            <path d="M12 6v8M9 11l3 3 3-3"></path>
+            <path d="M10 18h4"></path>
+          </svg>
+          <div class="nav-title">Get the<br>app</div>
+          <div class="nav-subtitle">Add to your home screen</div>
         </a>
 
       </nav>

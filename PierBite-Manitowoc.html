@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- PIERBITE PWA APP FINAL FILE PASS | 2026-09-20 13:44 UTC | Matches the verified PierBite.com wind-provenance and fixed-window display; adds final page description. Map untouched. -->
+<!-- PIERBITE PWA APP PARITY UPDATE | 2026-09-20 20:13 UTC | Shows newest gallery photos first and removes the duplicate per-pier upload box. Wind logic preserved; map untouched. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,6 @@
 #pbmtbsky,
 #pb-mtw-clean,
 #pbphmn,
-#pbsap-manitowoc,
 #pbwebcam-manitowoc { margin-bottom: 12px !important; }
     @media(max-width:650px) { .pierbite-pier-page { padding: 12px 10px 30px; } }
   </style>
@@ -566,7 +565,7 @@ if(loaded)return;
 loaded=true;
 var inner=document.querySelector("#pbphmn .pbphmn-inner");
 fetch(PHOTOS_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(function(data){
-var list=(data&&data[PIER_KEY])||[];
+var list=((data&&data[PIER_KEY])||[]).slice().reverse();
 var body;
 if(!list.length){
 body='<div class="empty">No photos yet for '+esc(PIER_NAME)+' &mdash; check back soon.</div>';
@@ -604,20 +603,8 @@ if(isOpen)loadPhotos();
 });
 })();</script>
 
-<!-- PIERBITE pbsap-manitowoc | 2026-09-11 12:55 UTC | v5 | STRUCTURAL FIX — renamed box ID from generic "pbsap" to "pbsap-manitowoc", same fix already applied to Sheboygan (D416/D417): the plain "pbsap" name is shared by every pier's copy of this box on the single long page, so whichever copy sits later in the DOM silently overrides the others' styling. Recolored to the master palette and 16px card radius at the same time. -->
-<div id="pbsap-manitowoc">
-<div class="card"><span>Got a good catch photo? <b>Share it with other anglers</b> &mdash; no account needed.</span><a href="https://tally.so/r/yPp91B" target="_blank" rel="noopener">Submit a Photo</a></div>
-</div>
-<style>#pbsap-manitowoc{--navy-panel:#112a3f;--navy-line:#1f405b;--im:#a3bcd1;--ink:#eef5fb;--gold:#f5b53f;--fs:"Inter",sans-serif;font-family:var(--fs);max-width:960px;margin:0 auto;}
-#pbsap-manitowoc *{box-sizing:border-box;margin:0;padding:0;}
-#pbsap-manitowoc .card{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:var(--navy-panel);border:1px solid var(--navy-line);font-size:.8rem;line-height:1.4;color:var(--im);}
-#pbsap-manitowoc .card b{color:var(--ink);}
-#pbsap-manitowoc a{background:var(--gold);color:#412402;font-size:.72rem;font-weight:700;text-decoration:none;padding:6px 12px;border-radius:14px;white-space:nowrap;}
-</style>
-
-<!-- PIERBITE pbwebcam-manitowoc | 2026-09-13 | v2 | Rebuilt to match Submit a
-Photo card style exactly (pbsap-portwashington v1 used as the reference
-file, per Paul's request). Same single-row card, same gold pill link.
+<!-- PIERBITE pbwebcam-manitowoc | 2026-09-13 | v2 | Uses the standard
+single-row card and gold pill link shared by the pier pages.
 Link-out only, opens in a new tab, same as every other pier's webcam box. -->
 <div id="pbwebcam-manitowoc">
 <div class="card"><span>Check current conditions at the pier &mdash; <b>watch the Manitowoc Marina Harbor Cam live</b>.</span><a href="https://www.manitowoc-marina.com/harbor-cam/" target="_blank" rel="noopener">Watch Live</a></div>
