@@ -1,10 +1,10 @@
 {
   "product": "NOAA LMHOFS surface water temperature",
-  "generated_at_utc": "2026-09-30T19:27:53.154602Z",
-  "valid_time_utc": "2026-09-30T12:00:00Z",
-  "cycle_utc": "2026-09-30 12Z",
-  "source_file": "lmhofs.t12z.20260930.fields.n006.nc",
-  "source_url": "https://opendap.co-ops.nos.noaa.gov/threddsdev/dodsC/NOAA/LMHOFS/MODELS/2026/09/30/lmhofs.t12z.20260930.fields.n006.nc",
+  "generated_at_utc": "2026-09-30T23:56:46.470570Z",
+  "valid_time_utc": "2026-09-30T18:00:00Z",
+  "cycle_utc": "2026-09-30 18Z",
+  "source_file": "lmhofs.t18z.20260930.fields.n006.nc",
+  "source_url": "https://opendap.co-ops.nos.noaa.gov/threddsdev/dodsC/NOAA/LMHOFS/MODELS/2026/09/30/lmhofs.t18z.20260930.fields.n006.nc",
   "surface_sigma_layer_index": 0,
   "bounds": {
     "west": -88.1,
@@ -12,10 +12,10 @@
     "south": 43.2,
     "north": 45.75
   },
-  "scale_min_f": 59,
+  "scale_min_f": 58,
   "scale_max_f": 67,
-  "actual_min_f": 55.69,
-  "actual_max_f": 67.12,
+  "actual_min_f": 55.85,
+  "actual_max_f": 67.05,
   "crop_node_count": 22163,
   "rendered_triangle_count": 39108,
   "palette": [
